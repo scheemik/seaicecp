@@ -2,7 +2,9 @@
 name = "seaicecp"
 version = "0.1.0"
 description = "Investigate sea ice choke points in the Canadian Arctic Archipelago using high-resolution models."
-authors = ["Mikhail Schee"]
+authors = [
+    { name = "Mikhail Schee", email = "mikhail.schee@alumni.utoronto.ca" }
+]
 license = "MIT"
 readme = "README.md"
 requires-python = ">=3.14"
