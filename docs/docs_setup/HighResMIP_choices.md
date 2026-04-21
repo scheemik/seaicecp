@@ -93,7 +93,8 @@ I will evaluate the HighResMIP models using similar criteria:
 ## Models
 
 Evaluation of each HighResMIP model is presented below with the following information:
-- Citation of the model and institution
+- Citation of the model
+- Institution
 - Simulations available (historical and future)
 - Relevant variables available
 - Resolution information
@@ -131,9 +132,10 @@ Evaluation of each HighResMIP model is presented below with the following inform
 
 #### EC-Earth3P-HR
 
-- Citation of the model and institution
-    - EC-Earth Consortium, Europe
+- Citation of the model
     - Haarsma et al. 2016[^Haarsma2016]
+- Institution
+    - EC-Earth Consortium, Europe
 - Simulations available (`experiment_id`'s)
     - `highres-future`
     - `hist-1950`
@@ -164,7 +166,7 @@ Evaluation of each HighResMIP model is presented below with the following inform
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `areacello` in Panoply, the model's land mask (in grey) appears to resolve the CAA well. The land mask matches well both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays, which represent the coastlines of the CAA. In particular, the Parry Channel seems to be well-resolved.
 
-![](HighResMIP_choices-img/Panoply_map_areacello_Ofx_EC-Earth3P-HR_highres_future.png)
+![Panoply_map_areacello_Ofx_EC-Earth3P-HR_highres_future](HighResMIP_choices-img/Panoply_map_areacello_Ofx_EC-Earth3P-HR_highres_future.png)
 
 <a id='HadGEM3-GC3'></a>
 [back to top](#top)
@@ -175,6 +177,56 @@ Evaluation of each HighResMIP model is presented below with the following inform
 [back to top](#top)
 
 #### HadGEM3-GC3.1-HH
+
+- Citation of the model
+    - Roberts et al. 2019[^Roberts2019]
+- Institution
+    - Met Office Hadley Centre, United Kingdom
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `control-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `siage`
+        - `siconc`
+        - `sidivvel`
+        - `sidmassdyn`
+        - `sidmassmeltbot`
+        - `sidmassmelttop`
+        - `sidmassth`
+        - `siflcondbot`
+        - `siflcondtop`
+        - `siflfwbot`
+        - `siflfwdrain`
+        - `sifllatstop`
+        - `siflsensupbot`
+        - `sihc`
+        - `simass`
+        - `sipr`
+        - `sisnconc`
+        - `sisnhc`
+        - `sisnmass`
+        - `sisnthick`
+        - `sispeed`
+        - `sistrxdtop`
+        - `sistrxubot`
+        - `sistrydtop`
+        - `sistryubot`
+        - `sitempbot`
+        - `sitimefrac`
+        - `sivol`
+    - `tas`
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `areacello` in Panoply, the model's land mask (in grey) appears to resolve the CAA well. I suspect this might indeed be the same `areacello` as was used for EC-Earth3P-HR. The only difference I can see is a gray line along approximately the 107$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
+
+![Panoply_map_areacello_Ofx_HadGEM3-GC31-HH_control-1950](HighResMIP_choices-img/Panoply_map_areacello_Ofx_HadGEM3-GC31-HH_control-1950.png)
 
 <a id='HadGEM3-GC3.1-HM'></a>
 [back to top](#top)
