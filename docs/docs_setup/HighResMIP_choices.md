@@ -27,7 +27,7 @@ From the [HighResMIP website](https://highresmip.org/):
 The following table is adapted from Haarsma et al. 2016[^Haarsma2016]. 
 <!-- "Appendix A: Participating models in HighResMIP.  Table A1. Model details from groups expressing intention to participate in at least Tier 1 simulations, together with the potential model resolutions (if known/available, blank if not)." [^Haarsma2016] (on page 16 / 4200) -->
 
-| Model name | Contact institute | Atmosphere resolution (STD/HI) mid-latitude (km) | Ocean resolution (HI) |
+| Model name | Contact institute | Atmosphere resolution (STD/HI) <br>mid-latitude (km) | Ocean resolution <br>(HI) |
 | --- | --- | --- | --- |
 | AWI-CM | Alfred Wegener Institute | T127 ($∼100$ km) <br>T255 ($∼ 50$ km) | 1–$\frac{1}{4}^\circ$ <br>0.05–1$^\circ$ |
 | BCC-CSM2-HR | Beijing Climate Center | T106 ($∼ 110$ km) <br>T266 ($∼ 45$ km) | $\frac{1}{3}$–1$^\circ$ |
