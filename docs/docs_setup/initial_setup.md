@@ -21,6 +21,7 @@ Link to the {doc}`README <../index>`.
     - [Adding `esgpull`](#esgpull)
         - [Adding `esgpull` install on an external drive](#esgpull_ext_HD)
     - [Using a Jupyter notebook](#jupyter_notebook)
+    - [Adding `cdo`](#cdo_install)
 - [Building the package](#build_pkg)
 - [Documentation](#docs)
     - [Building documentation](#build_docs)
