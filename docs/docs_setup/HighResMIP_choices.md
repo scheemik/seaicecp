@@ -65,5 +65,51 @@ I will evaluate the HighResMIP models using similar criteria:
     - How can I quantitatively evaluate this?
     - What specific channels would be necessary to resolve for this project?
 
+---
+<a id='models'></a>
+[back to top](#top)
+
+## Models
+
+Evaluation of each HighResMIP model is presented below with the following information:
+- Citation of the model and institution
+- Simulations available (historical and future)
+- Relevant variables available
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - Plot of `areacello` the CAA in Panoply
+
+<a id='EC-Earth'></a>
+[back to top](#top)
+
+### EC-Earth
+
+<a id='EC-Earth3P-HR'></a>
+[back to top](#top)
+
+#### EC-Earth3P-HR
+
+<a id='HadGEM3-GC3'></a>
+[back to top](#top)
+
+### HadGEM3-GC3
+
+<a id='HadGEM3-GC3.1-HH'></a>
+[back to top](#top)
+
+#### HadGEM3-GC3.1-HH
+
+<a id='HadGEM3-GC3.1-HM'></a>
+[back to top](#top)
+
+#### HadGEM3-GC3.1-HM
+
+<a id='HadGEM3-GC3.1-MM'></a>
+[back to top](#top)
+
+#### HadGEM3-GC3.1-MM
+
 
 [^Haarsma2016]: Haarsma, R.J, M.J. Roberts, P.L. Vidale et al. (2016), "High Resolution Model Intercomparison Project (HighResMIP v1.0) for CMIP6", _Geoscientific Model Development_, 9(11):4185-4208, <doi:10.5194/gmd-9-4185-2016>
