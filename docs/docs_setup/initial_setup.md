@@ -791,6 +791,51 @@ Found 16 datasets.
  15 │ CMIP6.HighResMIP.NCAR.CESM1-CAM5-SE-HR.hist-1950.r1i1p1f1.Ofx.are… │ 1 │  63.1 MiB │ esgf-data.ucar.edu
 ```
 
+#### Adding `esgpull` to the package
+
+After doing the above, I noticed that `esgpull` had not been added to the `.toml` file.
+I added it with the `uv add esgpull` command as shown below.
+I'm not sure whether it would be possible to just do this instead of the `uv tool install` command I did above.
+
+```console
+(seaicecp) Grey@Audron:seaicecp$ uv add esgpull
+Resolved 137 packages in 1.73s
+      Built seaicecp @ file:///Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp
+Prepared 4 packages in 669ms
+Uninstalled 1 package in 7ms
+Installed 28 packages in 162ms
+ + aiofiles==25.1.0
+ + aiostream==0.7.1
+ + alembic==1.18.4
+ + annotated-types==0.7.0
+ + anyio==4.13.0
+ + cattrs==26.1.0
+ + cffi==2.0.0
+ + click-params==0.5.0
+ + cryptography==46.0.7
+ + deprecated==1.3.1
+ + esgpull==0.9.6
+ + h11==0.16.0
+ + httpcore==1.0.9
+ + httpx==0.28.1
+ + mako==1.3.11
+ + pycparser==3.0
+ + pydantic==2.13.3
+ + pydantic-core==2.46.3
+ + pydantic-settings==2.14.0
+ + pyopenssl==26.0.0
+ + python-dotenv==1.2.2
+ + rich==15.0.0
+ ~ seaicecp==0.1.0 (from file:///Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp)
+ + setuptools==82.0.1
+ + tomlkit==0.14.0
+ + typing-inspection==0.4.2
+ + validators==0.22.0
+ + wrapt==2.1.2
+(seaicecp) Grey@Audron:seaicecp$ esgpull --version
+esgpull, version 0.9.6
+```
+
 <a id='jupyter_notebook'></a>
 [back to top](#top)
 
