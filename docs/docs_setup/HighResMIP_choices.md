@@ -100,7 +100,26 @@ Evaluation of each HighResMIP model is presented below with the following inform
     - Ocean and atmosphere resolution
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
 - Evaluation of how well the model resolves the CAA
-    - Plot of `areacello` the CAA in Panoply
+    - Plot of `areacello` the CAA in Panoply using these settings:
+        - Map Projection
+            - Projection: Azimuthal Equal-Area
+            - Centered on:
+                - Lon: -90$^\circ$E
+                - Lat: 77$^\circ$N
+                - Edge Angle: 11.0$^\circ$
+                - Fill corners: Yes
+            - Grid Lines Spacing:
+                - 15$^\circ$ E-W
+                - 15$^\circ$ N-S
+        - Map Overlay
+            - Overlay 1: `Earth.cno`
+                - Color: Red
+                - Weight: 75
+                - Style: Long Dashes
+            - Overlay 2: `MWDB_Coasts_1.cnob`
+                - Color: Black
+                - Weight: 50
+                - Style: Solid
 
 <a id='EC-Earth'></a>
 [back to top](#top)
