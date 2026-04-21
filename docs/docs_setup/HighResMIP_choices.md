@@ -1,9 +1,30 @@
+<a id='top'></a>
 # HighResMIP Choices
 
+In this project, we will use data from high-resolution models that participate in HighResMIP.
 From the [HighResMIP website](https://highresmip.org/):
 > "HighResMIP is a multi-model investigation of the impact of horizontal resolution on climate models. It involves atmosphere-only and coupled runs for 1950-2050, with some additional experiments and a successor project, HighResMIP2."
 
-A table adapted from Haarsma et al. 2016[^Haarsma2016]. 
+## Contents
+
+- [Table of HighResMIP models](#model_table)
+- [Model selection criteria](#selection_criteria)
+- [Models](#models)
+    - [EC-Earth](#EC-Earth)
+        - [EC-Earth3P-HR](#EC-Earth3P-HR)
+    - [HadGEM3-GC3](#HadGEM3-GC3)
+        - [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH)
+        - [HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM)
+        - [HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM)
+- [References](#references)
+
+---
+<a id='model_table'></a>
+[back to top](#top)
+
+## Table of HighResMIP models
+
+The following table is adapted from Haarsma et al. 2016[^Haarsma2016]. 
 <!-- "Appendix A: Participating models in HighResMIP.  Table A1. Model details from groups expressing intention to participate in at least Tier 1 simulations, together with the potential model resolutions (if known/available, blank if not)." [^Haarsma2016] (on page 16 / 4200) -->
 
 | Model name | Contact institute | Atmosphere resolution (STD/HI) mid-latitude (km) | Ocean resolution (HI) |
@@ -15,7 +36,7 @@ A table adapted from Haarsma et al. 2016[^Haarsma2016].
 | CAM6 | NCAR | 100 km <br>28 km | |
 | CMCC | Centro Euro-Mediterraneo sui <br>Cambiamenti Climatici | 100 km <br>25 km | 0.25$^\circ$ |
 | CNRM-CM6 | CERFACS | T127 ($∼ 100$ km) <br>T359 ($∼ 35$ km) | 1$^\circ$ <br>0.25$^\circ$ |
-| EC-Earth | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ |
+| [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ |
 | FGOALS | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | |
 | GFDL | GFDL | 200 km <br>- | |
 | INMCM-5H | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ |
@@ -26,7 +47,7 @@ A table adapted from Haarsma et al. 2016[^Haarsma2016].
 | MPI-ESM | Max Planck Institute for Meteorology | T127 ($∼ 100$ km) <br>T255 ($∼ 50$ km) | 0.4$^\circ$ | 
 | MRI-AGCM3 | Meteorological Research Institute | TL159 ($∼ 120$ km) <br>TL959 ($∼ 20$ km) | | 
 | NorESM | Norwegian Climate Service Centre | 2$^\circ$ <br>0.25$^\circ$ | 0.25$^\circ$ | 
-| HadGEM3-GC3 | Met Office Hadley Centre | 60 km <br>25 km | 0.25$^\circ$ |
+| [HadGEM3-GC3](#HadGEM3-GC3) | Met Office Hadley Centre | 60 km <br>25 km | 0.25$^\circ$ |
 
 ---
 <a id='selection_criteria'></a>
