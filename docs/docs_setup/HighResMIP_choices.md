@@ -287,12 +287,69 @@ Evaluation of each HighResMIP model is presented below with the following inform
     - Ocean and atmosphere resolution
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
 - Evaluation of how well the model resolves the CAA
-    - The `areacello` plot for HadGEM3-GC3.1-HM seems to be identical to the `areacello` plot for HadGEM3-GC3.1-HH, and therefore I won't reproduce it here. 
+    - The `areacello` plot for HadGEM3-GC3.1-HM seems to be identical to the `areacello` plot for [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH), and therefore I won't reproduce it here. 
 
 <a id='HadGEM3-GC3.1-MM'></a>
 [back to top](#top)
 
 #### HadGEM3-GC3.1-MM
+
+- Citation of the model
+    - Roberts et al. 2019[^Roberts2019]
+- Institution
+    - Met Office Hadley Centre, United Kingdom
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `control-1950`
+    - `highresSST-future`
+    - `highresSST-present`
+    - `spinup-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `siage`
+        - `siconc`
+        - `sidivvel`
+        - `sidmassdyn`
+        - `sidmassmeltbot`
+        - `sidmassmelttop`
+        - `sidmassth`
+        - `siflcondbot`
+        - `siflcondtop`
+        - `siflfwbot`
+        - `siflfwdrain`
+        - `sifllatstop`
+        - `sifllwdtop`
+        - `sifllwutop`
+        - `siflsenstop`
+        - `siflsensupbot`
+        - `siflswdtop`
+        - `siflswutop`
+        - `sihc`
+        - `simass`
+        - `sipr`
+        - `sisnconc`
+        - `sisnhc`
+        - `sisnmass`
+        - `sisnthick`
+        - `sispeed`
+        - `sistrxdtop`
+        - `sistrxubot`
+        - `sistrydtop`
+        - `sistryubot`
+        - `sitempbot`
+        - `sitemptop`
+        - `sitimefrac`
+        - `sivol`
+    - `tas`
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - The `areacello` plot for HadGEM3-GC3.1-MM seems to be identical to the `areacello` plot for [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH), and therefore I won't reproduce it here. 
 
 ---
 <a id='references'></a>
