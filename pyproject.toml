@@ -9,6 +9,7 @@ license = "MIT"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "esgpull>=0.9.6",
     "geoviews>=1.15.1",
     "netcdf4>=1.7.4",
     "xarray>=2026.4.0",
