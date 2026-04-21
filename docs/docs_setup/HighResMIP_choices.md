@@ -142,22 +142,21 @@ Evaluation of each HighResMIP model is presented below with the following inform
     - `highresSST-present`
 - Relevant variables available
     - `realm` = `seaIce`
-        - `siage`
-        - `siali`
         - `siconc`
-        - `sicompstren`
-        - `sidmassevapsubl`
-        - `siflswdtop`
-        - `sihthick`
-        - `sisnthick`
-        - `sispeed`
-        - `sistrxdtop`
-        - `sistrydtop`
-        - `sitemptop`
         - `sithick`
         - `siu`
         - `siv`
+        - `sitemptop`
+        - `sisnthick`
+        - `sispeed`
+        - `siage`
+        - `sicompstren`
+        - `sidmassevapsubl`
+        - `siflswdtop`
+        - `sistrxdtop`
+        - `sistrydtop`
         - `sivol`
+        - `sisali`
     - `tas`
 - Resolution information
     - Ocean and atmosphere resolution
