@@ -345,6 +345,8 @@ Installed 1 package in 11ms
  + xarray==2026.4.0
 ```
 
+In order to load data from NetCDF files into an `xarray` dataset, I also need to add the `netcdf4` package.
+
 ```console
 Grey@Audron:seaicecp$ source .venv/bin/activate
 (seaicecp) Grey@Audron:seaicecp$ uv add netcdf4
@@ -880,6 +882,203 @@ Installed kernelspec seaicecp_kernel in /Users/Grey/Library/Jupyter/kernels/seai
 ```
 
 At this point, I restarted VSCodium. Then, I made a notebook called `testing.ipynb`, then tried to import `xarray`. This brought up a dialogue where I didn't see `seaicecp_kernel`, but I selected ".venv (Python 3.14.1) .venv/bin/python". I then successfully imported `xarray` and `geoviews`. However, I encoutered the following error when I tried to open the dataset:
+
+<a id='cdo_install'></a>
+[back to top](#top)
+
+### Adding `cdo`
+
+I also added `cdo` (Climate Data Operators) to be able to interpolate the irregular grid of the model data onto a regular grid for plotting.
+
+```console
+(seaicecp) Grey@Audron:seaicecp$ uv add cdo
+Resolved 138 packages in 469ms
+      Built seaicecp @ file:///Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp
+Prepared 2 packages in 113ms
+Uninstalled 1 package in 1ms
+Installed 2 packages in 7ms
+ + cdo==1.6.1
+ ~ seaicecp==0.1.0 (from file:///Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp)
+(seaicecp) Grey@Audron:seaicecp$ cdo --version
+bash: cdo: command not found
+```
+
+As it turns out, the command I used above only installed the Python package `cdo`, but not the actual `cdo` command line tool which is required for the Python package to work.
+On the [`cdo` installation page for MacOS](https://code.mpimet.mpg.de/projects/cdo/wiki/MacOS_Platform), they show using Homebrew to install `cdo`.
+```console
+(seaicecp) Grey@Audron:seaicecp$ brew install cdo
+```
+
+<details>
+
+<summary>Output from the above command</summary>
+
+```console
+==> Auto-updating Homebrew...
+Adjust how often this is run with `$HOMEBREW_AUTO_UPDATE_SECS` or disable with
+`$HOMEBREW_NO_AUTO_UPDATE=1`. Hide these hints with `$HOMEBREW_NO_ENV_HINTS=1` (see `man brew`).
+==> Auto-updated Homebrew!
+Updated 2 taps (homebrew/core and homebrew/cask).
+==> New Formulae
+cc-connect: Bridges local AI coding agents to messaging platforms
+openssl@4: Cryptography and SSL/TLS Toolkit
+==> New Casks
+cavalry: Procedural motion design and animation software
+font-bjcree
+font-estedad
+mujoco: General purpose physics engine
+openin: Route links, emails, and files to your preferred apps
+t3-code@nightly: Minimal GUI for AI code agents
+
+You have 112 outdated formulae installed.
+
+==> Fetching downloads for: cdo
+✔︎ Bottle Manifest cdo (2.6.0)                                                           Downloaded   30.2KB/ 30.2KB
+✔︎ Bottle Manifest isl (0.27)                                                            Downloaded   14.5KB/ 14.5KB
+✔︎ Bottle isl (0.27)                                                                     Downloaded    1.8MB/  1.8MB
+✔︎ Bottle Manifest mpfr (4.2.2)                                                          Downloaded   12.7KB/ 12.7KB
+✔︎ Bottle mpfr (4.2.2)                                                                   Downloaded    1.1MB/  1.1MB
+✔︎ Bottle Manifest libmpc (1.4.1)                                                        Downloaded   12.0KB/ 12.0KB
+✔︎ Bottle libmpc (1.4.1)                                                                 Downloaded  164.3KB/164.3KB
+✔︎ Bottle Manifest xz (5.8.3)                                                            Downloaded   11.8KB/ 11.8KB
+✔︎ Bottle xz (5.8.3)                                                                     Downloaded  752.9KB/752.9KB
+✔︎ Bottle Manifest zstd (1.5.7_1)                                                        Downloaded   13.2KB/ 13.2KB
+✔︎ Bottle zstd (1.5.7_1)                                                                 Downloaded  929.3KB/929.3KB
+✔︎ Bottle Manifest gcc (15.2.0_1)                                                        Downloaded   23.5KB/ 23.5KB
+✔︎ Bottle Manifest libaec (1.1.6)                                                        Downloaded    7.2KB/  7.2KB
+✔︎ Bottle libaec (1.1.6)                                                                 Downloaded   49.9KB/ 49.9KB
+✔︎ Bottle Manifest libpng (1.6.58)                                                       Downloaded    8.6KB/  8.6KB
+✔︎ Bottle libpng (1.6.58)                                                                Downloaded  455.9KB/455.9KB
+✔︎ Bottle Manifest hdf5 (2.1.1)                                                          Downloaded   20.7KB/ 20.7KB
+✔︎ Bottle Manifest netcdf (4.10.0)                                                       Downloaded   24.4KB/ 24.4KB
+✔︎ Bottle netcdf (4.10.0)                                                                Downloaded    1.3MB/  1.3MB
+✔︎ Bottle Manifest jpeg-turbo (3.1.4.1)                                                  Downloaded    8.4KB/  8.4KB
+✔︎ Bottle jpeg-turbo (3.1.4.1)                                                           Downloaded    1.2MB/  1.2MB
+✔︎ Bottle Manifest libtiff (4.7.1_1)                                                     Downloaded   12.6KB/ 12.6KB
+✔︎ Bottle Manifest little-cms2 (2.18)                                                    Downloaded   12.2KB/ 12.2KB
+✔︎ Bottle little-cms2 (2.18)                                                             Downloaded  426.1KB/426.1KB
+✔︎ Bottle Manifest openjpeg (2.5.4)                                                      Downloaded   14.0KB/ 14.0KB
+✔︎ Bottle Manifest eccodes (2.46.0)                                                      Downloaded   32.8KB/ 32.8KB
+✔︎ Bottle libtiff (4.7.1_1)                                                              Downloaded    1.9MB/  1.9MB
+✔︎ Bottle Manifest proj (9.8.1)                                                          Downloaded   20.1KB/ 20.1KB
+✔︎ Bottle openjpeg (2.5.4)                                                               Downloaded    2.3MB/  2.3MB
+✔︎ Bottle cdo (2.6.0)                                                                    Downloaded    3.7MB/  3.7MB
+✔︎ Bottle hdf5 (2.1.1)                                                                   Downloaded    9.0MB/  9.0MB
+✔︎ Bottle eccodes (2.46.0)                                                               Downloaded   11.1MB/ 11.1MB
+✔︎ Bottle gcc (15.2.0_1)                                                                 Downloaded  161.9MB/161.9MB
+✔︎ Bottle proj (9.8.1)                                                                   Downloaded  800.1MB/800.1MB
+==> Installing dependencies for cdo: isl, mpfr, libmpc, xz, zstd, gcc, libaec, libpng, hdf5, netcdf, jpeg-turbo, libtiff, little-cms2, openjpeg, eccodes and proj
+==> Installing cdo dependency: isl
+==> Pouring isl--0.27.sequoia.bottle.tar.gz
+🍺  /usr/local/Cellar/isl/0.27: 74 files, 8MB
+==> Installing cdo dependency: mpfr
+==> Pouring mpfr--4.2.2.sequoia.bottle.tar.gz
+🍺  /usr/local/Cellar/mpfr/4.2.2: 31 files, 3.3MB
+==> Installing cdo dependency: libmpc
+==> Pouring libmpc--1.4.1.sequoia.bottle.tar.gz
+🍺  /usr/local/Cellar/libmpc/1.4.1: 14 files, 512.1KB
+==> Installing cdo dependency: xz
+==> Pouring xz--5.8.3.sequoia.bottle.tar.gz
+🍺  /usr/local/Cellar/xz/5.8.3: 96 files, 2.5MB
+==> Installing cdo dependency: zstd
+==> Pouring zstd--1.5.7_1.sequoia.bottle.tar.gz
+🍺  /usr/local/Cellar/zstd/1.5.7_1: 32 files, 2.5MB
+==> Installing cdo dependency: gcc
+==> Pouring gcc--15.2.0_1.sequoia.bottle.tar.gz
+🍺  /usr/local/Cellar/gcc/15.2.0_1: 1,715 files, 499.7MB
+==> Installing cdo dependency: libaec
+==> Pouring libaec--1.1.6.sonoma.bottle.tar.gz
+Warning: These files were overwritten during the `brew link` step:
+/usr/local/include/szlib.h
+/usr/local/lib/libsz.2.dylib
+/usr/local/lib/libsz.a
+/usr/local/lib/libsz.dylib
+
+They have been backed up to: /Users/Grey/Library/Caches/Homebrew/Backup
+==> Summary
+🍺  /usr/local/Cellar/libaec/1.1.6: 23 files, 176.1KB
+==> Installing cdo dependency: libpng
+==> Pouring libpng--1.6.58.sonoma.bottle.tar.gz
+🍺  /usr/local/Cellar/libpng/1.6.58: 28 files, 1.3MB
+==> Installing cdo dependency: hdf5
+==> Pouring hdf5--2.1.1.sonoma.bottle.tar.gz
+🍺  /usr/local/Cellar/hdf5/2.1.1: 271 files, 20.7MB
+==> Installing cdo dependency: netcdf
+==> Pouring netcdf--4.10.0.sonoma.bottle.tar.gz
+🍺  /usr/local/Cellar/netcdf/4.10.0: 34 files, 4.0MB
+==> Installing cdo dependency: jpeg-turbo
+==> Pouring jpeg-turbo--3.1.4.1.sonoma.bottle.tar.gz
+Warning: These files were overwritten during the `brew link` step:
+/usr/local/bin/cjpeg
+/usr/local/bin/djpeg
+/usr/local/bin/jpegtran
+/usr/local/bin/rdjpgcom
+/usr/local/bin/wrjpgcom
+/usr/local/include/jconfig.h
+/usr/local/include/jerror.h
+/usr/local/include/jmorecfg.h
+/usr/local/include/jpeglib.h
+/usr/local/share/man/man1/cjpeg.1
+/usr/local/share/man/man1/djpeg.1
+/usr/local/share/man/man1/jpegtran.1
+/usr/local/share/man/man1/rdjpgcom.1
+/usr/local/share/man/man1/wrjpgcom.1
+/usr/local/lib/libjpeg.a
+/usr/local/lib/libjpeg.dylib
+/usr/local/lib/pkgconfig/libjpeg.pc
+
+They have been backed up to: /Users/Grey/Library/Caches/Homebrew/Backup
+==> Summary
+🍺  /usr/local/Cellar/jpeg-turbo/3.1.4.1: 47 files, 4.4MB
+==> Installing cdo dependency: libtiff
+==> Pouring libtiff--4.7.1_1.sonoma.bottle.tar.gz
+🍺  /usr/local/Cellar/libtiff/4.7.1_1: 488 files, 8.2MB
+==> Installing cdo dependency: little-cms2
+==> Pouring little-cms2--2.18.sonoma.bottle.tar.gz
+🍺  /usr/local/Cellar/little-cms2/2.18: 23 files, 1.2MB
+==> Installing cdo dependency: openjpeg
+==> Pouring openjpeg--2.5.4.sonoma.bottle.tar.gz
+🍺  /usr/local/Cellar/openjpeg/2.5.4: 512 files, 14.6MB
+==> Installing cdo dependency: eccodes
+==> Pouring eccodes--2.46.0.sonoma.bottle.tar.gz
+🍺  /usr/local/Cellar/eccodes/2.46.0: 23,096 files, 56.7MB
+==> Installing cdo dependency: proj
+==> Pouring proj--9.8.1.sonoma.bottle.tar.gz
+🍺  /usr/local/Cellar/proj/9.8.1: 530 files, 834.3MB
+==> Installing cdo
+==> Pouring cdo--2.6.0.sonoma.bottle.tar.gz
+🍺  /usr/local/Cellar/cdo/2.6.0: 9 files, 11.2MB
+==> Running `brew cleanup cdo`...
+Disable this behaviour by setting `HOMEBREW_NO_INSTALL_CLEANUP=1`.
+Hide these hints with `HOMEBREW_NO_ENV_HINTS=1` (see `man brew`).
+```
+
+</details>
+
+Then, I can check to make sure `cdo` is installed by checking the version.
+```console
+(seaicecp) Grey@Audron:seaicecp$ cdo --version
+Climate Data Operators version 2.6.0 (https://mpimet.mpg.de/cdo)
+System: x86_64-apple-darwin23.6.0
+CXX Compiler: clang++ -std=gnu++11 -std=gnu++20 -g -O2  -pthread
+CXX version : Apple clang version 16.0.0 (clang-1600.0.26.6)
+CXX library :
+C Compiler: clang -g -O2  -pthread -pthread
+C version : Apple clang version 16.0.0 (clang-1600.0.26.6)
+F77 Compiler: gfortran -g -O2
+F77 version : GNU Fortran (Homebrew GCC 15.2.0_1) 15.2.0
+Features: 32GB 8threads c++20 Fortran pthreads HDF5 NC4/HDF5 dap sz proj sse4_2
+Libraries: yac/3.13.1 NetCDF/4.10.0 HDF5/2.1.1(h2.0.0) proj/9.7.1
+CDI data types: SizeType=size_t
+CDI file types: srv ext ieg grb1 grb2 nc1 nc2 nc4 nc4c nc5 nczarr 
+     CDI library version : 2.6.0
+ cgribex library version : 2.3.1
+ ecCodes library version : 2.46.0
+  NetCDF library version : 4.10.0 of Feb 25 2026 17:25:46 $
+    exse library version : 2.0.0
+    FILE library version : 1.9.1
+```
+
 
 <a id='build_pkg'></a>
 [back to top](#top)
