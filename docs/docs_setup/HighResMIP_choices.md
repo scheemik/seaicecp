@@ -112,6 +112,42 @@ Evaluation of each HighResMIP model is presented below with the following inform
 
 #### EC-Earth3P-HR
 
+- Citation of the model and institution
+    - EC-Earth Consortium, Europe
+    - Haarsma et al. 2016[^Haarsma2016]
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `control-1950`
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siage`
+        - `siali`
+        - `siconc`
+        - `sicompstren`
+        - `sidmassevapsubl`
+        - `siflswdtop`
+        - `sihthick`
+        - `sisnthick`
+        - `sispeed`
+        - `sistrxdtop`
+        - `sistrydtop`
+        - `sitemptop`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `sivol`
+    - `tas`
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `areacello` in Panoply, the model's land mask (in grey) appears to resolve the CAA well. The land mask matches well both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays, which represent the coastlines of the CAA. In particular, the Parry Channel seems to be well-resolved.
+
+![](HighResMIP_choices-img/Panoply_map_areacello_Ofx_EC-Earth3P-HR_highres_future.png)
+
 <a id='HadGEM3-GC3'></a>
 [back to top](#top)
 
