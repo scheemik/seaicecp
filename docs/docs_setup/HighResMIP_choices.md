@@ -10,8 +10,12 @@ From the [HighResMIP website](https://highresmip.org/):
 - [Table of HighResMIP models](#model_table)
 - [Model selection criteria](#selection_criteria)
 - [Models](#models)
+    - [AWI-CM](#AWI-CM)
+        - [AWI-CM-HR](#AWI-CM-HR)
+        - [AWI-CM-LR](#AWI-CM-LR)
     - [CAM5](#CAM5)
         - [CESM1-CAM5-SE-HR](#CESM1-CAM5-SE-HR)
+        - [CESM1-CAM5-SE-LR](#CESM1-CAM5-SE-LR)
     - [EC-Earth](#EC-Earth)
         - [EC-Earth3P-HR](#EC-Earth3P-HR)
     - [HadGEM3-GC3](#HadGEM3-GC3)
@@ -124,6 +128,107 @@ Evaluation of each HighResMIP model is presented below with the following inform
                 - Weight: 50
                 - Style: Solid
 
+---
+<a id='AWI-CM'></a>
+[back to top](#top)
+
+### AWI-CM
+
+<a id='AWI-CM-HR'></a>
+[back to top](#top)
+
+#### AWI-CM-HR
+
+- Citation of the model
+    - Sidorenko et al. 2015[^Sidorenko2015]?
+- Institution
+    - Alfred Wegener Institute (AWI), Germany
+- Simulations available (`experiment_id`'s)
+    - `hist-1950`
+    - `control-1950`
+    - `spinup-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `sitimefrac`
+        - `fsitherm`
+        - `siconc`
+        - `sifllatstop`
+        - `siarean`
+        - `siareas`
+        - `sidmassevapsubl`
+        - `sidmasssi`
+        - `sidmassth`
+        - `siextentn`
+        - `siextents`
+        - `sisnconc`
+        - `sisnmass`
+        - `sisnthick`
+        - `sispeed`
+        - `sistrxdtop`
+        - `sistrxubot`
+        - `sistrydtop`
+        - `sistryubot`
+        - `sivol`
+        - `sivoln`
+        - `sivols`
+    - `tas`
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - The `areacello` variable in the file for AWI-CM-HR is 1-dimensional and does not appear to map to ocean grid cells. I am unsure whether this is expected, or whether this is an issue with the data file I downloaded.
+
+<a id='AWI-CM-LR'></a>
+[back to top](#top)
+
+#### AWI-CM-LR
+
+- Citation of the model
+    - Sidorenko et al. 2015[^Sidorenko2015]?
+- Institution
+    - Alfred Wegener Institute (AWI), Germany
+- Simulations available (`experiment_id`'s)
+    - `hist-1950`
+    - `control-1950`
+    - `spinup-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `sitimefrac`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `sivoln`
+        - `sivols`
+        - `fsitherm`
+        - `siarean`
+        - `siareas`
+        - `siconc`
+        - `sidmassevapsubl`
+        - `sidmasssi`
+        - `sidmassth`
+        - `siextentn`
+        - `siextents`
+        - `sifllatstop`
+        - `sisnconc`
+        - `sisnmass`
+        - `sisnthick`
+        - `sispeed`
+        - `sistrxdtop`
+        - `sistrxubot`
+        - `sistrydtop`
+        - `sistryubot`
+        - `sivol`
+    - `tas` not available
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - The `areacello` variable in the file for AWI-CM-LR is 1-dimensional and does not appear to map to ocean grid cells. I am unsure whether this is expected, or whether this is an issue with the data file I downloaded.
+
+---
 <a id='CAM5'></a>
 [back to top](#top)
 
@@ -268,6 +373,7 @@ Evaluation of each HighResMIP model is presented below with the following inform
 
 ![Panoply_map_areacello_Ofx_CESM1-CAM5-ES-LR_control-1950](HighResMIP_choices-img/Panoply_map_areacello_Ofx_CESM1-CAM5-ES-LR_control-1950.png)
 
+---
 <a id='EC-Earth'></a>
 [back to top](#top)
 
@@ -317,6 +423,7 @@ Evaluation of each HighResMIP model is presented below with the following inform
 <a id='HadGEM3-GC3'></a>
 [back to top](#top)
 
+---
 ### HadGEM3-GC3
 
 <a id='HadGEM3-GC3.1-HH'></a>
