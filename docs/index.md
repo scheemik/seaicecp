@@ -6,8 +6,24 @@
 :hidden:
 
 example.ipynb
+```
+
+```{toctree}
+:maxdepth: 1
+:hidden:
+:caption: Setup
+
+docs_setup/initial_setup.md
+docs_setup/HighResMIP_choices.md
+```
+
+```{toctree}
+:maxdepth: 1
+:caption: Reference
+
+autoapi/index
 changelog.md
 contributing.md
 conduct.md
-autoapi/index
+docs_ref/license.md
 ```
