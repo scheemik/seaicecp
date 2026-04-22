@@ -84,14 +84,20 @@ The selected models are summarized in the supplementary information.
 
 I will evaluate the HighResMIP models using similar criteria:
 - Does the model have both historical and future simulation output available?
-    - Historical: `hist-1950` (possibly also `control-1950`?)
+    - Historical: `hist-1950`
+        - Required.
     - Future: `highres-future`
+        - Not strictly required, depending on whether we make projections or solely compare to observations. 
 - Does the model have the necessary variables output?
-    - `siconc`, `sivol`, `siu`, `siv`, `tas`
+    - Priority variables: `siconc`, `siage`, `siu`, `siv`, `tas`
+    - Probably won't need `sivol` is we are focusing on area fluxes.
+    - Likely won't need `tas` unless we want to evaluate correlations between temperature and sea ice variables, following Saenko et al. 2025[^Saenko2025].
 - Does the model have a high enough resolution?
+    - We will evaluate the resolution in the CAA region in particular. 
     - Ocean resolution of 0.25$^\circ$ or higher
     - Should there be an atmosphere resolution requirement as well?
 - Does the model reproduce the observed trend in Arctic sea ice area within no more than two standard errors?
+    - See Selivanova et al. 2024[^Selivanova2024] Table 3 for observed trend and standard error.
 - Does the model resolve the Canadian Arctic Archipelago (CAA) well?
     - How can I quantitatively evaluate this?
     - What specific channels would be necessary to resolve for this project?
@@ -675,3 +681,5 @@ I do not see this model as available through the ESGF data portal.
 [^Roberts2019]: Roberts, M.J., A. Baker, E.W. Blockley, D. Calvert, A. Coward et al. (2019), "Description of the resolution hierarchy of the global coupled HadGEM3-GC3.1 model as used in CMIP6 HighResMIP experiments", _Geoscientific Model Development_, 12:4999-5028, <doi:10.5194/gmd-12-4999-2019>
 
 [^Saenko2025]: Saenko, O., N.F. Tandon, S.E.L. Howell (2025), "Large Decreases in Sea Ice Strength and Pressure Along Major Arctic Shipping Routes Projected for the Next Two Decades", _Geophysical Research Letters_, 52(10):e2025GL114831, <doi:10.1029/2025GL114831>
+
+[^Selivanova2024]: Selivanova, J., D. Iovino, F. Cocetta (2024), "Past and future of the Arctic sea ice in High-Resolution Model Intercomparison Project (HighResMIP) climate models", _The Cryosphere_, 18(6):2739-2763, <doi:10.5194/tc-18-2739-2024>
