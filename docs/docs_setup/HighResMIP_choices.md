@@ -20,6 +20,9 @@ From the [HighResMIP website](https://highresmip.org/):
         - [CESM1-CAM5-SE-HR](#CESM1-CAM5-SE-HR)
         - [CESM1-CAM5-SE-LR](#CESM1-CAM5-SE-LR)
     - [CAM6](#CAM6)
+    - [CMCC](#CMCC)
+        - [CMCC-CM2-HR4](#CMCC-CM2-HR4)
+        - [CMCC-CM2-VHR4](#CMCC-CM2-VHR4)
     - [EC-Earth](#EC-Earth)
         - [EC-Earth3P-HR](#EC-Earth3P-HR)
     - [HadGEM3-GC3](#HadGEM3-GC3)
@@ -44,7 +47,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [BESM](#BESM) | INPE | T126 ($∼ 100$ km) <br>T233 ($∼ 60$ km) | 0.25$^\circ$ | 
 | [CAM5](#CAM5) | Lawrence Berkeley National Laboratory | 100 km <br>25 km | |
 | [CAM6](#CAM6) | NCAR | 100 km <br>28 km | |
-| CMCC | Centro Euro-Mediterraneo sui <br>Cambiamenti Climatici | 100 km <br>25 km | 0.25$^\circ$ |
+| [CMCC](#CMCC) | Centro Euro-Mediterraneo sui <br>Cambiamenti Climatici | 100 km <br>25 km | 0.25$^\circ$ |
 | CNRM-CM6 | CERFACS | T127 ($∼ 100$ km) <br>T359 ($∼ 35$ km) | 1$^\circ$ <br>0.25$^\circ$ |
 | [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ |
 | FGOALS | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | |
@@ -438,6 +441,74 @@ I do not see this model as available through the ESGF data portal.
 ### CAM6
 
 I do not see this model as available through the ESGF data portal.
+
+---
+<a id='CMCC'></a>
+[back to top](#top)
+
+### CMCC
+
+<a id='CMCC-CM2-HR4'></a>
+[back to top](#top)
+
+#### CMCC-CM2-HR4
+
+- Citation of the model
+    - Cherchi et al. 2020[^Cherchi2020]?
+- Institution
+    - Centro Euro-Mediterraneo sui Cambiamenti Climatici (CMCC), Italy
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `control-1950`
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `simass`
+        - `sisnmass`
+        - `sitimefrac`
+        - `sivol`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+- Decision
+    - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
+
+<a id='CMCC-CM2-VHR4'></a>
+[back to top](#top)
+
+#### CMCC-CM2-VHR4
+
+- Citation of the model
+    - Cherchi et al. 2020[^Cherchi2020]?
+- Institution
+    - Centro Euro-Mediterraneo sui Cambiamenti Climatici (CMCC), Italy
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `control-1950`
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `simass`
+        - `sisnmass`
+        - `sitimefrac`
+        - `sivol`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+- Decision
+    - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
 
 ---
 <a id='EC-Earth'></a>
