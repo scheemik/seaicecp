@@ -28,6 +28,9 @@ From the [HighResMIP website](https://highresmip.org/):
         - [CNRM-CM6-1-HR](#CNRM-CM6-1-HR)
     - [EC-Earth](#EC-Earth)
         - [EC-Earth3P-HR](#EC-Earth3P-HR)
+    - [FGOALS](#FGOALS)
+        - [FGOALS-f3-H](#FGOALS-f3-H)
+        - [FGOALS-f3-L](#FGOALS-f3-L)
     - [HadGEM3-GC3](#HadGEM3-GC3)
         - [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH)
         - [HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM)
@@ -53,7 +56,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [CMCC](#CMCC) | Centro Euro-Mediterraneo sui <br>Cambiamenti Climatici | 100 km <br>25 km | 0.25$^\circ$ |
 | [CNRM-CM6](#CNRM-CM6) | CERFACS | T127 ($∼ 100$ km) <br>T359 ($∼ 35$ km) | 1$^\circ$ <br>0.25$^\circ$ |
 | [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ |
-| FGOALS | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | |
+| [FGOALS](#FGOALS) | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | |
 | GFDL | GFDL | 200 km <br>- | |
 | INMCM-5H | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ |
 | IPSL-CM6 | IPSL | 0.25$^\circ$ | |
@@ -706,6 +709,63 @@ I do not see this model as available through the ESGF data portal.
     - In the plot below of `areacello` in Panoply, the model's land mask (in grey) appears to resolve the CAA well. The land mask matches well both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays, which represent the coastlines of the CAA. In particular, the Parry Channel seems to be well-resolved.
 
 ![Panoply_map_areacello_Ofx_EC-Earth3P-HR_highres_future](HighResMIP_choices-img/Panoply_map_areacello_Ofx_EC-Earth3P-HR_highres_future.png)
+
+---
+<a id='FGOALS'></a>
+[back to top](#top)
+
+### FGOALS
+
+<a id='FGOALS-f3-H'></a>
+[back to top](#top)
+
+#### FGOALS-f3-H
+
+- Citation of the model
+    - BAO, Q., LIU, Y., WU, G., HE, B., LI, J., WANG, L., … ZHANG, X. (2020). CAS FGOALS-f3-H and CAS FGOALS-f3-L outputs for the high-resolution model intercomparison project simulation of CMIP6. Atmospheric and Oceanic Science Letters, 13(6), 576–581. <doi:10.1080/16742834.2020.1814675>
+- Institution
+    - Chinese Academy of Sciences (CAS), China
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `control-1950`
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - None
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+- Decision
+    - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
+
+<a id='FGOALS-f3-L'></a>
+[back to top](#top)
+
+#### FGOALS-f3-L
+
+- Citation of the model
+    - BAO, Q., LIU, Y., WU, G., HE, B., LI, J., WANG, L., … ZHANG, X. (2020). CAS FGOALS-f3-H and CAS FGOALS-f3-L outputs for the high-resolution model intercomparison project simulation of CMIP6. Atmospheric and Oceanic Science Letters, 13(6), 576–581. <doi:10.1080/16742834.2020.1814675>
+- Institution
+    - Chinese Academy of Sciences (CAS), China
+- Simulations available (`experiment_id`'s)
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - None
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+- Decision
+    - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
 
 <a id='HadGEM3-GC3'></a>
 [back to top](#top)
