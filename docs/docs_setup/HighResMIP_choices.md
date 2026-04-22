@@ -35,7 +35,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 
 | Model name | Contact institute | Atmosphere resolution (STD/HI) <br>mid-latitude (km) | Ocean resolution <br>(HI) |
 | --- | --- | --- | --- |
-| AWI-CM | Alfred Wegener Institute | T127 ($∼100$ km) <br>T255 ($∼ 50$ km) | 1–$\frac{1}{4}^\circ$ <br>0.05–1$^\circ$ |
+| [AWI-CM](#AWI-CM) | Alfred Wegener Institute | T127 ($∼100$ km) <br>T255 ($∼ 50$ km) | 1–$\frac{1}{4}^\circ$ <br>0.05–1$^\circ$ |
 | BCC-CSM2-HR | Beijing Climate Center | T106 ($∼ 110$ km) <br>T266 ($∼ 45$ km) | $\frac{1}{3}$–1$^\circ$ |
 | BESM | INPE | T126 ($∼ 100$ km) <br>T233 ($∼ 60$ km) | 0.25$^\circ$ | 
 | [CAM5](#CAM5) | Lawrence Berkeley National Laboratory | 100 km <br>25 km | |
@@ -174,7 +174,7 @@ Evaluation of each HighResMIP model is presented below with the following inform
         - `sivol`
         - `sivoln`
         - `sivols`
-    - `tas`
+    - `tas` not available
 - Resolution information
     - Ocean and atmosphere resolution
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
