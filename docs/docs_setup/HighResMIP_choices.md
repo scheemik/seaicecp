@@ -198,6 +198,76 @@ Evaluation of each HighResMIP model is presented below with the following inform
 
 ![Panoply_map_areacello_Ofx_CESM1-CAM5-ES-HR_hist-1950](HighResMIP_choices-img/Panoply_map_areacello_Ofx_CESM1-CAM5-ES-HR_hist-1950.png)
 
+<a id='CESM1-CAM5-SE-LR'></a>
+[back to top](#top)
+
+#### CESM1-CAM5-SE-LR
+
+- Citation of the model
+    - Hurrell et al. 2013[^Hurrell2013]?
+    - Bacmeister et al. 2014[^Bacmeister2014]?
+- Institution
+    - National Center for Atmospheric Research (NCAR), United States
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `control-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `sfdsi`
+        - `siage`
+        - `siarean`
+        - `siareas`
+        - `sicompstren`
+        - `siconc`
+        - `sidconcdyn`
+        - `sidconcth`
+        - `sidivvel`
+        - `sidmasstranx`
+        - `sidmasstrany`
+        - `siextentn`
+        - `siextents`
+        - `sifllatstop`
+        - `sifllwdtop`
+        - `sifllwutop`
+        - `siflsenstop`
+        - `siflsensupbot`
+        - `siflswdbot`
+        - `siflswdtop`
+        - `siflswutop`
+        - `siforcecoriolx`
+        - `siforcecorioly`
+        - `siforceintstrx`
+        - `siforceintstry`
+        - `simass`
+        - `simassacrossline`
+        - `sisaltmass`
+        - `sishevel`
+        - `sisnthick`
+        - `sispeed`
+        - `sistrxdtop`
+        - `sistrxubot`
+        - `sistrydtop`
+        - `sistryubot`
+        - `sitemptop`
+        - `sithick`
+        - `sitimefrac`
+        - `siu`
+        - `siv`
+        - `sivol`
+        - `sivoln`
+        - `sivols`
+        - `siconca`
+    - `tas`
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `areacello` in Panoply, the model's land mask (in grey) is very low resolution with only a "pole hole" in Greenland.
+- Decision
+    - Excluded from analysis due to not resolving any islands of the CAA.
+
+![Panoply_map_areacello_Ofx_CESM1-CAM5-ES-LR_control-1950](HighResMIP_choices-img/Panoply_map_areacello_Ofx_CESM1-CAM5-ES-LR_control-1950.png)
+
 <a id='EC-Earth'></a>
 [back to top](#top)
 
