@@ -15,9 +15,11 @@ From the [HighResMIP website](https://highresmip.org/):
         - [AWI-CM-LR](#AWI-CM-LR)
     - [BCC-CSM2](#BCC-CSM2)
         - [BCC-CSM2-HR](#BCC-CSM2-HR)
+    - [BESM](#BESM)
     - [CAM5](#CAM5)
         - [CESM1-CAM5-SE-HR](#CESM1-CAM5-SE-HR)
         - [CESM1-CAM5-SE-LR](#CESM1-CAM5-SE-LR)
+    - [CAM6](#CAM6)
     - [EC-Earth](#EC-Earth)
         - [EC-Earth3P-HR](#EC-Earth3P-HR)
     - [HadGEM3-GC3](#HadGEM3-GC3)
@@ -39,9 +41,9 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | --- | --- | --- | --- |
 | [AWI-CM](#AWI-CM) | Alfred Wegener Institute | T127 ($∼100$ km) <br>T255 ($∼ 50$ km) | 1–$\frac{1}{4}^\circ$ <br>0.05–1$^\circ$ |
 | [BCC-CSM2-HR](#BCC-CSM2-HR) | Beijing Climate Center | T106 ($∼ 110$ km) <br>T266 ($∼ 45$ km) | $\frac{1}{3}$–1$^\circ$ |
-| BESM | INPE | T126 ($∼ 100$ km) <br>T233 ($∼ 60$ km) | 0.25$^\circ$ | 
+| [BESM](#BESM) | INPE | T126 ($∼ 100$ km) <br>T233 ($∼ 60$ km) | 0.25$^\circ$ | 
 | [CAM5](#CAM5) | Lawrence Berkeley National Laboratory | 100 km <br>25 km | |
-| CAM6 | NCAR | 100 km <br>28 km | |
+| [CAM6](#CAM6) | NCAR | 100 km <br>28 km | |
 | CMCC | Centro Euro-Mediterraneo sui <br>Cambiamenti Climatici | 100 km <br>25 km | 0.25$^\circ$ |
 | CNRM-CM6 | CERFACS | T127 ($∼ 100$ km) <br>T359 ($∼ 35$ km) | 1$^\circ$ <br>0.25$^\circ$ |
 | [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ |
@@ -271,6 +273,14 @@ Evaluation of each HighResMIP model is presented below with the following inform
 ![Panoply_map_areacello_Ofx_BCC-CSM2-HR_hist-1950](HighResMIP_choices-img/Panoply_map_areacello_Ofx_BCC-CSM2-HR_hist-1950.png)
 
 ---
+<a id='BESM'></a>
+[back to top](#top)
+
+### BESM
+
+I do not see this model as available through the ESGF data portal.
+
+---
 <a id='CAM5'></a>
 [back to top](#top)
 
@@ -414,6 +424,14 @@ Evaluation of each HighResMIP model is presented below with the following inform
     - Excluded from analysis due to not resolving any islands of the CAA.
 
 ![Panoply_map_areacello_Ofx_CESM1-CAM5-ES-LR_control-1950](HighResMIP_choices-img/Panoply_map_areacello_Ofx_CESM1-CAM5-ES-LR_control-1950.png)
+
+---
+<a id='CAM6'></a>
+[back to top](#top)
+
+### CAM6
+
+I do not see this model as available through the ESGF data portal.
 
 ---
 <a id='EC-Earth'></a>
