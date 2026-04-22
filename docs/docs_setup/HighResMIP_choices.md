@@ -10,6 +10,8 @@ From the [HighResMIP website](https://highresmip.org/):
 - [Table of HighResMIP models](#model_table)
 - [Model selection criteria](#selection_criteria)
 - [Models](#models)
+    - [CAM5](#CAM5)
+        - [CESM1-CAM5-SE-HR](#CESM1-CAM5-SE-HR)
     - [EC-Earth](#EC-Earth)
         - [EC-Earth3P-HR](#EC-Earth3P-HR)
     - [HadGEM3-GC3](#HadGEM3-GC3)
@@ -32,7 +34,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | AWI-CM | Alfred Wegener Institute | T127 ($∼100$ km) <br>T255 ($∼ 50$ km) | 1–$\frac{1}{4}^\circ$ <br>0.05–1$^\circ$ |
 | BCC-CSM2-HR | Beijing Climate Center | T106 ($∼ 110$ km) <br>T266 ($∼ 45$ km) | $\frac{1}{3}$–1$^\circ$ |
 | BESM | INPE | T126 ($∼ 100$ km) <br>T233 ($∼ 60$ km) | 0.25$^\circ$ | 
-| CAM5 | Lawrence Berkeley National Laboratory | 100 km <br>25 km | |
+| [CAM5](#CAM5) | Lawrence Berkeley National Laboratory | 100 km <br>25 km | |
 | CAM6 | NCAR | 100 km <br>28 km | |
 | CMCC | Centro Euro-Mediterraneo sui <br>Cambiamenti Climatici | 100 km <br>25 km | 0.25$^\circ$ |
 | CNRM-CM6 | CERFACS | T127 ($∼ 100$ km) <br>T359 ($∼ 35$ km) | 1$^\circ$ <br>0.25$^\circ$ |
@@ -121,6 +123,80 @@ Evaluation of each HighResMIP model is presented below with the following inform
                 - Color: Black
                 - Weight: 50
                 - Style: Solid
+
+<a id='CAM5'></a>
+[back to top](#top)
+
+### CAM5
+
+<a id='CESM1-CAM5-SE-HR'></a>
+[back to top](#top)
+
+#### CESM1-CAM5-SE-HR
+
+- Citation of the model
+    - Hurrell et al. 2013[^Hurrell2013]?
+    - Bacmeister et al. 2014[^Bacmeister2014]?
+- Institution
+    - National Center for Atmospheric Research (NCAR), United States
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `control-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `sfdsi`
+        - `siage`
+        - `siarean`
+        - `siareas`
+        - `sicompstren`
+        - `siconc`
+        - `sidconcdyn`
+        - `sidconcth`
+        - `sidivvel`
+        - `sidmasstranx`
+        - `sidmasstrany`
+        - `siextentn`
+        - `siextents`
+        - `sifllatstop`
+        - `sifllwdtop`
+        - `sifllwutop`
+        - `siflsenstop`
+        - `siflsensupbot`
+        - `siflswdbot`
+        - `siflswdtop`
+        - `siflswutop`
+        - `siforcecoriolx`
+        - `siforcecorioly`
+        - `siforceintstrx`
+        - `siforceintstry`
+        - `simass`
+        - `sisaltmass`
+        - `sishevel`
+        - `sisnthick`
+        - `sispeed`
+        - `sistrxdtop`
+        - `sistrxubot`
+        - `sistrydtop`
+        - `sistryubot`
+        - `sitemptop`
+        - `sithick`
+        - `sitimefrac`
+        - `siu`
+        - `siv`
+        - `sivol`
+        - `sivoln`
+        - `sivols`
+        - `siconca`
+    - `tas`
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `areacello` in Panoply, the model's land mask (in grey) does not appear to resolve the CAA well. The land mask is missing many islands of the CAA and the coastlines are very blocky and poorly resolved. The Parry Channel is clear, however lacks all the islands along the northern side. 
+    - Additionally, there is a gray line along approximately the 107$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
+
+![Panoply_map_areacello_Ofx_CESM1-CAM5-ES-HR_hist-1950](HighResMIP_choices-img/Panoply_map_areacello_Ofx_CESM1-CAM5-ES-HR_hist-1950.png)
 
 <a id='EC-Earth'></a>
 [back to top](#top)
