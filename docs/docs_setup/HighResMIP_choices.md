@@ -13,6 +13,8 @@ From the [HighResMIP website](https://highresmip.org/):
     - [AWI-CM](#AWI-CM)
         - [AWI-CM-HR](#AWI-CM-HR)
         - [AWI-CM-LR](#AWI-CM-LR)
+    - [BCC-CSM2](#BCC-CSM2)
+        - [BCC-CSM2-HR](#BCC-CSM2-HR)
     - [CAM5](#CAM5)
         - [CESM1-CAM5-SE-HR](#CESM1-CAM5-SE-HR)
         - [CESM1-CAM5-SE-LR](#CESM1-CAM5-SE-LR)
@@ -36,7 +38,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | Model name | Contact institute | Atmosphere resolution (STD/HI) <br>mid-latitude (km) | Ocean resolution <br>(HI) |
 | --- | --- | --- | --- |
 | [AWI-CM](#AWI-CM) | Alfred Wegener Institute | T127 ($∼100$ km) <br>T255 ($∼ 50$ km) | 1–$\frac{1}{4}^\circ$ <br>0.05–1$^\circ$ |
-| BCC-CSM2-HR | Beijing Climate Center | T106 ($∼ 110$ km) <br>T266 ($∼ 45$ km) | $\frac{1}{3}$–1$^\circ$ |
+| [BCC-CSM2-HR](#BCC-CSM2-HR) | Beijing Climate Center | T106 ($∼ 110$ km) <br>T266 ($∼ 45$ km) | $\frac{1}{3}$–1$^\circ$ |
 | BESM | INPE | T126 ($∼ 100$ km) <br>T233 ($∼ 60$ km) | 0.25$^\circ$ | 
 | [CAM5](#CAM5) | Lawrence Berkeley National Laboratory | 100 km <br>25 km | |
 | CAM6 | NCAR | 100 km <br>28 km | |
@@ -227,6 +229,46 @@ Evaluation of each HighResMIP model is presented below with the following inform
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
 - Evaluation of how well the model resolves the CAA
     - The `areacello` variable in the file for AWI-CM-LR is 1-dimensional and does not appear to map to ocean grid cells. I am unsure whether this is expected, or whether this is an issue with the data file I downloaded.
+
+---
+<a id='BCC-CSM2'></a>
+[back to top](#top)
+
+### BCC-CSM2
+
+<a id='BCC-CSM2-HR'></a>
+[back to top](#top)
+
+#### BCC-CSM2-HR
+
+- Citation of the model
+    - Zhou et al. 2020[^Zhou2020]?
+- Institution
+    - Beijing Climate Center (BCC), China
+- Simulations available (`experiment_id`'s)
+    - `hist-1950`
+    - `control-1950`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `siu`
+        - `siv`
+        - `simass`
+        - `sisnthick`
+        - `sitemptop`
+        - `sivol`
+        - `siitdconc`
+        - `sithick`
+    - `tas` not available
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `areacello` in Panoply, I don't see any land mask (which would be in gray), so it appears that the model does not resolve the CAA at all. 
+    - Additionally, there is a gray line along approximately the 100$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
+
+![Panoply_map_areacello_Ofx_BCC-CSM2-HR_hist-1950](HighResMIP_choices-img/Panoply_map_areacello_Ofx_BCC-CSM2-HR_hist-1950.png)
 
 ---
 <a id='CAM5'></a>
