@@ -159,7 +159,7 @@ Evaluation of each HighResMIP model is presented below with the following inform
 #### AWI-CM-HR
 
 - Citation of the model
-    - Sidorenko et al. 2015[^Sidorenko2015]?
+    - Semmler, Tido; Danilov, Sergey; Rackow, Thomas; Sidorenko, Dmitry; Hegewald, Jan; Sein, Dmitri; Wang, Qiang; Jung, Thomas (2017). AWI AWI-CM 1.1 HR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD[1].Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.1202>
 - Institution
     - Alfred Wegener Institute (AWI), Germany
 - Simulations available (`experiment_id`'s)
@@ -206,7 +206,7 @@ Evaluation of each HighResMIP model is presented below with the following inform
 #### AWI-CM-LR
 
 - Citation of the model
-    - Sidorenko et al. 2015[^Sidorenko2015]?
+    - Semmler, Tido; Danilov, Sergey; Rackow, Thomas; Sidorenko, Dmitry; Hegewald, Jan; Sein, Dmitri; Wang, Qiang; Jung, Thomas (2017). AWI AWI-CM 1.1 LR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.1209>
 - Institution
     - Alfred Wegener Institute (AWI), Germany
 - Simulations available (`experiment_id`'s)
@@ -259,7 +259,7 @@ Evaluation of each HighResMIP model is presented below with the following inform
 #### BCC-CSM2-HR
 
 - Citation of the model
-    - Zhou et al. 2020[^Zhou2020]?
+    - Wu, T., Yu, R., Lu, Y., Jie, W., Fang, Y., Zhang, J., Zhang, L., Xin, X., Li, L., Wang, Z., Liu, Y., Zhang, F., Wu, F., Chu, M., Li, J., Li, W., Zhang, Y., Shi, X., Zhou, W., Yao, J., Liu, X., Zhao, H., Yan, J., Wei, M., Xue, W., Huang, A., Zhang, Y., Zhang, Y., Shu, Q., and Hu, A.: BCC-CSM2-HR: a high-resolution version of the Beijing Climate Center Climate System Model, Geosci. Model Dev., 14, 2977–3006, <doi:10.5194/gmd-14-2977-2021>, 2021. 
 - Institution
     - Beijing Climate Center (BCC), China
 - Simulations available (`experiment_id`'s)
@@ -294,6 +294,7 @@ Evaluation of each HighResMIP model is presented below with the following inform
 ### BESM
 
 I do not see this model as available through the ESGF data portal.
+Here's a citation I found for something related: Veiga, S. F., Nobre, P., Giarolla, E., Capistrano, V., Baptista Jr., M., Marquez, A. L., Figueroa, S. N., Bonatti, J. P., Kubota, P., and Nobre, C. A.: The Brazilian Earth System Model ocean–atmosphere (BESM-OA) version 2.5: evaluation of its CMIP5 historical simulation, Geosci. Model Dev., 12, 1613–1642, <doi:10.5194/gmd-12-1613-2019>, 2019. 
 
 ---
 <a id='CAM5'></a>
@@ -307,8 +308,7 @@ I do not see this model as available through the ESGF data portal.
 #### CESM1-CAM5-SE-HR
 
 - Citation of the model
-    - Hurrell et al. 2013[^Hurrell2013]?
-    - Bacmeister et al. 2014[^Bacmeister2014]?
+    - Hurrel, James; Holland, Marika; Gent, Peter; Ghan, Steven; Kay, Jennifer; Kushner, Paul; Lamarque, Jean-Francois; Large, William G.; Lawrence, David; Lindsay, Keith; Lipscomb, William; Long, Matthew; Mahowald, Natalie M.; Marsh, Daniel; Neale, Richard; Rasch, Philip J.; Vavrus, Stephen J.; Vertenstein, Mariana; Bader, David C.; Collins, William D.; Hack, James J.; Kiehl, Jeff; Marshall, Shawn (2020). NCAR CESM1-CAM5-SE-HR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.14220>
 - Institution
     - National Center for Atmospheric Research (NCAR), United States
 - Simulations available (`experiment_id`'s)
@@ -376,8 +376,7 @@ I do not see this model as available through the ESGF data portal.
 #### CESM1-CAM5-SE-LR
 
 - Citation of the model
-    - Hurrell et al. 2013[^Hurrell2013]?
-    - Bacmeister et al. 2014[^Bacmeister2014]?
+    - Hurrel, James; Holland, Marika; Gent, Peter; Ghan, Steven; Kay, Jennifer; Kushner, Paul; Lamarque, Jean-Francois; Large, William G.; Lawrence, David; Lindsay, Keith; Lipscomb, William; Long, Matthew; Mahowald, Natalie M.; Marsh, Daniel; Neale, Richard; Rasch, Philip J.; Vavrus, Stephen J.; Vertenstein, Mariana; Bader, David C.; Collins, William D.; Hack, James J.; Kiehl, Jeff; Marshall, Shawn (2020). NCAR CESM1-CAM5-SE-LR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.14262>
 - Institution
     - National Center for Atmospheric Research (NCAR), United States
 - Simulations available (`experiment_id`'s)
@@ -447,6 +446,8 @@ I do not see this model as available through the ESGF data portal.
 ### CAM6
 
 I do not see this model as available through the ESGF data portal.
+Seems like this might not have been completed yet?
+The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc/build/html/cam6_scientific_summary/index.html#references
 
 ---
 <a id='CMCC'></a>
@@ -460,7 +461,7 @@ I do not see this model as available through the ESGF data portal.
 #### CMCC-CM2-HR4
 
 - Citation of the model
-    - Cherchi et al. 2020[^Cherchi2020]?
+    - Scoccimarro, Enrico; Bellucci, Alessio; Peano, Daniele (2017). CMCC CMCC-CM2-HR4 model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.1359>
 - Institution
     - Centro Euro-Mediterraneo sui Cambiamenti Climatici (CMCC), Italy
 - Simulations available (`experiment_id`'s)
@@ -491,7 +492,7 @@ I do not see this model as available through the ESGF data portal.
 #### CMCC-CM2-VHR4
 
 - Citation of the model
-    - Cherchi et al. 2020[^Cherchi2020]?
+    - Scoccimarro, Enrico; Bellucci, Alessio; Peano, Daniele (2017). CMCC CMCC-CM2-VHR4 model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.1367>
 - Institution
     - Centro Euro-Mediterraneo sui Cambiamenti Climatici (CMCC), Italy
 - Simulations available (`experiment_id`'s)
@@ -528,7 +529,7 @@ I do not see this model as available through the ESGF data portal.
 #### CNRM-CM6-1
 
 - Citation of the model
-    - Haarsma et al. 2016[^Haarsma2016]
+    - Voldoire, A., Saint-Martin, D., Sénési, S., Decharme, B., Alias, A., Chevallier, M., et al. (2019). Evaluation of CMIP6 DECK experiments with CNRM-CM6-1. Journal of Advances in Modeling Earth Systems, 11, 2177–2213. <doi:10.1029/2019MS001683>
 - Institution
     - Centre Européen de Recherche et de Formation Avancée en Calcul Scientifique (CERFACS), France
 - Simulations available (`experiment_id`'s)
@@ -620,7 +621,7 @@ I do not see this model as available through the ESGF data portal.
 #### CNRM-CM6-1-HR
 
 - Citation of the model
-    - Haarsma et al. 2016[^Haarsma2016]
+    - Voldoire, Aurore (2019). CNRM-CERFACS CNRM-CM6-1-HR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.1387>
 - Institution
     - Centre Européen de Recherche et de Formation Avancée en Calcul Scientifique (CERFACS), France
 - Simulations available (`experiment_id`'s)
@@ -675,7 +676,7 @@ I do not see this model as available through the ESGF data portal.
 #### EC-Earth3P-HR
 
 - Citation of the model
-    - Haarsma et al. 2016[^Haarsma2016]
+    - Haarsma, R., Acosta, M., Bakhshi, R., Bretonnière, P.-A., Caron, L.-P., Castrillo, M., Corti, S., Davini, P., Exarchou, E., Fabiano, F., Fladrich, U., Fuentes Franco, R., García-Serrano, J., von Hardenberg, J., Koenigk, T., Levine, X., Meccia, V. L., van Noije, T., van den Oord, G., Palmeiro, F. M., Rodrigo, M., Ruprich-Robert, Y., Le Sager, P., Tourigny, E., Wang, S., van Weele, M., and Wyser, K.: HighResMIP versions of EC-Earth: EC-Earth3P and EC-Earth3P-HR – description, model computational performance and basic validation, Geosci. Model Dev., 13, 3507–3527, <doi:10.5194/gmd-13-3507-2020>, 2020.
 - Institution
     - EC-Earth Consortium, Europe
 - Simulations available (`experiment_id`'s)
@@ -779,7 +780,7 @@ I do not see this model as available through the ESGF data portal.
 #### HadGEM3-GC3.1-HH
 
 - Citation of the model
-    - Roberts et al. 2019[^Roberts2019]
+    - Roberts, Malcolm (2018). MOHC HadGEM3-GC31-HH model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.445>
 - Institution
     - Met Office Hadley Centre, United Kingdom
 - Simulations available (`experiment_id`'s)
@@ -834,7 +835,7 @@ I do not see this model as available through the ESGF data portal.
 #### HadGEM3-GC3.1-HM
 
 - Citation of the model
-    - Roberts et al. 2019[^Roberts2019]
+    - Roberts, Malcolm (2017). MOHC HadGEM3-GC31-HM model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.446>
 - Institution
     - Met Office Hadley Centre, United Kingdom
 - Simulations available (`experiment_id`'s)
@@ -895,7 +896,7 @@ I do not see this model as available through the ESGF data portal.
 #### HadGEM3-GC3.1-MM
 
 - Citation of the model
-    - Roberts et al. 2019[^Roberts2019]
+    - Ridley, Jeff; Menary, Matthew; Kuhlbrodt, Till; Andrews, Martin; Andrews, Tim (2019). MOHC HadGEM3-GC31-MM model output prepared for CMIP6 CMIP historical. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.6112>
 - Institution
     - Met Office Hadley Centre, United Kingdom
 - Simulations available (`experiment_id`'s)
