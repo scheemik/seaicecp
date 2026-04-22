@@ -23,6 +23,9 @@ From the [HighResMIP website](https://highresmip.org/):
     - [CMCC](#CMCC)
         - [CMCC-CM2-HR4](#CMCC-CM2-HR4)
         - [CMCC-CM2-VHR4](#CMCC-CM2-VHR4)
+    - [CNRM](#CNRM)
+        - [CNRM-CM6-1](#CNRM-CM6-1)
+        - [CNRM-CM6-1-HR](#CNRM-CM6-1-HR)
     - [EC-Earth](#EC-Earth)
         - [EC-Earth3P-HR](#EC-Earth3P-HR)
     - [HadGEM3-GC3](#HadGEM3-GC3)
@@ -48,7 +51,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [CAM5](#CAM5) | Lawrence Berkeley National Laboratory | 100 km <br>25 km | |
 | [CAM6](#CAM6) | NCAR | 100 km <br>28 km | |
 | [CMCC](#CMCC) | Centro Euro-Mediterraneo sui <br>Cambiamenti Climatici | 100 km <br>25 km | 0.25$^\circ$ |
-| CNRM-CM6 | CERFACS | T127 ($∼ 100$ km) <br>T359 ($∼ 35$ km) | 1$^\circ$ <br>0.25$^\circ$ |
+| [CNRM-CM6](#CNRM-CM6) | CERFACS | T127 ($∼ 100$ km) <br>T359 ($∼ 35$ km) | 1$^\circ$ <br>0.25$^\circ$ |
 | [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ |
 | FGOALS | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | |
 | GFDL | GFDL | 200 km <br>- | |
@@ -509,6 +512,153 @@ I do not see this model as available through the ESGF data portal.
 - Evaluation of how well the model resolves the CAA
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
+
+---
+<a id='CNRM'></a>
+[back to top](#top)
+
+### CNRM
+
+<a id='CNRM-CM6-1'></a>
+[back to top](#top)
+
+#### CNRM-CM6-1
+
+- Citation of the model
+    - Haarsma et al. 2016[^Haarsma2016]
+- Institution
+    - Centre Européen de Recherche et de Formation Avancée en Calcul Scientifique (CERFACS), France
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `control-1950`
+    - `spinup-1950`
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconca`
+        - `siconc`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `sidconcdyn`
+        - `simass`
+        - `sitemptop`
+        - `sidmasslat`
+        - `siextentn`
+        - `siextents`
+        - `sisnconc`
+        - `sisnthick`
+        - `sispeed`
+        - `sitempsnic`
+        - `sivol`
+        - `sivoln`
+        - `sivols`
+        - `siareaacrossline`
+        - `siarean`
+        - `siareas`
+        - `sidconcth`
+        - `sidmassgrowthbot`
+        - `sidmassmeltbot`
+        - `sidmassmelttop`
+        - `sidmasstranx`
+        - `sidmasstrany`
+        - `sifb`
+        - `sifllatstop`
+        - `sifllwutop`
+        - `siflsensupbot`
+        - `siflswdtop`
+        - `siflswutop`
+        - `simassacrossline`
+        - `sndmassmelt`
+        - `sndmasssi`
+        - `sndmasssnf`
+        - `sfdsi`
+        - `siage`
+        - `sicompstren`
+        - `sidmassth`
+        - `sihc`
+        - `sidmassdyn`
+        - `sisaltmass`
+        - `sisnhc`
+        - `sisnmass`
+        - `sistrxdtop`
+        - `sitimefrac`
+        - `sidivvel`
+        - `sidmassevapsubl`
+        - `sidmassgrowthwat`
+        - `sidmasssi`
+        - `siflcondbot`
+        - `siflcondtop`
+        - `siflfwbot`
+        - `siflfwdrain`
+        - `siflswdbot`
+        - `sipr`
+        - `sishevel`
+        - `sistrxubot`
+        - `sistrydtop`
+        - `sistryubot`
+        - `sitempbot`
+        - `sndmassdyn`
+        - `sndmasssubl`
+        - `snmassacrossline`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - This model does not appear to have `areacello` or any fixed-frequency variables available. Therefore, I have not made a map of the CAA in Panoply for this model. 
+
+<a id='CNRM-CM6-1-HR'></a>
+[back to top](#top)
+
+#### CNRM-CM6-1-HR
+
+- Citation of the model
+    - Haarsma et al. 2016[^Haarsma2016]
+- Institution
+    - Centre Européen de Recherche et de Formation Avancée en Calcul Scientifique (CERFACS), France
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `control-1950`
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `sfdsi`
+        - `sitempsnic`
+        - `sivoln`
+        - `siconca`
+        - `siextentn`
+        - `siextents`
+        - `simass`
+        - `sisnconc`
+        - `sisnthick`
+        - `sispeed`
+        - `sitemptop`
+        - `sivol`
+        - `sivols`
+        - `sidmassdyn`
+        - `sidmassth`
+        - `sihc`
+        - `sisaltmass`
+        - `sisnhc`
+        - `sisnmass`
+        - `sitimefrac`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - This model does not appear to have `areacello` or any fixed-frequency variables available. Therefore, I have not made a map of the CAA in Panoply for this model. 
 
 ---
 <a id='EC-Earth'></a>
