@@ -37,7 +37,7 @@ From the [HighResMIP website](https://highresmip.org/):
         - [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH)
         - [HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM)
         - [HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM)
-    - [INM-CM-5H](#INM-CM-5H)
+    - [IPSL-CM6A](#IPSL-CM6A)
 - [References](#references)
 
 ---
@@ -62,7 +62,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [FGOALS](#FGOALS) | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | |
 | [GFDL](#GFDL) | GFDL | 200 km <br>- | |
 | [INMCM-5H](#INM-CM-5H) | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ |
-| IPSL-CM6 | IPSL | 0.25$^\circ$ | |
+| [IPSL-CM6](#IPSL-CM6A) | IPSL | 0.25$^\circ$ | |
 | MPAS-CAM | Pacific Northwest National Laboratory | – <br>30–50 km | 0.25$^\circ$ | 
 | MIROC6-CGCM | AORI, Univ. of Tokyo/JAMSTEC/National <br>Institute for Environmental Studies (NIES) | – <br>T213 | 0.25$^\circ$ | 
 | NICAM | JAMSTEC/AORI/ The Univ. of <br>Tokyo/RIKEN/AICS | 56–28 km <br>14 km (short term) | |
@@ -999,6 +999,11 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     
 ---
 
+<a id='INM-CM'></a>
+[back to top](#top)
+
+### INM-CM
+
 <a id='INM-CM-5H'></a>
 [back to top](#top)
 
@@ -1024,6 +1029,38 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
 - Evaluation of how well the model resolves the CAA
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
+    
+---
+
+<a id='IPSL-CM6A'></a>
+[back to top](#top)
+
+### IPSL-CM6A
+
+- This evaluation applies to all of the following models:
+    - IPSL-CM6A-ATM-ICO-LR
+    - IPSL-CM6A-ATM-ICO-MR
+    - IPSL-CM6A-ATM-ICO-HR
+    - IPSL-CM6A-ATM-ICO-VHR
+    - IPSL-CM6A-LR
+    - IPSL-CM6A-ATM-HR
+- Citation of one of the models (IPSL-CM6A-LR)
+    - Boucher, Olivier; Denvil, Sébastien; Levavasseur, Guillaume; Cozic, Anne; Caubel, Arnaud; Foujols, Marie-Alice; Meurdesoif, Yann; Cadule, Patricia; Devilliers, Marion; Ghattas, Josefine; Lebas, Nicolas; Lurton, Thibaut; Mellul, Lidia; Musat, Ionela; Mignot, Juliette; Cheruy, Frédérique (2018). IPSL IPSL-CM6A-LR model output prepared for CMIP6 CMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.1534>
+- Institution
+    - Institut Pierre-Simon Laplace (IPSL), France
+- Simulations available (`experiment_id`'s)
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - None
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+- Decision
+    - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
 
 ---
 <a id='references'></a>
