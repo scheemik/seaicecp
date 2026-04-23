@@ -41,6 +41,9 @@ From the [HighResMIP website](https://highresmip.org/):
     - [MPAS-CAM](#MPAS-CAM)
         - [CAM-MPAS-HR](#CAM-MPAS-HR)
         - [CAM-MPAS-LR](#CAM-MPAS-LR)
+    - [MIROC6-CGCM](#MIROC6-CGCM)
+    - [NICAM](#NICAM)
+        - [NICAM16](#NICAM16)
 - [References](#references)
 
 ---
@@ -68,8 +71,8 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [INMCM-5H](#INM-CM-5H) | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ | No, lacks variables `siage`, `siu`, and `siv` |
 | [IPSL-CM6](#IPSL-CM6A) | IPSL | 0.25$^\circ$ | | No, lacks all sea ice variables |
 | [MPAS-CAM](#MPAS-CAM) | Pacific Northwest National Laboratory | – <br>30–50 km | 0.25$^\circ$ | No, lacks all sea ice variables |
-| MIROC6-CGCM | AORI, Univ. of Tokyo/JAMSTEC/National <br>Institute for Environmental Studies (NIES) | – <br>T213 | 0.25$^\circ$ | 
-| NICAM | JAMSTEC/AORI/ The Univ. of <br>Tokyo/RIKEN/AICS | 56–28 km <br>14 km (short term) | |
+| [MIROC6-CGCM](#MIROC6-CGCM) | AORI, Univ. of Tokyo/JAMSTEC/National <br>Institute for Environmental Studies (NIES) | – <br>T213 | 0.25$^\circ$ | No, not available through ESGF data portal |
+| [NICAM](#NICAM) | JAMSTEC/AORI/ The Univ. of <br>Tokyo/RIKEN/AICS | 56–28 km <br>14 km (short term) | | No, lacks variables `siu`, `siv`, and `siage` |
 | MPI-ESM | Max Planck Institute for Meteorology | T127 ($∼ 100$ km) <br>T255 ($∼ 50$ km) | 0.4$^\circ$ | 
 | MRI-AGCM3 | Meteorological Research Institute | TL159 ($∼ 120$ km) <br>TL959 ($∼ 20$ km) | | 
 | NorESM | Norwegian Climate Service Centre | 2$^\circ$ <br>0.25$^\circ$ | 0.25$^\circ$ | 
@@ -1146,6 +1149,55 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - N/A
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
+    
+---
+<a id='MIROC6-CGCM'></a>
+[back to top](#top)
+
+### MIROC6-CGCM
+
+I do not see this model as available through the ESGF data portal. Here's a citation I found for something related: Shiogama, Hideo; Abe, Manabu; Tatebe, Hiroaki (2019). MIROC MIROC6 model output prepared for CMIP6 ScenarioMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.898>
+- Decision
+    - This model is not available through the ESGF data portal, so I will exclude it from analysis.
+    
+---
+<a id='NICAM'></a>
+[back to top](#top)
+
+### NICAM
+
+<a id='NICAM16'></a>
+[back to top](#top)
+
+#### NICAM16
+
+- This evaluation applies to all of the following models:
+    - `NICAM16-7S`
+    - `NICAM16-9S`
+    - `NICAM16-8S`
+- Citation of one of the models (NICAM16-9S)
+    - Kodama, Chihiro; Ohno, Tomoki; Seiki, Tatsuya; Yashiro, Hisashi; Noda, Akira T.; Nakano, Masuo; Yamada, Yohei; Roh, Woosub; Satoh, Masaki; Nitta, Tomoko; Goto, Daisuke; Miura, Hiroaki; Nasuno, Tomoe; Miyakawa, Tomoki; Chen, Ying-Wen; Sugi, Masato (2019). MIROC NICAM16-9S model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.1036>
+- Institution
+    - Japan Agency for Marine-Earth Science and Technology (JAMSTEC), Japan
+- Simulations available (`experiment_id`'s)
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `siconca`
+        - `simass`
+        - `sisnmass`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - N/A
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - N/A
+- Evaluation of how well the model resolves the CAA
+    - N/A
+- Decision
+    - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
 
 ---
 <a id='references'></a>
