@@ -37,6 +37,7 @@ From the [HighResMIP website](https://highresmip.org/):
         - [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH)
         - [HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM)
         - [HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM)
+    - [INM-CM-5H](#INM-CM-5H)
 - [References](#references)
 
 ---
@@ -60,7 +61,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ |
 | [FGOALS](#FGOALS) | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | |
 | [GFDL](#GFDL) | GFDL | 200 km <br>- | |
-| INMCM-5H | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ |
+| [INMCM-5H](#INM-CM-5H) | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ |
 | IPSL-CM6 | IPSL | 0.25$^\circ$ | |
 | MPAS-CAM | Pacific Northwest National Laboratory | – <br>30–50 km | 0.25$^\circ$ | 
 | MIROC6-CGCM | AORI, Univ. of Tokyo/JAMSTEC/National <br>Institute for Environmental Studies (NIES) | – <br>T213 | 0.25$^\circ$ | 
@@ -994,7 +995,35 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - Ocean and atmosphere resolution
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
 - Evaluation of how well the model resolves the CAA
-    - The `areacello` plot for HadGEM3-GC3.1-MM seems to be identical to the `areacello` plot for [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH), and therefore I won't reproduce it here. 
+    - The `areacello` plot for HadGEM3-GC3.1-MM seems to be identical to the `areacello` plot for [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH), and therefore I won't reproduce it here.
+    
+---
+
+<a id='INM-CM-5H'></a>
+[back to top](#top)
+
+#### INM-CM-5H
+
+- Citation of the model
+    - Volodin, Evgeny; Mortikov, Evgeny; Gritsun, Andrey; Lykossov, Vasily; Galin, Vener; Diansky, Nikolay; Gusev, Anatoly; Kostrykin, Sergey; Iakovlev, Nikolay; Shestakova, Anna; Emelina, Svetlana (2019). INM INM-CM5-0 model output prepared for CMIP6 ScenarioMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.12322>
+- Institution
+    - Institute of Numerical Mathematics, Russian Academy of Sciences, Russia
+- Simulations available (`experiment_id`'s)
+    - `hist-1950`
+    - `control-1950`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `simass`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+- Decision
+    - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
 
 ---
 <a id='references'></a>
