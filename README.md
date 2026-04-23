@@ -16,11 +16,11 @@ $ pip install seaicecp
 
 ## Contributing
 
-Interested in contributing? Check out the contributing guidelines. Please note that this project is released with a Code of Conduct. By contributing to this project, you agree to abide by its terms.
+Interested in contributing? Check out the [contributing guidelines](https://seaicecp.readthedocs.io/en/latest/contributing.html). Please note that this project is released with a [Code of Conduct](https://seaicecp.readthedocs.io/en/latest/conduct.html). By contributing to this project, you agree to abide by its terms.
 
 ## License
 
-`seaicecp` was created by Mikhail Schee. It is licensed under the terms of the MIT license.
+`seaicecp` was created by Mikhail Schee. It is licensed under the terms of the [MIT license](https://seaicecp.readthedocs.io/en/latest/docs_ref/license.html).
 
 ## Credits
 
