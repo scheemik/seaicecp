@@ -4,9 +4,11 @@ Investigate sea ice choke points in the Canadian Arctic Archipelago using high-r
 
 ## Installation
 
-```bash
+- TODO
+
+<!-- ```bash
 $ pip install seaicecp
-```
+``` -->
 
 ## Usage
 
