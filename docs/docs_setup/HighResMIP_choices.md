@@ -47,6 +47,9 @@ From the [HighResMIP website](https://highresmip.org/):
     - [MPI-ESM](#MPI-ESM)
         - [MPI-ESM1-2-HR](#MPI-ESM1-2-HR)
         - [MPI-ESM1-2-XR](#MPI-ESM1-2-XR)
+    - [MRI-AGCM3](#MRI-AGCM3)
+        - [MRI-AGCM3-2-H](#MRI-AGCM3-2-H)
+        - [MRI-AGCM3-2-S](#MRI-AGCM3-2-S)
 - [References](#references)
 
 ---
@@ -77,7 +80,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [MIROC6-CGCM](#MIROC6-CGCM) | AORI, Univ. of Tokyo/JAMSTEC/National <br>Institute for Environmental Studies (NIES) | – <br>T213 | 0.25$^\circ$ | No, not available through ESGF data portal |
 | [NICAM](#NICAM) | JAMSTEC/AORI/ The Univ. of <br>Tokyo/RIKEN/AICS | 56–28 km <br>14 km (short term) | | No, lacks variables `siu`, `siv`, and `siage` |
 | [MPI-ESM](#MPI-ESM) | Max Planck Institute for Meteorology | T127 ($∼ 100$ km) <br>T255 ($∼ 50$ km) | 0.4$^\circ$ | No, lacks `siage` variable |
-| MRI-AGCM3 | Meteorological Research Institute | TL159 ($∼ 120$ km) <br>TL959 ($∼ 20$ km) | | 
+| [MRI-AGCM3](#MRI-AGCM3) | Meteorological Research Institute | TL159 ($∼ 120$ km) <br>TL959 ($∼ 20$ km) | | No, lacks `hist-1950` experiment and variables `siage`, `siu`, and `siv` |
 | NorESM | Norwegian Climate Service Centre | 2$^\circ$ <br>0.25$^\circ$ | 0.25$^\circ$ | 
 
 ---
@@ -1281,7 +1284,7 @@ I do not see this model as available through the ESGF data portal. Here's a cita
 #### MPI-ESM1-2-XR
 
 - Citation of the model
-    - von Storch, Jin-Song; Putrasahan, Dian; Lohmann, Katja; Gutjahr, Oliver; Jungclaus, Johann; Bittner, Matthias; Haak, Helmuth; Wieners, Karl-Hermann; Giorgetta, Marco; Reick, Christian; Esch, Monika; Gayler, Veronika; de Vrese, Philipp; Raddatz, Thomas; Mauritsen, Thorsten; Behrens, Jörg; Brovkin, Victor; Claussen, Martin; Crueger, Traute; Fast, Irina; Fiedler, Stephanie; Hagemann, Stefan; Hohenegger, Cathy; Jahns, Thomas; Kloster, Silvia; Kinne, Stefan; Lasslop, Gitta; Kornblueh, Luis; Marotzke, Jochem; Matei, Daniela; Meraner, Katharina; Mikolajewicz, Uwe; Modali, Kameswarrao; Müller, Wolfgang; Nabel, Julia; Notz, Dirk; Peters-von Gehlen, Karsten; Pincus, Robert; Pohlmann, Holger; Pongratz, Julia; Rast, Sebastian; Schmidt, Hauke; Schnur, Reiner; Schulzweida, Uwe; Six, Katharina; Stevens, Bjorn; Voigt, Aiko; Roeckner, Erich (2017). MPI-M MPI-ESM1.2-XR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD[1].Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.10290>
+    - von Storch, Jin-Song; Putrasahan, Dian; Lohmann, Katja; Gutjahr, Oliver; Jungclaus, Johann; Bittner, Matthias; Haak, Helmuth; Wieners, Karl-Hermann; Giorgetta, Marco; Reick, Christian; Esch, Monika; Gayler, Veronika; de Vrese, Philipp; Raddatz, Thomas; Mauritsen, Thorsten; Behrens, Jörg; Brovkin, Victor; Claussen, Martin; Crueger, Traute; Fast, Irina; Fiedler, Stephanie; Hagemann, Stefan; Hohenegger, Cathy; Jahns, Thomas; Kloster, Silvia; Kinne, Stefan; Lasslop, Gitta; Kornblueh, Luis; Marotzke, Jochem; Matei, Daniela; Meraner, Katharina; Mikolajewicz, Uwe; Modali, Kameswarrao; Müller, Wolfgang; Nabel, Julia; Notz, Dirk; Peters-von Gehlen, Karsten; Pincus, Robert; Pohlmann, Holger; Pongratz, Julia; Rast, Sebastian; Schmidt, Hauke; Schnur, Reiner; Schulzweida, Uwe; Six, Katharina; Stevens, Bjorn; Voigt, Aiko; Roeckner, Erich (2017). MPI-M MPI-ESM1.2-XR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.10290>
 - Institution
     - Max Planck Institute for Meteorology (MPI-M), Germany
 - Simulations available (`experiment_id`'s)
@@ -1339,6 +1342,64 @@ I do not see this model as available through the ESGF data portal. Here's a cita
     - The `volcello` plot for MPI-ESM1-2-XR seems to be identical to the areacello plot for [MPI-ESM1-2-HR](#MPI-ESM1-2-HR), and therefore I won't reproduce it here.
 - Decision
     - This model lacks the `siage` variable. For now, I will exclude this model from the project, but I may revisit this decision if `siage` turns out to not be necessary.
+
+---
+<a id='MRI-AGCM3'></a>
+[back to top](#top)
+
+### MRI-AGCM3
+
+<a id='MRI-AGCM3-2-H'></a>
+[back to top](#top)
+
+#### MRI-AGCM3-2-H
+
+- Citation of the model
+    - Mizuta, Ryo; Yoshimura, Hiromasa; Ose, Tomoaki; Hosaka, Masahiro; Yukimoto, Seiji (2019). MRI MRI-AGCM3-2-H model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.10942>
+- Institution
+    - Meteorological Research Institute (MRI), Japan
+- Simulations available (`experiment_id`'s)
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - N/A
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - N/A
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `volcello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures almost all of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is clear, however lacks several straits along the northern side.
+- Decision
+    - This model lacks the `hist-1950` experiment as well as the variables `siu`, `siv`, and `siage`. Therefore, I will exclude this model from the project.
+
+<a id='MRI-AGCM3-2-S'></a>
+[back to top](#top)
+
+#### MRI-AGCM3-2-S
+
+- Citation of the model
+    - Mizuta, Ryo; Yoshimura, Hiromasa; Ose, Tomoaki; Hosaka, Masahiro; Yukimoto, Seiji (2019). MRI MRI-AGCM3-2-S model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.1625>
+- Institution
+    - Meteorological Research Institute (MRI), Japan
+- Simulations available (`experiment_id`'s)
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - N/A
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - N/A
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `volcello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures almost all of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is clear, however lacks several straits along the northern side.
+- Decision
+    - This model lacks the `hist-1950` experiment as well as the variables `siu`, `siv`, and `siage`. Therefore, I will exclude this model from the project.
 
 ---
 <a id='references'></a>
