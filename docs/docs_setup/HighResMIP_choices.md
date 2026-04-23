@@ -38,6 +38,9 @@ From the [HighResMIP website](https://highresmip.org/):
         - [HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM)
         - [HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM)
     - [IPSL-CM6A](#IPSL-CM6A)
+    - [MPAS-CAM](#MPAS-CAM)
+        - [CAM-MPAS-HR](#CAM-MPAS-HR)
+        - [CAM-MPAS-LR](#CAM-MPAS-LR)
 - [References](#references)
 
 ---
@@ -63,7 +66,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [GFDL](#GFDL) | GFDL | 200 km <br>- | |
 | [INMCM-5H](#INM-CM-5H) | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ |
 | [IPSL-CM6](#IPSL-CM6A) | IPSL | 0.25$^\circ$ | |
-| MPAS-CAM | Pacific Northwest National Laboratory | – <br>30–50 km | 0.25$^\circ$ | 
+| [MPAS-CAM](#MPAS-CAM) | Pacific Northwest National Laboratory | – <br>30–50 km | 0.25$^\circ$ | 
 | MIROC6-CGCM | AORI, Univ. of Tokyo/JAMSTEC/National <br>Institute for Environmental Studies (NIES) | – <br>T213 | 0.25$^\circ$ | 
 | NICAM | JAMSTEC/AORI/ The Univ. of <br>Tokyo/RIKEN/AICS | 56–28 km <br>14 km (short term) | |
 | MPI-ESM | Max Planck Institute for Meteorology | T127 ($∼ 100$ km) <br>T255 ($∼ 50$ km) | 0.4$^\circ$ | 
@@ -1059,6 +1062,65 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - Ocean and atmosphere resolution
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
 - Evaluation of how well the model resolves the CAA
+- Decision
+    - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
+    
+---
+
+<a id='MPAS-CAM'></a>
+[back to top](#top)
+
+### MPAS-CAM
+
+<a id='CAM-MPAS-HR'></a>
+[back to top](#top)
+
+#### CAM-MPAS-HR
+
+- Citation of the model
+    - Pacific Northwest National Laboratory (PNNL) (2025). PNNL-WACCEM CAM-MPAS-HR model output prepared for CMIP6 HighResMIP highresSST-future. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.14090>
+- Institution
+    - Pacific Northwest National Laboratory (PNNL), USA
+- Simulations available (`experiment_id`'s)
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - None
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - N/A
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - N/A
+- Evaluation of how well the model resolves the CAA
+    - N/A
+- Decision
+    - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
+
+<a id='CAM-MPAS-LR'></a>
+[back to top](#top)
+
+#### CAM-MPAS-LR
+
+- Citation of the model
+    - Pacific Northwest National Laboratory (PNNL) (2025). PNNL-WACCEM CAM-MPAS-LR model output prepared for CMIP6 HighResMIP highresSST-future. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.14767>
+- Institution
+    - Pacific Northwest National Laboratory (PNNL), USA
+- Simulations available (`experiment_id`'s)
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - None
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - N/A
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - N/A
+- Evaluation of how well the model resolves the CAA
+    - N/A
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
 
