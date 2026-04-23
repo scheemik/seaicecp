@@ -50,6 +50,7 @@ From the [HighResMIP website](https://highresmip.org/):
     - [MRI-AGCM3](#MRI-AGCM3)
         - [MRI-AGCM3-2-H](#MRI-AGCM3-2-H)
         - [MRI-AGCM3-2-S](#MRI-AGCM3-2-S)
+    - [NorESM](#NorESM)
 - [References](#references)
 
 ---
@@ -81,7 +82,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [NICAM](#NICAM) | JAMSTEC/AORI/ The Univ. of <br>Tokyo/RIKEN/AICS | 56–28 km <br>14 km (short term) | | No, lacks variables `siu`, `siv`, and `siage` |
 | [MPI-ESM](#MPI-ESM) | Max Planck Institute for Meteorology | T127 ($∼ 100$ km) <br>T255 ($∼ 50$ km) | 0.4$^\circ$ | No, lacks `siage` variable |
 | [MRI-AGCM3](#MRI-AGCM3) | Meteorological Research Institute | TL159 ($∼ 120$ km) <br>TL959 ($∼ 20$ km) | | No, lacks `hist-1950` experiment and variables `siage`, `siu`, and `siv` |
-| NorESM | Norwegian Climate Service Centre | 2$^\circ$ <br>0.25$^\circ$ | 0.25$^\circ$ | 
+| [NorESM](#NorESM) | Norwegian Climate Service Centre | 2$^\circ$ <br>0.25$^\circ$ | 0.25$^\circ$ | No, not available through ESGF data portal |
 
 ---
 <a id='selection_criteria'></a>
@@ -1400,6 +1401,17 @@ I do not see this model as available through the ESGF data portal. Here's a cita
     - In the plot below of `volcello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures almost all of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is clear, however lacks several straits along the northern side.
 - Decision
     - This model lacks the `hist-1950` experiment as well as the variables `siu`, `siv`, and `siage`. Therefore, I will exclude this model from the project.
+
+---
+<a id='NorESM'></a>
+[back to top](#top)
+
+### NorESM
+
+I do not see this model as available through the ESGF data portal. Here's a citation I found for something related: Bentsen, Mats; Oliviè, Dirk Jan Leo; Seland, Øyvind; Toniazzo, Thomas; Gjermundsen, Ada; Graff, Lise Seland; Debernard, Jens Boldingh; Gupta, Alok Kumar; He, Yanchun; Kirkevåg, Alf; Schwinger, Jörg; Tjiputra, Jerry; Aas, Kjetil Schanke; Bethke, Ingo; Fan, Yuanchao; Griesfeller, Jan; Grini, Alf; Guo, Chuncheng; Ilicak, Mehmet; Karset, Inger Helene Hafsahl; Landgren, Oskar Andreas; Liakka, Johan; Moseid, Kine Onsum; Nummelin, Aleksi; Spensberger, Clemens; Tang, Hui; Zhang, Zhongshi; Heinze, Christoph; Iversen, Trond; Schulz, Michael (2019). NCC NorESM2-MM model output prepared for CMIP6 ScenarioMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.608>
+
+- Decision
+    - This model is not available through the ESGF data portal, so I will exclude it from the project.
 
 ---
 <a id='references'></a>
