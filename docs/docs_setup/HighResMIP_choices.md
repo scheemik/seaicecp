@@ -134,30 +134,30 @@ I will evaluate the HighResMIP models using criteria similar to Saenko et al. 20
 The following table is adapted from Haarsma et al. 2016[^Haarsma2016]. 
 <!-- "Appendix A: Participating models in HighResMIP.  Table A1. Model details from groups expressing intention to participate in at least Tier 1 simulations, together with the potential model resolutions (if known/available, blank if not)." [^Haarsma2016] (on page 16 / 4200) -->
 
-| Model name | Contact institute | Atmosphere resolution (STD/HI) <br>mid-latitude (km) | Ocean resolution <br>(HI) | Including in this project |
-| --- | --- | --- | --- | --- |
-| [AWI-CM](#AWI-CM) | Alfred Wegener Institute | T127 ($∼100$ km) <br>T255 ($∼ 50$ km) | 1–$\frac{1}{4}^\circ$ <br>0.05–1$^\circ$ | No, lacks `siage` variable |
-| [BCC-CSM2-HR](#BCC-CSM2-HR) | Beijing Climate Center | T106 ($∼ 110$ km) <br>T266 ($∼ 45$ km) | $\frac{1}{3}$–1$^\circ$ | No, lacks `siage` variable |
-| [BESM](#BESM) | INPE | T126 ($∼ 100$ km) <br>T233 ($∼ 60$ km) | 0.25$^\circ$ | No, not available through ESGF data portal |
-| [CAM5](#CAM5) | Lawrence Berkeley National Laboratory | 100 km <br>25 km | | [CESM1-CAM5-ES-LR](#CESM1-CAM5-SE-LR): No, does not resolve any islands in CAA <br>[CESM1-CAM5-SE-HR](#CESM1-CAM5-SE-HR): In consideration, has low-res land mask |
-| [CAM6](#CAM6) | NCAR | 100 km <br>28 km | | No, not available through ESGF data portal |
-| [CAMS](#CAMS) | Chinese Academy of Meteorological <br>Sciences |  |  | No, lacks `hist-1950` experiment and variables `siconc`, `siage`, `siu`, and `siv` |
-| [CMCC](#CMCC) | Centro Euro-Mediterraneo sui <br>Cambiamenti Climatici | 100 km <br>25 km | 0.25$^\circ$ | No, lacks variables `siage`, `siu`, and `siv` |
-| [CNRM-CM6](#CNRM-CM6) | CERFACS | T127 ($∼ 100$ km) <br>T359 ($∼ 35$ km) | 1$^\circ$ <br>0.25$^\circ$ | In consideration pending evaluation of CAA resolution |
-| [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ | [EC-Earth3P-HR](#EC-Earth3P-HR): Yes <br>[EC-Earth3P](#EC-Earth3P): In consideration pending evaluation of CAA resolution |
-| [ECMWF-IFS](#ECMWF-IFS) | ECMWF |  |  | No, lacks `siage` variable |
-| [FGOALS](#FGOALS) | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | No, lacks all sea ice variables |
-| [GFDL](#GFDL) | GFDL | 200 km <br>- | | No, lacks `siage` variable |
-| [HadGEM3-GC3](#HadGEM3-GC3) | Met Office Hadley Centre | 60 km <br>25 km | 0.25$^\circ$ | [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH): Yes <br>[HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM): Yes <br>[HadGEM3-GC3.1-LL](#HadGEM3-GC3.1-LL): In consideration pending evaluation of CAA resolution <br>[HadGEM3-GC3.1-LM](#HadGEM3-GC3.1-LM): No, lacks variables `siage`, `siu`, and `siv` <br>[HadGEM3-GC3.1-MH](#HadGEM3-GC3.1-MH): No, lacks sea ice variables in `hist-1950` experiment <br>[HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM): Yes |
-| [HiRAM-SIT](#HiRAM-SIT) | AS-RCEC |  |  | No, lacks all sea ice variables |
-| [INMCM-5H](#INM-CM5-H) | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ | No, lacks variables `siage`, `siu`, and `siv` |
-| [IPSL-CM6](#IPSL-CM6A) | IPSL | 0.25$^\circ$ | | No, lacks all sea ice variables |
-| [MPAS-CAM](#MPAS-CAM) | Pacific Northwest National Laboratory | – <br>30–50 km | 0.25$^\circ$ | No, lacks all sea ice variables |
-| [MIROC6-CGCM](#MIROC6-CGCM) | AORI, Univ. of Tokyo/JAMSTEC/National <br>Institute for Environmental Studies (NIES) | – <br>T213 | 0.25$^\circ$ | No, not available through ESGF data portal |
-| [NICAM](#NICAM) | JAMSTEC/AORI/ The Univ. of <br>Tokyo/RIKEN/AICS | 56–28 km <br>14 km (short term) | | No, lacks variables `siu`, `siv`, and `siage` |
-| [MPI-ESM](#MPI-ESM) | Max Planck Institute for Meteorology | T127 ($∼ 100$ km) <br>T255 ($∼ 50$ km) | 0.4$^\circ$ | No, lacks `siage` variable |
-| [MRI-AGCM3](#MRI-AGCM3) | Meteorological Research Institute | TL159 ($∼ 120$ km) <br>TL959 ($∼ 20$ km) | | No, lacks `hist-1950` experiment and variables `siage`, `siu`, and `siv` |
-| [NorESM](#NorESM) | Norwegian Climate Service Centre | 2$^\circ$ <br>0.25$^\circ$ | 0.25$^\circ$ | No, not available through ESGF data portal |
+| Model name | Contact institute | Atmosphere resolution (STD/HI) <br>mid-latitude (km) | Ocean resolution <br>(HI) | Including in this project | Historical and Future <br>experiments? | Priority variables available <br>(`siage`, `siconc`, `sithick`, `siu`, `siv`) |
+| --- | --- | --- | --- | --- | --- | --- |
+| [AWI-CM](#AWI-CM) | Alfred Wegener Institute | T127 ($∼100$ km) <br>T255 ($∼ 50$ km) | 1–$\frac{1}{4}^\circ$ <br>0.05–1$^\circ$ | No, lacks `siage` variable | `hist-1950` | `siconc`, `sithick`, `siu`, `siv` |
+| [BCC-CSM2-HR](#BCC-CSM2-HR) | Beijing Climate Center | T106 ($∼ 110$ km) <br>T266 ($∼ 45$ km) | $\frac{1}{3}$–1$^\circ$ | No, lacks `siage` variable | `hist-1950` | `siconc`, `sithick`, `siu`, `siv` |
+| [BESM](#BESM) | INPE | T126 ($∼ 100$ km) <br>T233 ($∼ 60$ km) | 0.25$^\circ$ | No, not available through ESGF data portal | N/A | N/A |
+| [CAM5](#CAM5) | Lawrence Berkeley National Laboratory | 100 km <br>25 km | | [CESM1-CAM5-ES-LR](#CESM1-CAM5-SE-LR): No, does not resolve any islands in CAA <br>[CESM1-CAM5-SE-HR](#CESM1-CAM5-SE-HR): In consideration, has low-res land mask | `hist-1950`, <br>`highres-future` | `siage`, `siconc`, `sithick`, `siu`, `siv` |
+| [CAM6](#CAM6) | NCAR | 100 km <br>28 km | | No, not available through ESGF data portal | N/A | N/A |
+| [CAMS](#CAMS) | Chinese Academy of Meteorological <br>Sciences |  |  | No, lacks `hist-1950` experiment and priority variables | Neither | None, but has `siconca` |
+| [CMCC](#CMCC) | Centro Euro-Mediterraneo sui <br>Cambiamenti Climatici | 100 km <br>25 km | 0.25$^\circ$ | No, lacks most priority variables | `hist-1950`, <br>`highres-future` | `siconc` |
+| [CNRM-CM6](#CNRM-CM6) | CERFACS | T127 ($∼ 100$ km) <br>T359 ($∼ 35$ km) | 1$^\circ$ <br>0.25$^\circ$ | In consideration pending evaluation of CAA resolution | `hist-1950`, <br>`highres-future` | `siage` (not in HR), `siconc`, `sithick`, <br>`siu`, `siv` |
+| [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ | [EC-Earth3P-HR](#EC-Earth3P-HR): Yes <br>[EC-Earth3P](#EC-Earth3P): In consideration pending evaluation of CAA resolution | `hist-1950`, <br>`highres-future` | `siage`, `siconc`, `sithick`, `siu`, `siv` |
+| [ECMWF-IFS](#ECMWF-IFS) | ECMWF |  |  | No, lacks `siage` variable | `hist-1950` | `siconc`, `sithick`, `siu`, `siv` |
+| [FGOALS](#FGOALS) | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | No, lacks all sea ice variables | `hist-1950`, <br>`highres-future` (H only) | None |
+| [GFDL](#GFDL) | GFDL | 200 km <br>- | | No, lacks `siage` variable | `hist-1950` | `siconc`, `sithick`, `siu`, `siv` |
+| [HadGEM3-GC3](#HadGEM3-GC3) | Met Office Hadley Centre | 60 km <br>25 km | 0.25$^\circ$ | [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH): Yes <br>[HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM): Yes <br>[HadGEM3-GC3.1-LL](#HadGEM3-GC3.1-LL): In consideration pending evaluation of CAA resolution <br>[HadGEM3-GC3.1-LM](#HadGEM3-GC3.1-LM): No, lacks variables `siage`, `siu`, and `siv` <br>[HadGEM3-GC3.1-MH](#HadGEM3-GC3.1-MH): No, lacks sea ice variables in `hist-1950` experiment <br>[HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM): Yes | HH, HM, LL, MM: <br>`hist-1950`, <br>`highres-future` <br>LM: Neither <br>MH: `hist-1950` | HH, HM, LL, MH, MM: <br>`siage`, `siconc`, `sithick`, `siu`, `siv` <br> LM: `siconc`, `sithick` |
+| [HiRAM-SIT](#HiRAM-SIT) | AS-RCEC |  |  | No, lacks all sea ice variables | `hist-1950`, <br>`highres-future` | None |
+| [INMCM-5H](#INM-CM5-H) | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ | No, lacks most priority variables | `hist-1950` | `siconc` |
+| [IPSL-CM6](#IPSL-CM6A) | IPSL | 0.25$^\circ$ | | No, lacks all sea ice variables | Neither | None |
+| [MPAS-CAM](#MPAS-CAM) | Pacific Northwest National Laboratory | – <br>30–50 km | 0.25$^\circ$ | No, lacks all sea ice variables | Neither | None |
+| [MIROC6-CGCM](#MIROC6-CGCM) | AORI, Univ. of Tokyo/JAMSTEC/National <br>Institute for Environmental Studies (NIES) | – <br>T213 | 0.25$^\circ$ | No, not available through ESGF data portal | N/A | N/A |
+| [NICAM](#NICAM) | JAMSTEC/AORI/ The Univ. of <br>Tokyo/RIKEN/AICS | 56–28 km <br>14 km (short term) | | No, lacks most priority variables | Neither | `siconc` |
+| [MPI-ESM](#MPI-ESM) | Max Planck Institute for Meteorology | T127 ($∼ 100$ km) <br>T255 ($∼ 50$ km) | 0.4$^\circ$ | No, lacks `siage` variable | `hist-1950`, <br>`highres-future` | `siconc`, `sithick`, `siu`, `siv` |
+| [MRI-AGCM3](#MRI-AGCM3) | Meteorological Research Institute | TL159 ($∼ 120$ km) <br>TL959 ($∼ 20$ km) | | No, lacks most priority variables | Neither | `siconc` |
+| [NorESM](#NorESM) | Norwegian Climate Service Centre | 2$^\circ$ <br>0.25$^\circ$ | 0.25$^\circ$ | No, not available through ESGF data portal | N/A | N/A |
 
 ---
 <a id='models'></a>
