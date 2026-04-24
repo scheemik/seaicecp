@@ -11,8 +11,8 @@ From the [HighResMIP website](https://highresmip.org/):
 - [Table of HighResMIP models](#model_table)
 - [Models](#models)
     - [AWI-CM](#AWI-CM)
-        - [AWI-CM-HR](#AWI-CM-HR)
-        - [AWI-CM-LR](#AWI-CM-LR)
+        - [AWI-CM-1-1-HR](#AWI-CM-1-1-HR)
+        - [AWI-CM-1-1-LR](#AWI-CM-1-1-LR)
     - [BCC-CSM2](#BCC-CSM2)
         - [BCC-CSM2-HR](#BCC-CSM2-HR)
     - [BESM](#BESM)
@@ -23,11 +23,18 @@ From the [HighResMIP website](https://highresmip.org/):
     - [CMCC](#CMCC)
         - [CMCC-CM2-HR4](#CMCC-CM2-HR4)
         - [CMCC-CM2-VHR4](#CMCC-CM2-VHR4)
+    - [CAMS](#CAMS)
+        - [CAMS-CSM1-0](#CAMS-CSM1-0)
     - [CNRM](#CNRM)
         - [CNRM-CM6-1](#CNRM-CM6-1)
         - [CNRM-CM6-1-HR](#CNRM-CM6-1-HR)
     - [EC-Earth](#EC-Earth)
+        - [EC-Earth3P](#EC-Earth3P)
         - [EC-Earth3P-HR](#EC-Earth3P-HR)
+    - [ECMWF-IFS](#ECMWF-IFS)
+        - [ECMWF-IFS-HR](#ECMWF-IFS-HR)
+        - [ECMWF-IFS-LR](#ECMWF-IFS-LR)
+        - [ECMWF-IFS-MR](#ECMWF-IFS-MR)
     - [FGOALS](#FGOALS)
         - [FGOALS-f3-H](#FGOALS-f3-H)
         - [FGOALS-f3-L](#FGOALS-f3-L)
@@ -36,7 +43,13 @@ From the [HighResMIP website](https://highresmip.org/):
     - [HadGEM3-GC3](#HadGEM3-GC3)
         - [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH)
         - [HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM)
+        - [HadGEM3-GC3.1-LL](#HadGEM3-GC3.1-LL)
+        - [HadGEM3-GC3.1-LM](#HadGEM3-GC3.1-LM)
+        - [HadGEM3-GC3.1-MH](#HadGEM3-GC3.1-MH)
         - [HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM)
+    - [HiRAM-SIT](#HiRAM-SIT)
+        - [HiRAM-SIT-HR](#HiRAM-SIT-HR)
+        - [HiRAM-SIT-LR](#HiRAM-SIT-LR)
     - [IPSL-CM6A](#IPSL-CM6A)
     - [MPAS-CAM](#MPAS-CAM)
         - [CAM-MPAS-HR](#CAM-MPAS-HR)
@@ -76,7 +89,21 @@ The selected models are summarized in the supplementary information.
 > 
 > " [^Saenko2025] (on page 19 / X-9)
 
-I will evaluate the HighResMIP models using similar criteria:
+Laliberté et al. 2018[^Laliberte2018] defines landfast ice in model output using a combination of sea ice thickness `sithick`, concentration `siconc`, and velocities `siu` and `siv`. 
+<!-- > "To circumvent this limitation, we use daily sea ice thickness (hereafter, `sit`), sea ice concentration (hereafter, `sic`) and sea ice velocities (hereafter, `usi` and `vsi`) to synthetically characterize landfast sea ice conditions using the following procedure:  
+> 1. On the original model grid, we set the land mask to its nearest neighbour and remap using a nearest-neighbour remapping `usi`, `vsi` and `sit` to the `sic` native grid. Finally, we use a nearest-neighbour remapping to put all variables on a EASE 2.0 grid.  
+> 2. The sea ice speed (hereafter, `speedsi`) is computed from `usi` and `vsi` on this new grid.  
+> 3. Daily `speedsi`, `sit` and `sic` are averaged to weekly means.  
+> 4. A grid cell is identified as having “packed ice” if the remapped weekly mean `sic` is larger than 85 %.  
+> 5. A grid cell is identified as having “slow ice” if the remapped weekly mean `speedsi` is less than 1 cm s$^{−1}$ ($\sim$ 1 km day$^{−1}$).  
+> 6. Slow, packed ice is used as a proxy for landfast ice.  
+> 
+> At each grid cell we then compute the number of months in each year with slow, packed ice. Using slow, packed ice is representative because we are interested in one specific aspect of landfast ice: the fact that its growth is primarily driven by thermodynamics and not by the import/export of sea ice." [^Laliberte2018] (on page 2-3 / 3578-3579) -->
+Cook et al. 2024[^Cook2024] notes that multi-year sea ice flow through the Northwest Passage is a hazard to shipping.
+<!-- "This is particularly important to vessels transiting the NWP, as they become susceptible to the southward flow of thick MYI from the Arctic Ocean [16,17] a process that has increased as a result of climate change [18–20]." [^Cook2024] (on page 1)  -->
+Therefore, `siage` will be a variable of interest.
+
+I will evaluate the HighResMIP models using criteria similar to Saenko et al. 2025[^Saenko2025]:
 - Does the model have both historical and future simulation output available?
     - Historical: `hist-1950`
         - Required.
@@ -84,6 +111,7 @@ I will evaluate the HighResMIP models using similar criteria:
         - Not strictly required, depending on whether we make projections or solely compare to observations. 
 - Does the model have the necessary variables output?
     - Priority variables: `siconc`, `siage`, `siu`, `siv`
+        - Should `sithick` be a priority variable?
     - Probably won't need `sivol` is we are focusing on area fluxes.
     - Likely won't need `tas` unless we want to evaluate correlations between temperature and sea ice variables, following Saenko et al. 2025[^Saenko2025].
 - Does the model have a high enough resolution?
@@ -93,6 +121,7 @@ I will evaluate the HighResMIP models using similar criteria:
 - Does the model reproduce the observed trend in Arctic sea ice area within no more than two standard errors?
     - See Selivanova et al. 2024[^Selivanova2024] Table 3 for observed trend and standard error.
 - Does the model resolve the Canadian Arctic Archipelago (CAA) well?
+    - Initial evaluation done by inspecting maps of how land is represented in the CAA
     - How can I quantitatively evaluate this?
     - What specific channels would be necessary to resolve for this project?
 
@@ -105,27 +134,30 @@ I will evaluate the HighResMIP models using similar criteria:
 The following table is adapted from Haarsma et al. 2016[^Haarsma2016]. 
 <!-- "Appendix A: Participating models in HighResMIP.  Table A1. Model details from groups expressing intention to participate in at least Tier 1 simulations, together with the potential model resolutions (if known/available, blank if not)." [^Haarsma2016] (on page 16 / 4200) -->
 
-| Model name | Contact institute | Atmosphere resolution (STD/HI) <br>mid-latitude (km) | Ocean resolution <br>(HI) | Including in this project |
-| --- | --- | --- | --- | --- |
-| [AWI-CM](#AWI-CM) | Alfred Wegener Institute | T127 ($∼100$ km) <br>T255 ($∼ 50$ km) | 1–$\frac{1}{4}^\circ$ <br>0.05–1$^\circ$ | No, lacks `siage` variable |
-| [BCC-CSM2-HR](#BCC-CSM2-HR) | Beijing Climate Center | T106 ($∼ 110$ km) <br>T266 ($∼ 45$ km) | $\frac{1}{3}$–1$^\circ$ | No, lacks `siage` variable |
-| [BESM](#BESM) | INPE | T126 ($∼ 100$ km) <br>T233 ($∼ 60$ km) | 0.25$^\circ$ | No, not available through ESGF data portal |
-| [CAM5](#CAM5) | Lawrence Berkeley National Laboratory | 100 km <br>25 km | | [CESM1-CAM5-ES-LR](#CESM1-CAM5-SE-LR): No, does not resolve any islands in CAA <br>[CESM1-CAM5-SE-HR](#CESM1-CAM5-SE-HR): In consideration, has low-res land mask |
-| [CAM6](#CAM6) | NCAR | 100 km <br>28 km | | No, not available through ESGF data portal |
-| [CMCC](#CMCC) | Centro Euro-Mediterraneo sui <br>Cambiamenti Climatici | 100 km <br>25 km | 0.25$^\circ$ | No, lacks variables `siage`, `siu`, and `siv` |
-| [CNRM-CM6](#CNRM-CM6) | CERFACS | T127 ($∼ 100$ km) <br>T359 ($∼ 35$ km) | 1$^\circ$ <br>0.25$^\circ$ | In consideration pending evaluation of CAA resolution |
-| [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ | [EC-Earth3P-HR](#EC-Earth3P-HR): Yes |
-| [FGOALS](#FGOALS) | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | No, lacks all sea ice variables |
-| [GFDL](#GFDL) | GFDL | 200 km <br>- | | No, lacks `siage` variable |
-| [HadGEM3-GC3](#HadGEM3-GC3) | Met Office Hadley Centre | 60 km <br>25 km | 0.25$^\circ$ | [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH): Yes <br>[HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM): Yes <br>[HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM): Yes |
-| [INMCM-5H](#INM-CM-5H) | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ | No, lacks variables `siage`, `siu`, and `siv` |
-| [IPSL-CM6](#IPSL-CM6A) | IPSL | 0.25$^\circ$ | | No, lacks all sea ice variables |
-| [MPAS-CAM](#MPAS-CAM) | Pacific Northwest National Laboratory | – <br>30–50 km | 0.25$^\circ$ | No, lacks all sea ice variables |
-| [MIROC6-CGCM](#MIROC6-CGCM) | AORI, Univ. of Tokyo/JAMSTEC/National <br>Institute for Environmental Studies (NIES) | – <br>T213 | 0.25$^\circ$ | No, not available through ESGF data portal |
-| [NICAM](#NICAM) | JAMSTEC/AORI/ The Univ. of <br>Tokyo/RIKEN/AICS | 56–28 km <br>14 km (short term) | | No, lacks variables `siu`, `siv`, and `siage` |
-| [MPI-ESM](#MPI-ESM) | Max Planck Institute for Meteorology | T127 ($∼ 100$ km) <br>T255 ($∼ 50$ km) | 0.4$^\circ$ | No, lacks `siage` variable |
-| [MRI-AGCM3](#MRI-AGCM3) | Meteorological Research Institute | TL159 ($∼ 120$ km) <br>TL959 ($∼ 20$ km) | | No, lacks `hist-1950` experiment and variables `siage`, `siu`, and `siv` |
-| [NorESM](#NorESM) | Norwegian Climate Service Centre | 2$^\circ$ <br>0.25$^\circ$ | 0.25$^\circ$ | No, not available through ESGF data portal |
+| Model name | Contact institute | Atmosphere resolution (STD/HI) <br>mid-latitude (km) | Ocean resolution <br>(HI) | Including in this project | Historical and Future <br>experiments? | Priority variables available <br>(`siage`, `siconc`, `sithick`, `siu`, `siv`) |
+| --- | --- | --- | --- | --- | --- | --- |
+| [AWI-CM](#AWI-CM) | Alfred Wegener Institute | T127 ($∼100$ km) <br>T255 ($∼ 50$ km) | 1–$\frac{1}{4}^\circ$ <br>0.05–1$^\circ$ | No, lacks `siage` variable | `hist-1950` | `siconc`, `sithick`, `siu`, `siv` |
+| [BCC-CSM2-HR](#BCC-CSM2-HR) | Beijing Climate Center | T106 ($∼ 110$ km) <br>T266 ($∼ 45$ km) | $\frac{1}{3}$–1$^\circ$ | No, lacks `siage` variable | `hist-1950` | `siconc`, `sithick`, `siu`, `siv` |
+| [BESM](#BESM) | INPE | T126 ($∼ 100$ km) <br>T233 ($∼ 60$ km) | 0.25$^\circ$ | No, not available through ESGF data portal | N/A | N/A |
+| [CAM5](#CAM5) | Lawrence Berkeley National Laboratory | 100 km <br>25 km | | [CESM1-CAM5-ES-LR](#CESM1-CAM5-SE-LR): No, does not resolve any islands in CAA <br>[CESM1-CAM5-SE-HR](#CESM1-CAM5-SE-HR): In consideration, has low-res land mask | `hist-1950`, <br>`highres-future` | `siage`, `siconc`, `sithick`, `siu`, `siv` |
+| [CAM6](#CAM6) | NCAR | 100 km <br>28 km | | No, not available through ESGF data portal | N/A | N/A |
+| [CAMS](#CAMS) | Chinese Academy of Meteorological <br>Sciences |  |  | No, lacks `hist-1950` experiment and priority variables | Neither | None, but has `siconca` |
+| [CMCC](#CMCC) | Centro Euro-Mediterraneo sui <br>Cambiamenti Climatici | 100 km <br>25 km | 0.25$^\circ$ | No, lacks most priority variables | `hist-1950`, <br>`highres-future` | `siconc` |
+| [CNRM-CM6](#CNRM-CM6) | CERFACS | T127 ($∼ 100$ km) <br>T359 ($∼ 35$ km) | 1$^\circ$ <br>0.25$^\circ$ | In consideration pending evaluation of CAA resolution | `hist-1950`, <br>`highres-future` | `siage` (not in HR), `siconc`, `sithick`, <br>`siu`, `siv` |
+| [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ | [EC-Earth3P-HR](#EC-Earth3P-HR): Yes <br>[EC-Earth3P](#EC-Earth3P): In consideration pending evaluation of CAA resolution | `hist-1950`, <br>`highres-future` | `siage`, `siconc`, `sithick`, `siu`, `siv` |
+| [ECMWF-IFS](#ECMWF-IFS) | ECMWF |  |  | No, lacks `siage` variable | `hist-1950` | `siconc`, `sithick`, `siu`, `siv` |
+| [FGOALS](#FGOALS) | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | No, lacks all sea ice variables | `hist-1950`, <br>`highres-future` (H only) | None |
+| [GFDL](#GFDL) | GFDL | 200 km <br>- | | No, lacks `siage` variable | `hist-1950` | `siconc`, `sithick`, `siu`, `siv` |
+| [HadGEM3-GC3](#HadGEM3-GC3) | Met Office Hadley Centre | 60 km <br>25 km | 0.25$^\circ$ | [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH): Yes <br>[HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM): Yes <br>[HadGEM3-GC3.1-LL](#HadGEM3-GC3.1-LL): In consideration pending evaluation of CAA resolution <br>[HadGEM3-GC3.1-LM](#HadGEM3-GC3.1-LM): No, lacks variables `siage`, `siu`, and `siv` <br>[HadGEM3-GC3.1-MH](#HadGEM3-GC3.1-MH): No, lacks sea ice variables in `hist-1950` experiment <br>[HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM): Yes | HH, HM, LL, MM: <br>`hist-1950`, <br>`highres-future` <br>LM: Neither <br>MH: `hist-1950` | HH, HM, LL, MH, MM: <br>`siage`, `siconc`, `sithick`, `siu`, `siv` <br> LM: `siconc`, `sithick` |
+| [HiRAM-SIT](#HiRAM-SIT) | AS-RCEC |  |  | No, lacks all sea ice variables | `hist-1950`, <br>`highres-future` | None |
+| [INMCM-5H](#INM-CM5-H) | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ | No, lacks most priority variables | `hist-1950` | `siconc` |
+| [IPSL-CM6](#IPSL-CM6A) | IPSL | 0.25$^\circ$ | | No, lacks all sea ice variables | Neither | None |
+| [MPAS-CAM](#MPAS-CAM) | Pacific Northwest National Laboratory | – <br>30–50 km | 0.25$^\circ$ | No, lacks all sea ice variables | Neither | None |
+| [MIROC6-CGCM](#MIROC6-CGCM) | AORI, Univ. of Tokyo/JAMSTEC/National <br>Institute for Environmental Studies (NIES) | – <br>T213 | 0.25$^\circ$ | No, not available through ESGF data portal | N/A | N/A |
+| [NICAM](#NICAM) | JAMSTEC/AORI/ The Univ. of <br>Tokyo/RIKEN/AICS | 56–28 km <br>14 km (short term) | | No, lacks most priority variables | Neither | `siconc` |
+| [MPI-ESM](#MPI-ESM) | Max Planck Institute for Meteorology | T127 ($∼ 100$ km) <br>T255 ($∼ 50$ km) | 0.4$^\circ$ | No, lacks `siage` variable | `hist-1950`, <br>`highres-future` | `siconc`, `sithick`, `siu`, `siv` |
+| [MRI-AGCM3](#MRI-AGCM3) | Meteorological Research Institute | TL159 ($∼ 120$ km) <br>TL959 ($∼ 20$ km) | | No, lacks most priority variables | Neither | `siconc` |
+| [NorESM](#NorESM) | Norwegian Climate Service Centre | 2$^\circ$ <br>0.25$^\circ$ | 0.25$^\circ$ | No, not available through ESGF data portal | N/A | N/A |
 
 ---
 <a id='models'></a>
@@ -139,10 +171,9 @@ Evaluation of each HighResMIP model is presented below with the following inform
 - Simulations available (historical and future)
 - Relevant variables available
 - Resolution information
-    - Ocean and atmosphere resolution
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
 - Evaluation of how well the model resolves the CAA
-    - Plot of `areacello` the CAA in Panoply using these settings:
+    - Plot of `areacello`, `volcello`, or `sftlf` in the CAA in Panoply using these settings:
         - Map Projection
             - Projection: Azimuthal Equal-Area
             - Centered on:
@@ -169,10 +200,10 @@ Evaluation of each HighResMIP model is presented below with the following inform
 
 ### AWI-CM
 
-<a id='AWI-CM-HR'></a>
+<a id='AWI-CM-1-1-HR'></a>
 [back to top](#top)
 
-#### AWI-CM-HR
+#### AWI-CM-1-1-HR
 
 - Citation of the model
     - Semmler, Tido; Danilov, Sergey; Rackow, Thomas; Sidorenko, Dmitry; Hegewald, Jan; Sein, Dmitri; Wang, Qiang; Jung, Thomas (2017). AWI AWI-CM 1.1 HR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.1202>
@@ -211,17 +242,18 @@ Evaluation of each HighResMIP model is presented below with the following inform
         - `sivols`
     - `tas` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
-    - The `areacello` variable in the file for AWI-CM-HR is 1-dimensional and does not appear to map to ocean grid cells. I am unsure whether this is expected, or whether this is an issue with the data file I downloaded.
+    - The `areacello` variable in the file for AWI-CM-1-1-HR is 1-dimensional and does not appear to map to ocean grid cells. I am unsure whether this is expected, or whether this is an issue with the data file I downloaded.
 - Decision
     - This model lacks the `siage` variable. For now, I will exclude this model from the project, but I may revisit this decision if `siage` turns out to not be necessary.
 
-<a id='AWI-CM-LR'></a>
+<a id='AWI-CM-1-1-LR'></a>
 [back to top](#top)
 
-#### AWI-CM-LR
+#### AWI-CM-1-1-LR
 
 - Citation of the model
     - Semmler, Tido; Danilov, Sergey; Rackow, Thomas; Sidorenko, Dmitry; Hegewald, Jan; Sein, Dmitri; Wang, Qiang; Jung, Thomas (2017). AWI AWI-CM 1.1 LR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.1209>
@@ -260,10 +292,11 @@ Evaluation of each HighResMIP model is presented below with the following inform
         - `sivol`
     - `tas` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
-    - The `areacello` variable in the file for AWI-CM-LR is 1-dimensional and does not appear to map to ocean grid cells. I am unsure whether this is expected, or whether this is an issue with the data file I downloaded.
+    - The `areacello` variable in the file for AWI-CM-1-1-LR is 1-dimensional and does not appear to map to ocean grid cells. I am unsure whether this is expected, or whether this is an issue with the data file I downloaded.
 - Decision
     - This model lacks the `siage` variable. For now, I will exclude this model from the project, but I may revisit this decision if `siage` turns out to not be necessary.
 
@@ -299,8 +332,9 @@ Evaluation of each HighResMIP model is presented below with the following inform
         - `sithick`
     - `tas` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `areacello` in Panoply, I don't see any land mask (which would be in gray), so it appears that the model does not resolve the CAA at all. 
     - Additionally, there is a gray line along approximately the 100$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
@@ -386,8 +420,9 @@ Here's a citation I found for something related: Veiga, S. F., Nobre, P., Giarol
         - `siconca`
     - `tas`
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `areacello` in Panoply, the model's land mask (in grey) does not appear to resolve the CAA well. The land mask is missing many islands of the CAA and the coastlines are very blocky and poorly resolved. The Parry Channel is clear, however lacks all the islands along the northern side. 
     - Additionally, there is a gray line along approximately the 110$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
@@ -456,8 +491,9 @@ Here's a citation I found for something related: Veiga, S. F., Nobre, P., Giarol
         - `siconca`
     - `tas`
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `areacello` in Panoply, the model's land mask (in grey) is very low resolution with only a "pole hole" in Greenland.
 - Decision
@@ -476,6 +512,37 @@ Seems like this might not have been completed yet?
 The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc/build/html/cam6_scientific_summary/index.html#references
 - Decision
     - This model is not available through the ESGF data portal, so I will exclude it from the project.
+
+---
+<a id='CAMS'></a>
+[back to top](#top)
+
+### CAMS
+
+<a id='CAMS-CSM1-0'></a>
+[back to top](#top)
+
+#### CAMS-CSM1-0
+
+- Citation of the model
+    - Rong, Xinyao (2019). CAMS CAMS-CSM1.0 model output prepared for CMIP6 ScenarioMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.11004>
+- Institution
+    - Chinese Academy of Meteorological Sciences (CAMS), China
+- Simulations available (`experiment_id`'s)
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconca`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - Not evaluated
+- Decision
+    - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
 
 ---
 <a id='CMCC'></a>
@@ -508,8 +575,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
@@ -539,8 +607,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
@@ -638,8 +707,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - This model does not appear to have `areacello` or any fixed-frequency variables available. Therefore, I have not made a map of the CAA in Panoply for this model. 
 - Decision
@@ -689,8 +759,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - This model does not appear to have `areacello` or any fixed-frequency variables available. Therefore, I have not made a map of the CAA in Panoply for this model. 
 - Decision
@@ -702,12 +773,59 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
 
 ### EC-Earth
 
+<a id='EC-Earth3P'></a>
+[back to top](#top)
+
+#### EC-Earth3P
+
+- Citation of the model
+    - Haarsma, R., Acosta, M., Bakhshi, R., Bretonnière, P.-A., Caron, L.-P., Castrillo, M., Corti, S., Davini, P., Exarchou, E., Fabiano, F., Fladrich, U., Fuentes Franco, R., García-Serrano, J., von Hardenberg, J., Koenigk, T., Levine, X., Meccia, V. L., van Noije, T., van den Oord, G., Palmeiro, F. M., Rodrigo, M., Ruprich-Robert, Y., Le Sager, P., Tourigny, E., Wang, S., van Weele, M., and Wyser, K.: HighResMIP versions of EC-Earth: EC-Earth3P and EC-Earth3P-HR – description, model computational performance and basic validation, Geosci. Model Dev., 13, 3507–3527, <doi:10.5194/gmd-13-3507-2020>, 2020.
+- Institution
+    - EC-Earth Consortium, Europe
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `control-1950`
+    - `spinup-1950`
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `sitemptop`
+        - `sisnthick`
+        - `sispeed`
+        - `siage`
+        - `sicompstren`
+        - `sidmassevapsubl`
+        - `siflswdtop`
+        - `sistrxdtop`
+        - `sistrydtop`
+        - `sivol`
+        - `sisali`
+        - `sidivvel`
+    - `tas`
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `volcello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures the majority of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is mostly clear, however may be too narrow on the eastern end and lacks several straits along the northern side.
+- Decision
+    - In consideration for inclusion in the project. This model has the necessary variables, but does not resolve the CAA as well as others. Further investigation needed to determine whether the resolution is high enough.
+
+![Panoply_map_areacello_Ofx_EC-Earth3P_highres_future](HighResMIP_choices-img/Panoply_map_areacello_Ofx_EC-Earth3P_highres_future.png)
+
 <a id='EC-Earth3P-HR'></a>
 [back to top](#top)
 
 #### EC-Earth3P-HR
 
 - Citation of the model
+    - EC-Earth Consortium (EC-Earth) (2018). EC-Earth-Consortium EC-Earth3P-HR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.2323>
     - Haarsma, R., Acosta, M., Bakhshi, R., Bretonnière, P.-A., Caron, L.-P., Castrillo, M., Corti, S., Davini, P., Exarchou, E., Fabiano, F., Fladrich, U., Fuentes Franco, R., García-Serrano, J., von Hardenberg, J., Koenigk, T., Levine, X., Meccia, V. L., van Noije, T., van den Oord, G., Palmeiro, F. M., Rodrigo, M., Ruprich-Robert, Y., Le Sager, P., Tourigny, E., Wang, S., van Weele, M., and Wyser, K.: HighResMIP versions of EC-Earth: EC-Earth3P and EC-Earth3P-HR – description, model computational performance and basic validation, Geosci. Model Dev., 13, 3507–3527, <doi:10.5194/gmd-13-3507-2020>, 2020.
 - Institution
     - EC-Earth Consortium, Europe
@@ -736,14 +854,133 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
         - `sisali`
     - `tas`
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `areacello` in Panoply, the model's land mask (in grey) appears to resolve the CAA well. The land mask matches well both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays, which represent the coastlines of the CAA. In particular, the Parry Channel seems to be well-resolved.
 - Decision
     - Included in analysis.
 
 ![Panoply_map_areacello_Ofx_EC-Earth3P-HR_highres_future](HighResMIP_choices-img/Panoply_map_areacello_Ofx_EC-Earth3P-HR_highres_future.png)
+
+---
+<a id='ECMWF-IFS'></a>
+[back to top](#top)
+
+### ECMWF-IFS
+
+<a id='ECMWF-IFS-HR'></a>
+[back to top](#top)
+
+#### ECMWF-IFS-HR
+
+- Citation of the model
+    - Roberts, Christopher David; Senan, Retish; Molteni, Franco; Boussetta, Souhail; Keeley, Sarah (2017). ECMWF ECMWF-IFS-HR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.2461>
+- Institution
+    - European Centre for Medium-Range Weather Forecasts (ECMWF), Europe
+- Simulations available (`experiment_id`'s)
+    - `hist-1950`
+    - `control-1950`
+    - `highresSST-present`
+    - `spinup-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `sisnthick`
+        - `sitemptop`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `sistrxdtop`
+        - `sistrydtop`
+        - `sivol`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `sftlf` in Panoply, the model's representation of where land is does an okay job of resolving the CAA. The land matches both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays fairly well for the larger and medium sized islands. The Parry Channel has a point towards the eastern end which seems to have a high percentage of land crossing the channel.
+    - In the plot below of `sftlf` in Panoply, the model's representation of where land is appears to resolve the CAA well. The land matches well both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays, which represent the coastlines of the CAA. In particular, the Parry Channel seems to be fairly well-resolved.
+- Decision
+    - This model lacks the `siage` variable. For now, I will exclude this model from the project, but I may revisit this decision if `siage` turns out to not be necessary.
+
+![Panoply_map_sftlf_fx_ECMWF-IFS-HR_hist_1950](HighResMIP_choices-img/Panoply_map_sftlf_fx_ECMWF-IFS-HR_hist_1950.png)
+
+<a id='ECMWF-IFS-LR'></a>
+[back to top](#top)
+
+#### ECMWF-IFS-LR
+
+- Citation of the model
+    - Roberts, Christopher David; Senan, Retish; Molteni, Franco; Boussetta, Souhail; Keeley, Sarah (2017). ECMWF ECMWF-IFS-LR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.2463>
+- Institution
+    - European Centre for Medium-Range Weather Forecasts (ECMWF), Europe
+- Simulations available (`experiment_id`'s)
+    - `hist-1950`
+    - `control-1950`
+    - `highresSST-present`
+    - `spinup-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `sisnthick`
+        - `sitemptop`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `sistrxdtop`
+        - `sistrydtop`
+        - `sivol`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `sftlf` in Panoply, the model's representation of where land is does an okay job of resolving the CAA. The land matches both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays fairly well for the larger and medium sized islands. The Parry Channel has a point towards the eastern end which seems to have a high percentage of land crossing the channel.
+- Decision
+    - This model lacks the `siage` variable. For now, I will exclude this model from the project, but I may revisit this decision if `siage` turns out to not be necessary. It may also have issues with resolving the Parry Channel.
+
+![Panoply_map_sftlf_fx_ECMWF-IFS-LR_hist_1950](HighResMIP_choices-img/Panoply_map_sftlf_fx_ECMWF-IFS-LR_hist_1950.png)
+
+<a id='ECMWF-IFS-MR'></a>
+[back to top](#top)
+
+#### ECMWF-IFS-MR
+
+- Citation of the model
+    - Roberts, Christopher David; Senan, Retish; Molteni, Franco; Boussetta, Souhail; Keeley, Sarah (2017). ECMWF ECMWF-IFS-LR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.2463>
+- Institution
+    - European Centre for Medium-Range Weather Forecasts (ECMWF), Europe
+- Simulations available (`experiment_id`'s)
+    - `hist-1950`
+    - `control-1950`
+    - `spinup-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `sisnthick`
+        - `sitemptop`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `sistrxdtop`
+        - `sistrydtop`
+        - `sivol`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - This model does not appear to have `areacello`, `sftlf`, or any fixed-frequency variables available. Therefore, I have not made a map of the CAA in Panoply for this model. 
+- Decision
+    - This model lacks the `siage` variable. For now, I will exclude this model from the project, but I may revisit this decision if `siage` turns out to not be necessary.
 
 ---
 <a id='FGOALS'></a>
@@ -772,9 +1009,11 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
+    - Not evaluated
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
 
@@ -796,9 +1035,11 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
+    - Not evaluated
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
 
@@ -839,8 +1080,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - This model does not appear to have `areacello` or any fixed-frequency variables available. Therefore, I have not made a map of the CAA in Panoply for this model.
 - Decision
@@ -900,10 +1142,12 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
         - `sivol`
     - `tas`
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
-    - In the plot below of `areacello` in Panoply, the model's land mask (in grey) appears to resolve the CAA well. I suspect this might indeed be the same `areacello` as was used for EC-Earth3P-HR. The only difference I can see is a gray line along approximately the 107$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
+    - In the plot below of `areacello` in Panoply, the model's land mask (in grey) appears to resolve the CAA well. The land mask matches well both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays, which represent the coastlines of the CAA. In particular, the Parry Channel seems to be well-resolved.
+    - I suspect this might indeed be the same `areacello` as was used for [EC-Earth3P-HR](#EC-Earth3P-HR). The only difference I can see is a gray line along approximately the 107$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
 - Decision
     - Included in analysis.
 
@@ -965,12 +1209,162 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
         - `sivol`
     - `tas`
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - The `areacello` plot for HadGEM3-GC3.1-HM seems to be identical to the `areacello` plot for [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH), and therefore I won't reproduce it here. 
 - Decision
     - Included in analysis.
+
+<a id='HadGEM3-GC3.1-LL'></a>
+[back to top](#top)
+
+#### HadGEM3-GC3.1-LL
+
+- Citation of the model
+    - Ridley, Jeff; Menary, Matthew; Kuhlbrodt, Till; Andrews, Martin; Andrews, Tim (2019). MOHC HadGEM3-GC31-LL model output prepared for CMIP6 CMIP historical. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.6109>
+- Institution
+    - Met Office Hadley Centre, United Kingdom
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `control-1950`
+    - `spinup-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `siage`
+        - `siconc`
+        - `sidivvel`
+        - `sidmassdyn`
+        - `sidmassmeltbot`
+        - `sidmassmelttop`
+        - `sidmassth`
+        - `siflcondbot`
+        - `siflcondtop`
+        - `siflfwbot`
+        - `siflfwdrain`
+        - `sifllatstop`
+        - `sifllwdtop`
+        - `sifllwutop`
+        - `siflsenstop`
+        - `siflsensupbot`
+        - `siflswdtop`
+        - `siflswutop`
+        - `sihc`
+        - `simass`
+        - `sipr`
+        - `sisnconc`
+        - `sisnhc`
+        - `sisnmass`
+        - `sisnthick`
+        - `sispeed`
+        - `sistrxdtop`
+        - `sistrxubot`
+        - `sistrydtop`
+        - `sistryubot`
+        - `sitempbot`
+        - `sitemptop`
+        - `sitimefrac`
+        - `sivol`
+    - `tas`
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `areacello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures the majority of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is mostly clear, however may be too narrow on the eastern end and lacks several straits along the northern side.
+    - I suspect this might indeed be the same `areacello` as was used for [EC-Earth3P](#EC-Earth3P). The only difference I can see is a gray line along approximately the 107$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
+- Decision
+    - In consideration for inclusion in the project. This model has the necessary variables, but does not resolve the CAA as well as others. Further investigation needed to determine whether the resolution is high enough.
+
+![Panoply_map_areacello_Ofx_HadGEM3-GC31-LL_hist-1950](HighResMIP_choices-img/Panoply_map_areacello_Ofx_HadGEM3-GC31-LL_hist-1950.png)
+
+<a id='HadGEM3-GC3.1-LM'></a>
+[back to top](#top)
+
+#### HadGEM3-GC3.1-LM
+
+- Citation of the model
+    - None found
+- Institution
+    - Met Office Hadley Centre, United Kingdom
+- Simulations available (`experiment_id`'s)
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `sithick`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - Not evaluated
+- Decision
+    - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
+
+<a id='HadGEM3-GC3.1-MH'></a>
+[back to top](#top)
+
+#### HadGEM3-GC3.1-MH
+
+- Citation of the model
+    - None found
+- Institution
+    - Met Office Hadley Centre, United Kingdom
+- Simulations available (`experiment_id`'s)
+    - `hist-1950`
+    - `spinup-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `siage`
+        - `siconc`
+        - `sidivvel`
+        - `sidmassdyn`
+        - `sidmassmeltbot`
+        - `sidmassmelttop`
+        - `sidmassth`
+        - `siflcondbot`
+        - `siflcondtop`
+        - `siflfwbot`
+        - `siflfwdrain`
+        - `sifllatstop`
+        - `siflsensupbot`
+        - `sihc`
+        - `simass`
+        - `sipr`
+        - `sisnconc`
+        - `sisnhc`
+        - `sisnmass`
+        - `sisnthick`
+        - `sispeed`
+        - `sistrxdtop`
+        - `sistrxubot`
+        - `sistrydtop`
+        - `sistryubot`
+        - `sitempbot`
+        - `sitimefrac`
+        - `sivol`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - Not evaluated
+- Decision
+    - Excluded from analysis as no sea ice variables are available in the `hist-1950` experiment.
 
 <a id='HadGEM3-GC3.1-MM'></a>
 [back to top](#top)
@@ -1029,12 +1423,75 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
         - `sivol`
     - `tas`
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - The `areacello` plot for HadGEM3-GC3.1-MM seems to be identical to the `areacello` plot for [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH), and therefore I won't reproduce it here.
 - Decision
     - Included in analysis.
+
+---
+<a id='HiRAM-SIT'></a>
+[back to top](#top)
+
+### HiRAM-SIT
+
+<a id='HiRAM-SIT-HR'></a>
+[back to top](#top)
+
+#### HiRAM-SIT-HR
+
+- Citation of the model
+    - Tu, Chia-Ying (2020). AS-RCEC HiRAM-SIT-HR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.13301>
+- Institution
+    - Academia Sinica, Research Center for Environmental Changes (AS-RCEC), Taiwan 
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - None
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - Not evaluated
+- Decision
+    - Excluded from analysis due to lack of any sea ice variables.
+
+<a id='HiRAM-SIT-LR'></a>
+[back to top](#top)
+
+#### HiRAM-SIT-LR
+
+- Citation of the model
+    - Tu, Chia-Ying (2020). AS-RCEC HiRAM-SIT-LR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.13303>
+- Institution
+    - Academia Sinica, Research Center for Environmental Changes (AS-RCEC), Taiwan 
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - None
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - Not evaluated
+- Decision
+    - Excluded from analysis due to lack of any sea ice variables.
     
 ---
 <a id='INM-CM'></a>
@@ -1042,10 +1499,10 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
 
 ### INM-CM
 
-<a id='INM-CM-5H'></a>
+<a id='INM-CM5-H'></a>
 [back to top](#top)
 
-#### INM-CM-5H
+#### INM-CM5-H
 
 - Citation of the model
     - Volodin, Evgeny; Mortikov, Evgeny; Gritsun, Andrey; Lykossov, Vasily; Galin, Vener; Diansky, Nikolay; Gusev, Anatoly; Kostrykin, Sergey; Iakovlev, Nikolay; Shestakova, Anna; Emelina, Svetlana (2019). INM INM-CM5-0 model output prepared for CMIP6 ScenarioMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.12322>
@@ -1062,9 +1519,11 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
+    - Not evaluated
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
     
@@ -1093,9 +1552,11 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
+    - Not evaluated
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
     
@@ -1123,11 +1584,11 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
-    - N/A
+    - Not evaluated
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
 
@@ -1149,11 +1610,11 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
-    - N/A
+    - Not evaluated
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
     
@@ -1198,11 +1659,11 @@ I do not see this model as available through the ESGF data portal. Here's a cita
     - `tas`
     - `areacello` not available
 - Resolution information
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
-    - N/A
+    - Not evaluated
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
 
@@ -1269,9 +1730,9 @@ I do not see this model as available through the ESGF data portal. Here's a cita
     - `tas`
     - `areacello` not available, however `volcello` is available
 - Resolution information
-    - TODO
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
-    - TODO
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `volcello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures almost all of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is clear, however lacks several straits along the northern side.
 - Decision
@@ -1336,9 +1797,9 @@ I do not see this model as available through the ESGF data portal. Here's a cita
     - `tas`
     - `areacello` not available, however `volcello` is available
 - Resolution information
-    - TODO
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
-    - TODO
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - The `volcello` plot for MPI-ESM1-2-XR seems to be identical to the areacello plot for [MPI-ESM1-2-HR](#MPI-ESM1-2-HR), and therefore I won't reproduce it here.
 - Decision
@@ -1368,9 +1829,9 @@ I do not see this model as available through the ESGF data portal. Here's a cita
     - `tas`
     - `areacello` not available
 - Resolution information
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `volcello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures almost all of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is clear, however lacks several straits along the northern side.
 - Decision
@@ -1394,9 +1855,9 @@ I do not see this model as available through the ESGF data portal. Here's a cita
     - `tas`
     - `areacello` not available
 - Resolution information
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `volcello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures almost all of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is clear, however lacks several straits along the northern side.
 - Decision
@@ -1419,7 +1880,11 @@ I do not see this model as available through the ESGF data portal. Here's a cita
 
 ## References
 
+[^Cook2024]: Cook, A.J., J. Dawson, S.E.L. Howell, J.E. Holloway, M. Brady (2024)), "Sea ice choke points reduce the length of the shipping season in the Northwest Passage", _Communications Earth & Environment_, 5(1):1-11, <doi:10.1038/s43247-024-01477-6>
+
 [^Haarsma2016]: Haarsma, R.J, M.J. Roberts, P.L. Vidale et al. (2016), "High Resolution Model Intercomparison Project (HighResMIP v1.0) for CMIP6", _Geoscientific Model Development_, 9(11):4185-4208, <doi:10.5194/gmd-9-4185-2016>
+
+[^Laliberte2018]: Laliberté, F., S. Howell, J-F. Lemieux, F. Dupont, J. Lei (2018), "What historical landfast ice observations tell us about projected ice conditions in Arctic archipelagoes and marginal seas under anthropogenic forcing", _The Cryosphere_, 12(11):3577-3588, <doi:10.5194/tc-12-3577-2018>
 
 [^Roberts2019]: Roberts, M.J., A. Baker, E.W. Blockley, D. Calvert, A. Coward et al. (2019), "Description of the resolution hierarchy of the global coupled HadGEM3-GC3.1 model as used in CMIP6 HighResMIP experiments", _Geoscientific Model Development_, 12:4999-5028, <doi:10.5194/gmd-12-4999-2019>
 
