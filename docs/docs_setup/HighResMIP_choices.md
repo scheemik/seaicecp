@@ -23,6 +23,8 @@ From the [HighResMIP website](https://highresmip.org/):
     - [CMCC](#CMCC)
         - [CMCC-CM2-HR4](#CMCC-CM2-HR4)
         - [CMCC-CM2-VHR4](#CMCC-CM2-VHR4)
+    - [CAMS](#CAMS)
+        - [CAMS-CSM1-0](#CAMS-CSM1-0)
     - [CNRM](#CNRM)
         - [CNRM-CM6-1](#CNRM-CM6-1)
         - [CNRM-CM6-1-HR](#CNRM-CM6-1-HR)
@@ -116,6 +118,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [BESM](#BESM) | INPE | T126 ($∼ 100$ km) <br>T233 ($∼ 60$ km) | 0.25$^\circ$ | No, not available through ESGF data portal |
 | [CAM5](#CAM5) | Lawrence Berkeley National Laboratory | 100 km <br>25 km | | [CESM1-CAM5-ES-LR](#CESM1-CAM5-SE-LR): No, does not resolve any islands in CAA <br>[CESM1-CAM5-SE-HR](#CESM1-CAM5-SE-HR): In consideration, has low-res land mask |
 | [CAM6](#CAM6) | NCAR | 100 km <br>28 km | | No, not available through ESGF data portal |
+| [CAMS](#CAMS) | Chinese Academy of Meteorological <br>Sciences |  |  | No, lacks `hist-1950` experiment and variables `siconc`, `siage`, `siu`, and `siv` |
 | [CMCC](#CMCC) | Centro Euro-Mediterraneo sui <br>Cambiamenti Climatici | 100 km <br>25 km | 0.25$^\circ$ | No, lacks variables `siage`, `siu`, and `siv` |
 | [CNRM-CM6](#CNRM-CM6) | CERFACS | T127 ($∼ 100$ km) <br>T359 ($∼ 35$ km) | 1$^\circ$ <br>0.25$^\circ$ | In consideration pending evaluation of CAA resolution |
 | [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ | [EC-Earth3P-HR](#EC-Earth3P-HR): Yes <br>[EC-Earth3P](#EC-Earth3P): In consideration pending evaluation of CAA resolution |
@@ -480,6 +483,37 @@ Seems like this might not have been completed yet?
 The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc/build/html/cam6_scientific_summary/index.html#references
 - Decision
     - This model is not available through the ESGF data portal, so I will exclude it from the project.
+
+---
+<a id='CAMS'></a>
+[back to top](#top)
+
+### CAMS
+
+<a id='CAMS-CSM1-0'></a>
+[back to top](#top)
+
+#### CAMS-CSM1-0
+
+- Citation of the model
+    - Rong, Xinyao (2019). CAMS CAMS-CSM1.0 model output prepared for CMIP6 ScenarioMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.11004>
+- Institution
+    - Chinese Academy of Meteorological Sciences (CAMS), China
+- Simulations available (`experiment_id`'s)
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconca`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - Not evaluated
+- Decision
+    - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
 
 ---
 <a id='CMCC'></a>
