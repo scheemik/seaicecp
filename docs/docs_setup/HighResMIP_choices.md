@@ -31,6 +31,10 @@ From the [HighResMIP website](https://highresmip.org/):
     - [EC-Earth](#EC-Earth)
         - [EC-Earth3P](#EC-Earth3P)
         - [EC-Earth3P-HR](#EC-Earth3P-HR)
+    - [ECMWF-IFS](#ECMWF-IFS)
+        - [ECMWF-IFS-HR](#ECMWF-IFS-HR)
+        - [ECMWF-IFS-LR](#ECMWF-IFS-LR)
+        - [ECMWF-IFS-MR](#ECMWF-IFS-MR)
     - [FGOALS](#FGOALS)
         - [FGOALS-f3-H](#FGOALS-f3-H)
         - [FGOALS-f3-L](#FGOALS-f3-L)
@@ -122,6 +126,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [CMCC](#CMCC) | Centro Euro-Mediterraneo sui <br>Cambiamenti Climatici | 100 km <br>25 km | 0.25$^\circ$ | No, lacks variables `siage`, `siu`, and `siv` |
 | [CNRM-CM6](#CNRM-CM6) | CERFACS | T127 ($∼ 100$ km) <br>T359 ($∼ 35$ km) | 1$^\circ$ <br>0.25$^\circ$ | In consideration pending evaluation of CAA resolution |
 | [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ | [EC-Earth3P-HR](#EC-Earth3P-HR): Yes <br>[EC-Earth3P](#EC-Earth3P): In consideration pending evaluation of CAA resolution |
+| [ECMWF-IFS](#ECMWF-IFS) | ECMWF |  |  | No, lacks `siage` variable |
 | [FGOALS](#FGOALS) | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | No, lacks all sea ice variables |
 | [GFDL](#GFDL) | GFDL | 200 km <br>- | | No, lacks `siage` variable |
 | [HadGEM3-GC3](#HadGEM3-GC3) | Met Office Hadley Centre | 60 km <br>25 km | 0.25$^\circ$ | [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH): Yes <br>[HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM): Yes <br>[HadGEM3-GC3.1-LL](#HadGEM3-GC3.1-LL): In consideration pending evaluation of CAA resolution <br>[HadGEM3-GC3.1-LM](#HadGEM3-GC3.1-LM): No, lacks variables `siage`, `siu`, and `siv` <br>[HadGEM3-GC3.1-MH](#HadGEM3-GC3.1-MH): No, lacks sea ice variables in `hist-1950` experiment <br>[HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM): Yes |
@@ -828,6 +833,121 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - Included in analysis.
 
 ![Panoply_map_areacello_Ofx_EC-Earth3P-HR_highres_future](HighResMIP_choices-img/Panoply_map_areacello_Ofx_EC-Earth3P-HR_highres_future.png)
+
+---
+<a id='ECMWF-IFS'></a>
+[back to top](#top)
+
+### ECMWF-IFS
+
+<a id='ECMWF-IFS-HR'></a>
+[back to top](#top)
+
+### ECMWF-IFS-HR
+
+- Citation of the model
+    - Roberts, Christopher David; Senan, Retish; Molteni, Franco; Boussetta, Souhail; Keeley, Sarah (2017). ECMWF ECMWF-IFS-HR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.2461>
+- Institution
+    - European Centre for Medium-Range Weather Forecasts (ECMWF), Europe
+- Simulations available (`experiment_id`'s)
+    - `hist-1950`
+    - `control-1950`
+    - `highresSST-present`
+    - `spinup-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `sisnthick`
+        - `sitemptop`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `sistrxdtop`
+        - `sistrydtop`
+        - `sivol`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `sftlf` in Panoply, the model's representation of where land is does an okay job of resolving the CAA. The land matches both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays fairly well for the larger and medium sized islands. The Parry Channel has a point towards the eastern end which seems to have a high percentage of land crossing the channel.
+    - In the plot below of `sftlf` in Panoply, the model's representation of where land is appears to resolve the CAA well. The land matches well both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays, which represent the coastlines of the CAA. In particular, the Parry Channel seems to be fairly well-resolved.
+- Decision
+    - This model lacks the `siage` variable. For now, I will exclude this model from the project, but I may revisit this decision if `siage` turns out to not be necessary.
+
+![Panoply_map_sftlf_fx_ECMWF-IFS-HR_hist_1950](HighResMIP_choices-img/Panoply_map_sftlf_fx_ECMWF-IFS-HR_hist_1950.png)
+
+<a id='ECMWF-IFS-LR'></a>
+[back to top](#top)
+
+### ECMWF-IFS-LR
+
+- Citation of the model
+    - Roberts, Christopher David; Senan, Retish; Molteni, Franco; Boussetta, Souhail; Keeley, Sarah (2017). ECMWF ECMWF-IFS-LR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.2463>
+- Institution
+    - European Centre for Medium-Range Weather Forecasts (ECMWF), Europe
+- Simulations available (`experiment_id`'s)
+    - `hist-1950`
+    - `control-1950`
+    - `highresSST-present`
+    - `spinup-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `sisnthick`
+        - `sitemptop`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `sistrxdtop`
+        - `sistrydtop`
+        - `sivol`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `sftlf` in Panoply, the model's representation of where land is does an okay job of resolving the CAA. The land matches both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays fairly well for the larger and medium sized islands. The Parry Channel has a point towards the eastern end which seems to have a high percentage of land crossing the channel.
+- Decision
+    - This model lacks the `siage` variable. For now, I will exclude this model from the project, but I may revisit this decision if `siage` turns out to not be necessary. It may also have issues with resolving the Parry Channel.
+
+![Panoply_map_sftlf_fx_ECMWF-IFS-LR_hist_1950](HighResMIP_choices-img/Panoply_map_sftlf_fx_ECMWF-IFS-LR_hist_1950.png)
+
+<a id='ECMWF-IFS-MR'></a>
+[back to top](#top)
+
+### ECMWF-IFS-MR
+
+- Citation of the model
+    - Roberts, Christopher David; Senan, Retish; Molteni, Franco; Boussetta, Souhail; Keeley, Sarah (2017). ECMWF ECMWF-IFS-LR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.2463>
+- Institution
+    - European Centre for Medium-Range Weather Forecasts (ECMWF), Europe
+- Simulations available (`experiment_id`'s)
+    - `hist-1950`
+    - `control-1950`
+    - `spinup-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `sisnthick`
+        - `sitemptop`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `sistrxdtop`
+        - `sistrydtop`
+        - `sivol`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - This model does not appear to have `areacello`, `sftlf`, or any fixed-frequency variables available. Therefore, I have not made a map of the CAA in Panoply for this model. 
+- Decision
+    - This model lacks the `siage` variable. For now, I will exclude this model from the project, but I may revisit this decision if `siage` turns out to not be necessary.
 
 ---
 <a id='FGOALS'></a>
