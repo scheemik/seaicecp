@@ -27,6 +27,7 @@ From the [HighResMIP website](https://highresmip.org/):
         - [CNRM-CM6-1](#CNRM-CM6-1)
         - [CNRM-CM6-1-HR](#CNRM-CM6-1-HR)
     - [EC-Earth](#EC-Earth)
+        - [EC-Earth3P](#EC-Earth3P)
         - [EC-Earth3P-HR](#EC-Earth3P-HR)
     - [FGOALS](#FGOALS)
         - [FGOALS-f3-H](#FGOALS-f3-H)
@@ -114,7 +115,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [CAM6](#CAM6) | NCAR | 100 km <br>28 km | | No, not available through ESGF data portal |
 | [CMCC](#CMCC) | Centro Euro-Mediterraneo sui <br>Cambiamenti Climatici | 100 km <br>25 km | 0.25$^\circ$ | No, lacks variables `siage`, `siu`, and `siv` |
 | [CNRM-CM6](#CNRM-CM6) | CERFACS | T127 ($∼ 100$ km) <br>T359 ($∼ 35$ km) | 1$^\circ$ <br>0.25$^\circ$ | In consideration pending evaluation of CAA resolution |
-| [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ | [EC-Earth3P-HR](#EC-Earth3P-HR): Yes |
+| [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ | [EC-Earth3P-HR](#EC-Earth3P-HR): Yes <br>[EC-Earth3P](#EC-Earth3P): In consideration pending evaluation of CAA resolution |
 | [FGOALS](#FGOALS) | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | No, lacks all sea ice variables |
 | [GFDL](#GFDL) | GFDL | 200 km <br>- | | No, lacks `siage` variable |
 | [HadGEM3-GC3](#HadGEM3-GC3) | Met Office Hadley Centre | 60 km <br>25 km | 0.25$^\circ$ | [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH): Yes <br>[HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM): Yes <br>[HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM): Yes |
@@ -702,12 +703,58 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
 
 ### EC-Earth
 
+<a id='EC-Earth3P'></a>
+[back to top](#top)
+
+#### EC-Earth3P
+
+- Citation of the model
+    - Haarsma, R., Acosta, M., Bakhshi, R., Bretonnière, P.-A., Caron, L.-P., Castrillo, M., Corti, S., Davini, P., Exarchou, E., Fabiano, F., Fladrich, U., Fuentes Franco, R., García-Serrano, J., von Hardenberg, J., Koenigk, T., Levine, X., Meccia, V. L., van Noije, T., van den Oord, G., Palmeiro, F. M., Rodrigo, M., Ruprich-Robert, Y., Le Sager, P., Tourigny, E., Wang, S., van Weele, M., and Wyser, K.: HighResMIP versions of EC-Earth: EC-Earth3P and EC-Earth3P-HR – description, model computational performance and basic validation, Geosci. Model Dev., 13, 3507–3527, <doi:10.5194/gmd-13-3507-2020>, 2020.
+- Institution
+    - EC-Earth Consortium, Europe
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `control-1950`
+    - `spinup-1950`
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `sitemptop`
+        - `sisnthick`
+        - `sispeed`
+        - `siage`
+        - `sicompstren`
+        - `sidmassevapsubl`
+        - `siflswdtop`
+        - `sistrxdtop`
+        - `sistrydtop`
+        - `sivol`
+        - `sisali`
+        - `sidivvel`
+    - `tas`
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `volcello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures the majority of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is mostly clear, however may be too narrow on the eastern end and lacks several straits along the northern side.
+- Decision
+    - In consideration for inclusion in the project. This model has the necessary variables, but does not resolve the CAA as well as others. Further investigation needed to determine whether the resolution is high enough.
+
+![Panoply_map_areacello_Ofx_EC-Earth3P_highres_future](HighResMIP_choices-img/Panoply_map_areacello_Ofx_EC-Earth3P_highres_future.png)
+
 <a id='EC-Earth3P-HR'></a>
 [back to top](#top)
 
 #### EC-Earth3P-HR
 
 - Citation of the model
+    - EC-Earth Consortium (EC-Earth) (2018). EC-Earth-Consortium EC-Earth3P-HR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.2323>
     - Haarsma, R., Acosta, M., Bakhshi, R., Bretonnière, P.-A., Caron, L.-P., Castrillo, M., Corti, S., Davini, P., Exarchou, E., Fabiano, F., Fladrich, U., Fuentes Franco, R., García-Serrano, J., von Hardenberg, J., Koenigk, T., Levine, X., Meccia, V. L., van Noije, T., van den Oord, G., Palmeiro, F. M., Rodrigo, M., Ruprich-Robert, Y., Le Sager, P., Tourigny, E., Wang, S., van Weele, M., and Wyser, K.: HighResMIP versions of EC-Earth: EC-Earth3P and EC-Earth3P-HR – description, model computational performance and basic validation, Geosci. Model Dev., 13, 3507–3527, <doi:10.5194/gmd-13-3507-2020>, 2020.
 - Institution
     - EC-Earth Consortium, Europe
