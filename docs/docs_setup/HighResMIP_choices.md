@@ -89,7 +89,21 @@ The selected models are summarized in the supplementary information.
 > 
 > " [^Saenko2025] (on page 19 / X-9)
 
-I will evaluate the HighResMIP models using similar criteria:
+Laliberté et al. 2018[^Laliberte2018] defines landfast ice in model output using a combination of sea ice thickness `sithick`, concentration `siconc`, and velocities `siu` and `siv`. 
+<!-- > "To circumvent this limitation, we use daily sea ice thickness (hereafter, `sit`), sea ice concentration (hereafter, `sic`) and sea ice velocities (hereafter, `usi` and `vsi`) to synthetically characterize landfast sea ice conditions using the following procedure:  
+> 1. On the original model grid, we set the land mask to its nearest neighbour and remap using a nearest-neighbour remapping `usi`, `vsi` and `sit` to the `sic` native grid. Finally, we use a nearest-neighbour remapping to put all variables on a EASE 2.0 grid.  
+> 2. The sea ice speed (hereafter, `speedsi`) is computed from `usi` and `vsi` on this new grid.  
+> 3. Daily `speedsi`, `sit` and `sic` are averaged to weekly means.  
+> 4. A grid cell is identified as having “packed ice” if the remapped weekly mean `sic` is larger than 85 %.  
+> 5. A grid cell is identified as having “slow ice” if the remapped weekly mean `speedsi` is less than 1 cm s$^{−1}$ ($\sim$ 1 km day$^{−1}$).  
+> 6. Slow, packed ice is used as a proxy for landfast ice.  
+> 
+> At each grid cell we then compute the number of months in each year with slow, packed ice. Using slow, packed ice is representative because we are interested in one specific aspect of landfast ice: the fact that its growth is primarily driven by thermodynamics and not by the import/export of sea ice." [^Laliberte2018] (on page 2-3 / 3578-3579) -->
+Cook et al. 2024[^Cook2024] notes that multi-year sea ice flow through the Northwest Passage is a hazard to shipping.
+<!-- "This is particularly important to vessels transiting the NWP, as they become susceptible to the southward flow of thick MYI from the Arctic Ocean [16,17] a process that has increased as a result of climate change [18–20]." [^Cook2024] (on page 1)  -->
+Therefore, `siage` will be a variable of interest.
+
+I will evaluate the HighResMIP models using criteria similar to Saenko et al. 2025[^Saenko2025]:
 - Does the model have both historical and future simulation output available?
     - Historical: `hist-1950`
         - Required.
@@ -97,6 +111,7 @@ I will evaluate the HighResMIP models using similar criteria:
         - Not strictly required, depending on whether we make projections or solely compare to observations. 
 - Does the model have the necessary variables output?
     - Priority variables: `siconc`, `siage`, `siu`, `siv`
+        - Should `sithick` be a priority variable?
     - Probably won't need `sivol` is we are focusing on area fluxes.
     - Likely won't need `tas` unless we want to evaluate correlations between temperature and sea ice variables, following Saenko et al. 2025[^Saenko2025].
 - Does the model have a high enough resolution?
@@ -106,6 +121,7 @@ I will evaluate the HighResMIP models using similar criteria:
 - Does the model reproduce the observed trend in Arctic sea ice area within no more than two standard errors?
     - See Selivanova et al. 2024[^Selivanova2024] Table 3 for observed trend and standard error.
 - Does the model resolve the Canadian Arctic Archipelago (CAA) well?
+    - Initial evaluation done by inspecting maps of how land is represented in the CAA
     - How can I quantitatively evaluate this?
     - What specific channels would be necessary to resolve for this project?
 
@@ -155,10 +171,9 @@ Evaluation of each HighResMIP model is presented below with the following inform
 - Simulations available (historical and future)
 - Relevant variables available
 - Resolution information
-    - Ocean and atmosphere resolution
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
 - Evaluation of how well the model resolves the CAA
-    - Plot of `areacello` the CAA in Panoply using these settings:
+    - Plot of `areacello`, `volcello`, or `sftlf` in the CAA in Panoply using these settings:
         - Map Projection
             - Projection: Azimuthal Equal-Area
             - Centered on:
@@ -1865,7 +1880,11 @@ I do not see this model as available through the ESGF data portal. Here's a cita
 
 ## References
 
+[^Cook2024]: Cook, A.J., J. Dawson, S.E.L. Howell, J.E. Holloway, M. Brady (2024)), "Sea ice choke points reduce the length of the shipping season in the Northwest Passage", _Communications Earth & Environment_, 5(1):1-11, <doi:10.1038/s43247-024-01477-6>
+
 [^Haarsma2016]: Haarsma, R.J, M.J. Roberts, P.L. Vidale et al. (2016), "High Resolution Model Intercomparison Project (HighResMIP v1.0) for CMIP6", _Geoscientific Model Development_, 9(11):4185-4208, <doi:10.5194/gmd-9-4185-2016>
+
+[^Laliberte2018]: Laliberté, F., S. Howell, J-F. Lemieux, F. Dupont, J. Lei (2018), "What historical landfast ice observations tell us about projected ice conditions in Arctic archipelagoes and marginal seas under anthropogenic forcing", _The Cryosphere_, 12(11):3577-3588, <doi:10.5194/tc-12-3577-2018>
 
 [^Roberts2019]: Roberts, M.J., A. Baker, E.W. Blockley, D. Calvert, A. Coward et al. (2019), "Description of the resolution hierarchy of the global coupled HadGEM3-GC3.1 model as used in CMIP6 HighResMIP experiments", _Geoscientific Model Development_, 12:4999-5028, <doi:10.5194/gmd-12-4999-2019>
 
