@@ -37,6 +37,9 @@ From the [HighResMIP website](https://highresmip.org/):
     - [HadGEM3-GC3](#HadGEM3-GC3)
         - [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH)
         - [HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM)
+        - [HadGEM3-GC3.1-LL](#HadGEM3-GC3.1-LL)
+        - [HadGEM3-GC3.1-LM](#HadGEM3-GC3.1-LM)
+        - [HadGEM3-GC3.1-MH](#HadGEM3-GC3.1-MH)
         - [HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM)
     - [IPSL-CM6A](#IPSL-CM6A)
     - [MPAS-CAM](#MPAS-CAM)
@@ -118,7 +121,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [EC-Earth](#EC-Earth) | SMHI, KNMI, BSC, CNR, and 23 other <br>institutes | T255 ($∼ 80$ km) <br>T511/T799 ($∼ 40$/25 km) | 1$^\circ$ <br>0.25$^\circ$ | [EC-Earth3P-HR](#EC-Earth3P-HR): Yes <br>[EC-Earth3P](#EC-Earth3P): In consideration pending evaluation of CAA resolution |
 | [FGOALS](#FGOALS) | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | No, lacks all sea ice variables |
 | [GFDL](#GFDL) | GFDL | 200 km <br>- | | No, lacks `siage` variable |
-| [HadGEM3-GC3](#HadGEM3-GC3) | Met Office Hadley Centre | 60 km <br>25 km | 0.25$^\circ$ | [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH): Yes <br>[HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM): Yes <br>[HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM): Yes |
+| [HadGEM3-GC3](#HadGEM3-GC3) | Met Office Hadley Centre | 60 km <br>25 km | 0.25$^\circ$ | [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH): Yes <br>[HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM): Yes <br>[HadGEM3-GC3.1-LL](#HadGEM3-GC3.1-LL): In consideration pending evaluation of CAA resolution <br>[HadGEM3-GC3.1-LM](#HadGEM3-GC3.1-LM): No, lacks variables `siage`, `siu`, and `siv` <br>[HadGEM3-GC3.1-MH](#HadGEM3-GC3.1-MH): No, lacks sea ice variables in `hist-1950` experiment <br>[HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM): Yes |
 | [INMCM-5H](#INM-CM5-H) | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ | No, lacks variables `siage`, `siu`, and `siv` |
 | [IPSL-CM6](#IPSL-CM6A) | IPSL | 0.25$^\circ$ | | No, lacks all sea ice variables |
 | [MPAS-CAM](#MPAS-CAM) | Pacific Northwest National Laboratory | – <br>30–50 km | 0.25$^\circ$ | No, lacks all sea ice variables |
@@ -950,7 +953,8 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - Ocean and atmosphere resolution
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
 - Evaluation of how well the model resolves the CAA
-    - In the plot below of `areacello` in Panoply, the model's land mask (in grey) appears to resolve the CAA well. I suspect this might indeed be the same `areacello` as was used for EC-Earth3P-HR. The only difference I can see is a gray line along approximately the 107$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
+    - In the plot below of `areacello` in Panoply, the model's land mask (in grey) appears to resolve the CAA well. The land mask matches well both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays, which represent the coastlines of the CAA. In particular, the Parry Channel seems to be well-resolved.
+    - I suspect this might indeed be the same `areacello` as was used for [EC-Earth3P-HR](#EC-Earth3P-HR). The only difference I can see is a gray line along approximately the 107$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
 - Decision
     - Included in analysis.
 
@@ -1018,6 +1022,154 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - The `areacello` plot for HadGEM3-GC3.1-HM seems to be identical to the `areacello` plot for [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH), and therefore I won't reproduce it here. 
 - Decision
     - Included in analysis.
+
+<a id='HadGEM3-GC3.1-LL'></a>
+[back to top](#top)
+
+#### HadGEM3-GC3.1-LL
+
+- Citation of the model
+    - Ridley, Jeff; Menary, Matthew; Kuhlbrodt, Till; Andrews, Martin; Andrews, Tim (2019). MOHC HadGEM3-GC31-LL model output prepared for CMIP6 CMIP historical. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.6109>
+- Institution
+    - Met Office Hadley Centre, United Kingdom
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `control-1950`
+    - `spinup-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `siage`
+        - `siconc`
+        - `sidivvel`
+        - `sidmassdyn`
+        - `sidmassmeltbot`
+        - `sidmassmelttop`
+        - `sidmassth`
+        - `siflcondbot`
+        - `siflcondtop`
+        - `siflfwbot`
+        - `siflfwdrain`
+        - `sifllatstop`
+        - `sifllwdtop`
+        - `sifllwutop`
+        - `siflsenstop`
+        - `siflsensupbot`
+        - `siflswdtop`
+        - `siflswutop`
+        - `sihc`
+        - `simass`
+        - `sipr`
+        - `sisnconc`
+        - `sisnhc`
+        - `sisnmass`
+        - `sisnthick`
+        - `sispeed`
+        - `sistrxdtop`
+        - `sistrxubot`
+        - `sistrydtop`
+        - `sistryubot`
+        - `sitempbot`
+        - `sitemptop`
+        - `sitimefrac`
+        - `sivol`
+    - `tas`
+- Resolution information
+    - Ocean and atmosphere resolution
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+- Evaluation of how well the model resolves the CAA
+    - In the plot below of `areacello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures the majority of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is mostly clear, however may be too narrow on the eastern end and lacks several straits along the northern side.
+    - I suspect this might indeed be the same `areacello` as was used for [EC-Earth3P](#EC-Earth3P). The only difference I can see is a gray line along approximately the 107$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
+- Decision
+    - In consideration for inclusion in the project. This model has the necessary variables, but does not resolve the CAA as well as others. Further investigation needed to determine whether the resolution is high enough.
+
+![Panoply_map_areacello_Ofx_HadGEM3-GC31-LL_hist-1950](HighResMIP_choices-img/Panoply_map_areacello_Ofx_HadGEM3-GC31-LL_hist-1950.png)
+
+<a id='HadGEM3-GC3.1-LM'></a>
+[back to top](#top)
+
+#### HadGEM3-GC3.1-LM
+
+- Citation of the model
+    - None found
+- Institution
+    - Met Office Hadley Centre, United Kingdom
+- Simulations available (`experiment_id`'s)
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `siconc`
+        - `sithick`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - Not evaluated
+- Decision
+    - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
+
+<a id='HadGEM3-GC3.1-MH'></a>
+[back to top](#top)
+
+#### HadGEM3-GC3.1-MH
+
+- Citation of the model
+    - None found
+- Institution
+    - Met Office Hadley Centre, United Kingdom
+- Simulations available (`experiment_id`'s)
+    - `hist-1950`
+    - `spinup-1950`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - `sithick`
+        - `siu`
+        - `siv`
+        - `siage`
+        - `siconc`
+        - `sidivvel`
+        - `sidmassdyn`
+        - `sidmassmeltbot`
+        - `sidmassmelttop`
+        - `sidmassth`
+        - `siflcondbot`
+        - `siflcondtop`
+        - `siflfwbot`
+        - `siflfwdrain`
+        - `sifllatstop`
+        - `siflsensupbot`
+        - `sihc`
+        - `simass`
+        - `sipr`
+        - `sisnconc`
+        - `sisnhc`
+        - `sisnmass`
+        - `sisnthick`
+        - `sispeed`
+        - `sistrxdtop`
+        - `sistrxubot`
+        - `sistrydtop`
+        - `sistryubot`
+        - `sitempbot`
+        - `sitimefrac`
+        - `sivol`
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - Not evaluated
+- Decision
+    - Excluded from analysis as no sea ice variables are available in the `hist-1950` experiment.
 
 <a id='HadGEM3-GC3.1-MM'></a>
 [back to top](#top)
