@@ -227,8 +227,9 @@ Evaluation of each HighResMIP model is presented below with the following inform
         - `sivols`
     - `tas` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - The `areacello` variable in the file for AWI-CM-1-1-HR is 1-dimensional and does not appear to map to ocean grid cells. I am unsure whether this is expected, or whether this is an issue with the data file I downloaded.
 - Decision
@@ -276,8 +277,9 @@ Evaluation of each HighResMIP model is presented below with the following inform
         - `sivol`
     - `tas` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - The `areacello` variable in the file for AWI-CM-1-1-LR is 1-dimensional and does not appear to map to ocean grid cells. I am unsure whether this is expected, or whether this is an issue with the data file I downloaded.
 - Decision
@@ -315,8 +317,9 @@ Evaluation of each HighResMIP model is presented below with the following inform
         - `sithick`
     - `tas` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `areacello` in Panoply, I don't see any land mask (which would be in gray), so it appears that the model does not resolve the CAA at all. 
     - Additionally, there is a gray line along approximately the 100$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
@@ -402,8 +405,9 @@ Here's a citation I found for something related: Veiga, S. F., Nobre, P., Giarol
         - `siconca`
     - `tas`
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `areacello` in Panoply, the model's land mask (in grey) does not appear to resolve the CAA well. The land mask is missing many islands of the CAA and the coastlines are very blocky and poorly resolved. The Parry Channel is clear, however lacks all the islands along the northern side. 
     - Additionally, there is a gray line along approximately the 110$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
@@ -472,8 +476,9 @@ Here's a citation I found for something related: Veiga, S. F., Nobre, P., Giarol
         - `siconca`
     - `tas`
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `areacello` in Panoply, the model's land mask (in grey) is very low resolution with only a "pole hole" in Greenland.
 - Decision
@@ -555,8 +560,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
@@ -586,8 +592,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
@@ -685,8 +692,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - This model does not appear to have `areacello` or any fixed-frequency variables available. Therefore, I have not made a map of the CAA in Panoply for this model. 
 - Decision
@@ -736,8 +744,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - This model does not appear to have `areacello` or any fixed-frequency variables available. Therefore, I have not made a map of the CAA in Panoply for this model. 
 - Decision
@@ -785,8 +794,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
         - `sidivvel`
     - `tas`
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `volcello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures the majority of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is mostly clear, however may be too narrow on the eastern end and lacks several straits along the northern side.
 - Decision
@@ -829,8 +839,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
         - `sisali`
     - `tas`
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `areacello` in Panoply, the model's land mask (in grey) appears to resolve the CAA well. The land mask matches well both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays, which represent the coastlines of the CAA. In particular, the Parry Channel seems to be well-resolved.
 - Decision
@@ -874,6 +885,7 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
 - Resolution information
     - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `sftlf` in Panoply, the model's representation of where land is does an okay job of resolving the CAA. The land matches both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays fairly well for the larger and medium sized islands. The Parry Channel has a point towards the eastern end which seems to have a high percentage of land crossing the channel.
     - In the plot below of `sftlf` in Panoply, the model's representation of where land is appears to resolve the CAA well. The land matches well both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays, which represent the coastlines of the CAA. In particular, the Parry Channel seems to be fairly well-resolved.
@@ -912,6 +924,7 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
 - Resolution information
     - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `sftlf` in Panoply, the model's representation of where land is does an okay job of resolving the CAA. The land matches both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays fairly well for the larger and medium sized islands. The Parry Channel has a point towards the eastern end which seems to have a high percentage of land crossing the channel.
 - Decision
@@ -948,6 +961,7 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
 - Resolution information
     - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - This model does not appear to have `areacello`, `sftlf`, or any fixed-frequency variables available. Therefore, I have not made a map of the CAA in Panoply for this model. 
 - Decision
@@ -980,9 +994,11 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
+    - Not evaluated
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
 
@@ -1004,9 +1020,11 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
+    - Not evaluated
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
 
@@ -1047,8 +1065,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - This model does not appear to have `areacello` or any fixed-frequency variables available. Therefore, I have not made a map of the CAA in Panoply for this model.
 - Decision
@@ -1108,8 +1127,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
         - `sivol`
     - `tas`
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `areacello` in Panoply, the model's land mask (in grey) appears to resolve the CAA well. The land mask matches well both the `Earth.cno` (red dashed line) and `MWDB_Coasts_1.cnob` (black solid line) overlays, which represent the coastlines of the CAA. In particular, the Parry Channel seems to be well-resolved.
     - I suspect this might indeed be the same `areacello` as was used for [EC-Earth3P-HR](#EC-Earth3P-HR). The only difference I can see is a gray line along approximately the 107$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
@@ -1174,8 +1194,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
         - `sivol`
     - `tas`
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - The `areacello` plot for HadGEM3-GC3.1-HM seems to be identical to the `areacello` plot for [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH), and therefore I won't reproduce it here. 
 - Decision
@@ -1236,8 +1257,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
         - `sivol`
     - `tas`
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `areacello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures the majority of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is mostly clear, however may be too narrow on the eastern end and lacks several straits along the northern side.
     - I suspect this might indeed be the same `areacello` as was used for [EC-Earth3P](#EC-Earth3P). The only difference I can see is a gray line along approximately the 107$^\circ$E line of longitude. This line appears to be an artifact, however it is unclear to me whether this would be an artifact in the model data or an artifact of plotting it in Panoply.
@@ -1386,8 +1408,9 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
         - `sivol`
     - `tas`
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - The `areacello` plot for HadGEM3-GC3.1-MM seems to be identical to the `areacello` plot for [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH), and therefore I won't reproduce it here.
 - Decision
@@ -1481,9 +1504,11 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
+    - Not evaluated
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
     
@@ -1512,9 +1537,11 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - Ocean and atmosphere resolution
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
+    - Not evaluated
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
     
@@ -1542,11 +1569,11 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
-    - N/A
+    - Not evaluated
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
 
@@ -1568,11 +1595,11 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - `tas`
     - `areacello` not available
 - Resolution information
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
-    - N/A
+    - Not evaluated
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siconc`, `siu`, `siv`, `siage`).
     
@@ -1617,11 +1644,11 @@ I do not see this model as available through the ESGF data portal. Here's a cita
     - `tas`
     - `areacello` not available
 - Resolution information
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
-    - N/A
+    - Not evaluated
 - Decision
     - Excluded from analysis due to lack of necessary variables (e.g. `siu`, `siv`, `siage`).
 
@@ -1688,9 +1715,9 @@ I do not see this model as available through the ESGF data portal. Here's a cita
     - `tas`
     - `areacello` not available, however `volcello` is available
 - Resolution information
-    - TODO
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
-    - TODO
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `volcello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures almost all of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is clear, however lacks several straits along the northern side.
 - Decision
@@ -1755,9 +1782,9 @@ I do not see this model as available through the ESGF data portal. Here's a cita
     - `tas`
     - `areacello` not available, however `volcello` is available
 - Resolution information
-    - TODO
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
-    - TODO
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - The `volcello` plot for MPI-ESM1-2-XR seems to be identical to the areacello plot for [MPI-ESM1-2-HR](#MPI-ESM1-2-HR), and therefore I won't reproduce it here.
 - Decision
@@ -1787,9 +1814,9 @@ I do not see this model as available through the ESGF data portal. Here's a cita
     - `tas`
     - `areacello` not available
 - Resolution information
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `volcello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures almost all of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is clear, however lacks several straits along the northern side.
 - Decision
@@ -1813,9 +1840,9 @@ I do not see this model as available through the ESGF data portal. Here's a cita
     - `tas`
     - `areacello` not available
 - Resolution information
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
-    - N/A
+    - Not evaluated
 - Evaluation of how well the model resolves the CAA
     - In the plot below of `volcello` in Panoply, the model's land mask (in grey) does an okay job of resolving the CAA. The land mask captures almost all of the islands of the CAA, however in many circumstances, groups of individual islands have been grouped together. The Parry Channel is clear, however lacks several straits along the northern side.
 - Decision
