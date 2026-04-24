@@ -47,6 +47,9 @@ From the [HighResMIP website](https://highresmip.org/):
         - [HadGEM3-GC3.1-LM](#HadGEM3-GC3.1-LM)
         - [HadGEM3-GC3.1-MH](#HadGEM3-GC3.1-MH)
         - [HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM)
+    - [HiRAM-SIT](#HiRAM-SIT)
+        - [HiRAM-SIT-HR](#HiRAM-SIT-HR)
+        - [HiRAM-SIT-LR](#HiRAM-SIT-LR)
     - [IPSL-CM6A](#IPSL-CM6A)
     - [MPAS-CAM](#MPAS-CAM)
         - [CAM-MPAS-HR](#CAM-MPAS-HR)
@@ -130,6 +133,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [FGOALS](#FGOALS) | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | No, lacks all sea ice variables |
 | [GFDL](#GFDL) | GFDL | 200 km <br>- | | No, lacks `siage` variable |
 | [HadGEM3-GC3](#HadGEM3-GC3) | Met Office Hadley Centre | 60 km <br>25 km | 0.25$^\circ$ | [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH): Yes <br>[HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM): Yes <br>[HadGEM3-GC3.1-LL](#HadGEM3-GC3.1-LL): In consideration pending evaluation of CAA resolution <br>[HadGEM3-GC3.1-LM](#HadGEM3-GC3.1-LM): No, lacks variables `siage`, `siu`, and `siv` <br>[HadGEM3-GC3.1-MH](#HadGEM3-GC3.1-MH): No, lacks sea ice variables in `hist-1950` experiment <br>[HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM): Yes |
+| [HiRAM-SIT](#HiRAM-SIT) | AS-RCEC |  |  | No, lacks all sea ice variables |
 | [INMCM-5H](#INM-CM5-H) | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ | No, lacks variables `siage`, `siu`, and `siv` |
 | [IPSL-CM6](#IPSL-CM6A) | IPSL | 0.25$^\circ$ | | No, lacks all sea ice variables |
 | [MPAS-CAM](#MPAS-CAM) | Pacific Northwest National Laboratory | – <br>30–50 km | 0.25$^\circ$ | No, lacks all sea ice variables |
@@ -843,7 +847,7 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
 <a id='ECMWF-IFS-HR'></a>
 [back to top](#top)
 
-### ECMWF-IFS-HR
+#### ECMWF-IFS-HR
 
 - Citation of the model
     - Roberts, Christopher David; Senan, Retish; Molteni, Franco; Boussetta, Souhail; Keeley, Sarah (2017). ECMWF ECMWF-IFS-HR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.2461>
@@ -881,7 +885,7 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
 <a id='ECMWF-IFS-LR'></a>
 [back to top](#top)
 
-### ECMWF-IFS-LR
+#### ECMWF-IFS-LR
 
 - Citation of the model
     - Roberts, Christopher David; Senan, Retish; Molteni, Franco; Boussetta, Souhail; Keeley, Sarah (2017). ECMWF ECMWF-IFS-LR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.2463>
@@ -918,7 +922,7 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
 <a id='ECMWF-IFS-MR'></a>
 [back to top](#top)
 
-### ECMWF-IFS-MR
+#### ECMWF-IFS-MR
 
 - Citation of the model
     - Roberts, Christopher David; Senan, Retish; Molteni, Franco; Boussetta, Souhail; Keeley, Sarah (2017). ECMWF ECMWF-IFS-LR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.2463>
@@ -1388,6 +1392,68 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
     - The `areacello` plot for HadGEM3-GC3.1-MM seems to be identical to the `areacello` plot for [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH), and therefore I won't reproduce it here.
 - Decision
     - Included in analysis.
+
+---
+<a id='HiRAM-SIT'></a>
+[back to top](#top)
+
+### HiRAM-SIT
+
+<a id='HiRAM-SIT-HR'></a>
+[back to top](#top)
+
+#### HiRAM-SIT-HR
+
+- Citation of the model
+    - Tu, Chia-Ying (2020). AS-RCEC HiRAM-SIT-HR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.13301>
+- Institution
+    - Academia Sinica, Research Center for Environmental Changes (AS-RCEC), Taiwan 
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - None
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - Not evaluated
+- Decision
+    - Excluded from analysis due to lack of any sea ice variables.
+
+<a id='HiRAM-SIT-LR'></a>
+[back to top](#top)
+
+#### HiRAM-SIT-LR
+
+- Citation of the model
+    - Tu, Chia-Ying (2020). AS-RCEC HiRAM-SIT-LR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.13303>
+- Institution
+    - Academia Sinica, Research Center for Environmental Changes (AS-RCEC), Taiwan 
+- Simulations available (`experiment_id`'s)
+    - `highres-future`
+    - `hist-1950`
+    - `highresSST-future`
+    - `highresSST-present`
+- Relevant variables available
+    - `realm` = `seaIce`
+        - None
+    - `tas`
+    - `areacello` not available
+- Resolution information
+    - Not evaluated
+- Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
+    - Not evaluated
+- Evaluation of how well the model resolves the CAA
+    - Not evaluated
+- Decision
+    - Excluded from analysis due to lack of any sea ice variables.
     
 ---
 <a id='INM-CM'></a>
