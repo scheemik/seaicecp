@@ -11,8 +11,8 @@ From the [HighResMIP website](https://highresmip.org/):
 - [Table of HighResMIP models](#model_table)
 - [Models](#models)
     - [AWI-CM](#AWI-CM)
-        - [AWI-CM-HR](#AWI-CM-HR)
-        - [AWI-CM-LR](#AWI-CM-LR)
+        - [AWI-CM-1-1-HR](#AWI-CM-1-1-HR)
+        - [AWI-CM-1-1-LR](#AWI-CM-1-1-LR)
     - [BCC-CSM2](#BCC-CSM2)
         - [BCC-CSM2-HR](#BCC-CSM2-HR)
     - [BESM](#BESM)
@@ -119,7 +119,7 @@ The following table is adapted from Haarsma et al. 2016[^Haarsma2016].
 | [FGOALS](#FGOALS) | LASG, IAP, CAS | 100 km <br>25 km | 0.1–0.25$^\circ$ | No, lacks all sea ice variables |
 | [GFDL](#GFDL) | GFDL | 200 km <br>- | | No, lacks `siage` variable |
 | [HadGEM3-GC3](#HadGEM3-GC3) | Met Office Hadley Centre | 60 km <br>25 km | 0.25$^\circ$ | [HadGEM3-GC3.1-HH](#HadGEM3-GC3.1-HH): Yes <br>[HadGEM3-GC3.1-HM](#HadGEM3-GC3.1-HM): Yes <br>[HadGEM3-GC3.1-MM](#HadGEM3-GC3.1-MM): Yes |
-| [INMCM-5H](#INM-CM-5H) | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ | No, lacks variables `siage`, `siu`, and `siv` |
+| [INMCM-5H](#INM-CM5-H) | Institute of Numerical Mathematics | – <br>0.3 $\times$ 0.4$^\circ$ | 0.25 $\times$ 0.5$\circ$ <br>$\frac{1}{6}\times\frac{1}{8}^\circ$ | No, lacks variables `siage`, `siu`, and `siv` |
 | [IPSL-CM6](#IPSL-CM6A) | IPSL | 0.25$^\circ$ | | No, lacks all sea ice variables |
 | [MPAS-CAM](#MPAS-CAM) | Pacific Northwest National Laboratory | – <br>30–50 km | 0.25$^\circ$ | No, lacks all sea ice variables |
 | [MIROC6-CGCM](#MIROC6-CGCM) | AORI, Univ. of Tokyo/JAMSTEC/National <br>Institute for Environmental Studies (NIES) | – <br>T213 | 0.25$^\circ$ | No, not available through ESGF data portal |
@@ -170,10 +170,10 @@ Evaluation of each HighResMIP model is presented below with the following inform
 
 ### AWI-CM
 
-<a id='AWI-CM-HR'></a>
+<a id='AWI-CM-1-1-HR'></a>
 [back to top](#top)
 
-#### AWI-CM-HR
+#### AWI-CM-1-1-HR
 
 - Citation of the model
     - Semmler, Tido; Danilov, Sergey; Rackow, Thomas; Sidorenko, Dmitry; Hegewald, Jan; Sein, Dmitri; Wang, Qiang; Jung, Thomas (2017). AWI AWI-CM 1.1 HR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.1202>
@@ -215,14 +215,14 @@ Evaluation of each HighResMIP model is presented below with the following inform
     - Ocean and atmosphere resolution
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
 - Evaluation of how well the model resolves the CAA
-    - The `areacello` variable in the file for AWI-CM-HR is 1-dimensional and does not appear to map to ocean grid cells. I am unsure whether this is expected, or whether this is an issue with the data file I downloaded.
+    - The `areacello` variable in the file for AWI-CM-1-1-HR is 1-dimensional and does not appear to map to ocean grid cells. I am unsure whether this is expected, or whether this is an issue with the data file I downloaded.
 - Decision
     - This model lacks the `siage` variable. For now, I will exclude this model from the project, but I may revisit this decision if `siage` turns out to not be necessary.
 
-<a id='AWI-CM-LR'></a>
+<a id='AWI-CM-1-1-LR'></a>
 [back to top](#top)
 
-#### AWI-CM-LR
+#### AWI-CM-1-1-LR
 
 - Citation of the model
     - Semmler, Tido; Danilov, Sergey; Rackow, Thomas; Sidorenko, Dmitry; Hegewald, Jan; Sein, Dmitri; Wang, Qiang; Jung, Thomas (2017). AWI AWI-CM 1.1 LR model output prepared for CMIP6 HighResMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.1209>
@@ -264,7 +264,7 @@ Evaluation of each HighResMIP model is presented below with the following inform
     - Ocean and atmosphere resolution
 - Evaluation of how well the model reproduces the observed trend in Arctic sea ice area
 - Evaluation of how well the model resolves the CAA
-    - The `areacello` variable in the file for AWI-CM-LR is 1-dimensional and does not appear to map to ocean grid cells. I am unsure whether this is expected, or whether this is an issue with the data file I downloaded.
+    - The `areacello` variable in the file for AWI-CM-1-1-LR is 1-dimensional and does not appear to map to ocean grid cells. I am unsure whether this is expected, or whether this is an issue with the data file I downloaded.
 - Decision
     - This model lacks the `siage` variable. For now, I will exclude this model from the project, but I may revisit this decision if `siage` turns out to not be necessary.
 
@@ -1089,10 +1089,10 @@ The webpage I found for it is out of date: https://ncar.github.io/CAM_SciDoc/doc
 
 ### INM-CM
 
-<a id='INM-CM-5H'></a>
+<a id='INM-CM5-H'></a>
 [back to top](#top)
 
-#### INM-CM-5H
+#### INM-CM5-H
 
 - Citation of the model
     - Volodin, Evgeny; Mortikov, Evgeny; Gritsun, Andrey; Lykossov, Vasily; Galin, Vener; Diansky, Nikolay; Gusev, Anatoly; Kostrykin, Sergey; Iakovlev, Nikolay; Shestakova, Anna; Emelina, Svetlana (2019). INM INM-CM5-0 model output prepared for CMIP6 ScenarioMIP. Version YYYYMMDD.Earth System Grid Federation. <doi:10.22033/ESGF/CMIP6.12322>
