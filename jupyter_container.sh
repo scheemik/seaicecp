@@ -28,7 +28,7 @@ if [[ -n "$SICP_DATA_DIR" ]]; then
 fi
 
 # ---- Run container (Jupyter starts automatically from CMD) ----
-podman run -it \
+podman run -it --rm \
   --name "$CONTAINER_NAME" \
   -p 8889:8888 \
   "${VOLUMES[@]}" \
