@@ -1,8 +1,8 @@
-# ---- Stage 1: get uv binary ----
-FROM ghcr.io/astral-sh/uv:latest AS uv
+# ---- Stage 1: get uv image ----
+FROM ghcr.io/astral-sh/uv:trixie-slim@sha256:5cbec7ab7753a6c763c6dda6a38f085c8c585ec9f53cfb4e7368b79ca30bc881 AS uv
 
 # ---- Stage 2: main image ----
-FROM debian:trixie-slim
+FROM debian:trixie-slim@sha256:e18da95f66066b7c5fa31491b524e83121271eca59a3d140f4906c8d0a090367
 
 ENV DEBIAN_FRONTEND=noninteractive
 
