@@ -1,0 +1,37 @@
+# ---- Stage 1: get uv binary ----
+FROM ghcr.io/astral-sh/uv:latest AS uv
+
+# ---- Stage 2: main image ----
+FROM debian:trixie-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# System + scientific dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    git \
+    build-essential \
+    pkg-config \
+    libnetcdf-dev \
+    netcdf-bin \
+    libhdf5-dev \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    cdo \
+    nco \
+    python3.13 \
+    python3.13-venv \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Make `python` command available
+RUN ln -s /usr/bin/python3.13 /usr/bin/python
+
+# Copy uv from official image
+COPY --from=uv /uv /usr/local/bin/uv
+
+# Working directory
+WORKDIR /workspace
+
+CMD ["/bin/bash"]
