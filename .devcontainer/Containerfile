@@ -5,6 +5,7 @@ FROM ghcr.io/astral-sh/uv:trixie-slim@sha256:5cbec7ab7753a6c763c6dda6a38f085c8c5
 FROM debian:trixie-slim@sha256:e18da95f66066b7c5fa31491b524e83121271eca59a3d140f4906c8d0a090367
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV UV_LINK_MODE=copy
 
 # System + scientific dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
