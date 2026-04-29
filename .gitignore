@@ -1,3 +1,9 @@
+# Data files
+data/*
+
+# Extra images
+docs/docs_setup/HighResMIP_choices-img/Extra_images/*
+
 # UV generated files
 uv.lock
 
@@ -42,6 +48,7 @@ MANIFEST
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+.devcontainer/build_container_*.txt
 
 # Unit test / coverage reports
 htmlcov/
