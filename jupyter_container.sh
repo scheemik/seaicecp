@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# ---- Ensure podman machine is running (macOS) ----
+if ! podman machine inspect >/dev/null 2>&1; then
+  echo "No podman machine found. Initializing..."
+  podman machine init
+fi
+
+MACHINE_STATE=$(podman machine inspect --format '{{.State}}')
+
+if [[ "$MACHINE_STATE" != "running" ]]; then
+  echo "Starting podman machine..."
+  podman machine start
+fi
+
 # ---- Set parameters ----
 IMAGE="seaicecp_1"
 CONTAINER_NAME="sicp_cont"
