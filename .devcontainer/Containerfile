@@ -48,11 +48,10 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync \
  && uv run python -m ipykernel install --sys-prefix --name python3 --display-name "Python (container)"
 
-# Set up the `esgpull` install
-COPY .devcontainer/esgpull_entrypoint.sh /esgpull_entrypoint.sh
-RUN chmod +x /esgpull_entrypoint.sh
-
-ENTRYPOINT ["/esgpull_entrypoint.sh"]
+# # Set up the `esgpull` install (too many nodes are currently down)
+# COPY .devcontainer/esgpull_entrypoint.sh /esgpull_entrypoint.sh
+# RUN chmod +x /esgpull_entrypoint.sh
+# ENTRYPOINT ["/esgpull_entrypoint.sh"]
 
 # Run the Jupyter server
 EXPOSE 8888
