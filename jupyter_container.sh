@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# This script should be run from the project main directory
 set -euo pipefail
 
 # ---- Ensure podman machine is running (macOS) ----
@@ -21,6 +22,12 @@ WORKDIR="/workspace"
 
 # ---- Cleanup old container if it exists ----
 podman rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
+
+# ---- Ensure image exists ----
+if ! podman image exists "$IMAGE"; then
+  echo "Image $IMAGE not found. Building from `.devcontainer/Containerfile`..."
+  podman build -f .devcontainer/Containerfile -t "$IMAGE" . | tee .devcontainer/build_container_log.txt
+fi
 
 # ---- Setup external hard drive access ----
 export SICP_DATA_DIR=/Volumes/BERGY_BITS/seaicecp_data/
