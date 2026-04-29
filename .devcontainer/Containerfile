@@ -1,3 +1,6 @@
+# Build with the following command
+# podman build -f .devcontainer/Containerfile -t seaicecp_1 . | tee .devcontainer/build_container_try_7.txt
+
 # ---- Stage 1: get uv image ----
 FROM ghcr.io/astral-sh/uv:trixie-slim@sha256:5cbec7ab7753a6c763c6dda6a38f085c8c585ec9f53cfb4e7368b79ca30bc881 AS uv
 
@@ -26,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-# Make `python` command available
+# Make `python` command available via symlink
 RUN ln -s /usr/bin/python3.13 /usr/bin/python
 
 # Copy uv from official image
