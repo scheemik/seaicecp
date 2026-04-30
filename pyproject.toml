@@ -9,10 +9,16 @@ license = "MIT"
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
 dependencies = [
+    "bokeh>=3.9.0",
+    "cartopy>=0.25.0",
     "esgpull>=0.9.6",
+    "geoviews>=1.15.1",
+    "hvplot>=0.12.2",
     "ipykernel>=7.2.0",
     "jupyter>=1.1.1",
     "netcdf4>=1.7.4",
+    "pillow>=12.2.0",
+    "selenium>=4.43.0",
     "xarray>=2026.4.0",
 ]
 
