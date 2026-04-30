@@ -7,6 +7,9 @@ docs/docs_setup/HighResMIP_choices-img/Extra_images/*
 # UV generated files
 uv.lock
 
+# Jupyter generated files
+.jupyter/*
+
 # esgpull generated files
 .esgpull/*
 
