@@ -16,7 +16,7 @@ if [[ "$MACHINE_STATE" != "running" ]]; then
 fi
 
 # ---- Set parameters ----
-IMAGE="seaicecp_3"
+IMAGE="seaicecp_4"
 CONTAINER_NAME="sicp_cont"
 WORKDIR="/workspace"
 
