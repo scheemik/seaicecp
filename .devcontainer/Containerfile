@@ -27,6 +27,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3.13 \
     python3.13-venv \
     python3-pip \
+    chromium \
+    chromium-driver \
+    fonts-liberation \
     && rm -rf /var/lib/apt/lists/*
 
 # Make `python` command available via symlink
