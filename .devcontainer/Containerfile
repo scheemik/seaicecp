@@ -1,0 +1,68 @@
+# Build with the following command
+# podman build -f .devcontainer/Containerfile -t seaicecp_2 . | tee .devcontainer/build_container_try_7.txt
+
+# ---- Stage 1: get uv image ----
+FROM ghcr.io/astral-sh/uv:trixie-slim@sha256:5cbec7ab7753a6c763c6dda6a38f085c8c585ec9f53cfb4e7368b79ca30bc881 AS uv
+
+# ---- Stage 2: main image ----
+FROM debian:trixie-slim@sha256:e18da95f66066b7c5fa31491b524e83121271eca59a3d140f4906c8d0a090367
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV UV_LINK_MODE=copy
+
+# System + scientific dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    git \
+    build-essential \
+    pkg-config \
+    libnetcdf-dev \
+    netcdf-bin \
+    libhdf5-dev \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    cdo \
+    nco \
+    python3.13 \
+    python3.13-venv \
+    python3-pip \
+    chromium \
+    chromium-driver \
+    fonts-liberation \
+    && rm -rf /var/lib/apt/lists/*
+
+# Make `python` command available via symlink
+RUN ln -s /usr/bin/python3.13 /usr/bin/python
+
+# Copy uv from official image
+COPY --from=uv /uv /usr/local/bin/uv
+
+# Working directory
+WORKDIR /workspace
+
+# Copy dependency files for the venv
+COPY pyproject.toml uv.lock ./
+COPY README.md ./
+COPY src ./src
+
+# Install kernel for Jupyter notebooks
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync \
+ && uv run python -m ipykernel install --sys-prefix --name python3 --display-name "Python (container)"
+
+# # Set up the `esgpull` install (too many nodes are currently down)
+# COPY .devcontainer/esgpull_entrypoint.sh /esgpull_entrypoint.sh
+# RUN chmod +x /esgpull_entrypoint.sh
+# ENTRYPOINT ["/esgpull_entrypoint.sh"]
+
+# Run the Jupyter server
+EXPOSE 8888
+
+CMD ["bash", "-lc", "exec uv run jupyter lab \
+    --ip=0.0.0.0 \
+    --port=8888 \
+    --no-browser \
+    --allow-root \
+    --ServerApp.token='' \
+    --ServerApp.password=''"]
