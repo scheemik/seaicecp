@@ -51,6 +51,12 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync \
  && uv run python -m ipykernel install --sys-prefix --name python3 --display-name "Python (container)"
 
+# Trigger downloads of commonly used Natural Earth datasets
+RUN /workspace/.venv/bin/python - <<'EOF'
+import cartopy.io.shapereader as shp
+shp.natural_earth(resolution='110m', category='physical', name='coastline')
+EOF
+
 # # Set up the `esgpull` install (too many nodes are currently down)
 # COPY .devcontainer/esgpull_entrypoint.sh /esgpull_entrypoint.sh
 # RUN chmod +x /esgpull_entrypoint.sh
