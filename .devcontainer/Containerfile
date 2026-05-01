@@ -7,7 +7,11 @@ FROM ghcr.io/astral-sh/uv:trixie-slim@sha256:5cbec7ab7753a6c763c6dda6a38f085c8c5
 # ---- Stage 2: main image ----
 FROM debian:trixie-slim@sha256:e18da95f66066b7c5fa31491b524e83121271eca59a3d140f4906c8d0a090367
 
+## Define environment variables
 ENV DEBIAN_FRONTEND=noninteractive
+# Rename the default directory for the `uv` virtual environment to avoid
+#   conflicts with using the environment in/outside the container
+ENV UV_PROJECT_ENVIRONMENT=/workspace/.cvenv
 ENV UV_LINK_MODE=copy
 
 # System + scientific dependencies
@@ -46,13 +50,13 @@ COPY pyproject.toml uv.lock ./
 COPY README.md ./
 COPY src ./src
 
-# Install kernel for Jupyter notebooks
+# Install dependencies via `uv` and start a kernel for Jupyter notebooks
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync \
  && uv run python -m ipykernel install --sys-prefix --name python3 --display-name "Python (container)"
 
 # Trigger downloads of commonly used Natural Earth datasets
-RUN /workspace/.venv/bin/python - <<'EOF'
+RUN /workspace/.cvenv/bin/python - <<'EOF'
 import cartopy.io.shapereader as shp
 shp.natural_earth(resolution='110m', category='physical', name='coastline')
 EOF
@@ -62,7 +66,7 @@ EOF
 # RUN chmod +x /esgpull_entrypoint.sh
 # ENTRYPOINT ["/esgpull_entrypoint.sh"]
 
-# Run the Jupyter server
+# Expose the port for the Jupyter server
 EXPOSE 8888
 
 CMD ["bash", "-lc", "exec uv run jupyter lab \
