@@ -25,7 +25,7 @@ podman rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
 
 # ---- Ensure image exists ----
 if ! podman image exists "$IMAGE"; then
-  echo "Image $IMAGE not found. Building from `.devcontainer/Containerfile`..."
+  echo "Image $IMAGE not found. Building from '.devcontainer/Containerfile'..."
   podman build -f .devcontainer/Containerfile -t "$IMAGE" . | tee .devcontainer/build_container_log.txt
 fi
 
