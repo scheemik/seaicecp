@@ -4,6 +4,9 @@ data/*
 # Extra images
 docs/docs_setup/HighResMIP_choices-img/Extra_images/*
 
+# Outputs
+outputs/*
+
 # UV generated files
 uv.lock
 
