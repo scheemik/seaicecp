@@ -2,9 +2,12 @@ import hvplot.xarray
 import xarray as xr
 import cartopy.crs as crs
 
+from seaicecp.plot.save_hvplots import save_hvplot
+
 def quadmesh_map(
     xr_data: xr.Dataset,
     var: str, 
+    save_as: str = None,
     **kwargs,
 ):
     """ Create an `hvplot` quadmesh map.
@@ -17,8 +20,11 @@ def quadmesh_map(
             The dataset to plot.
         var : `str`
             The variable in `xr_data` to plot.
+        save_as : `str`, `None`, optional
+            The file name to pass to `seaicecp.plot.save_hvplots.save_hvplot()`.
+            Default is `None`, which doesn't save the plot to a file.
         **kwargs
-            Keyword arguments to pass to `hvplot.quadmesh()`.
+            Keyword arguments to pass to `hvplot.quadmesh()` and 
 
         Returns
         -------
@@ -39,6 +45,10 @@ def quadmesh_map(
         raise TypeError(f"(quadmesh_plot) `var` must be a string. Got type: {type(var)}")
     if var not in xr_data.data_vars:
         raise ValueError(f"(quadmesh_plot) Variable '{var}' not found in `xr_data`. Available variables are: {list(xr_data.data_vars)}")
+    if not isinstance(save_as, (str, type(None))):
+        raise TypeError(f"(quadmesh_plot) `save_as` must be a string or `None`. Got type: {type(save_as)}")
+    
+    print(f"(quadmesh_plot) `save_as`: {save_as}")
 
     # Make the plot
     qm_map_plot = xr_data[var].hvplot.quadmesh(
@@ -50,5 +60,11 @@ def quadmesh_map(
         cmap='viridis', 
         coastline=True,
     )
+
+    # Save the plot, if applicable
+    if not isinstance(save_as, type(None)):
+        # Save the plot to file
+        save_hvplot(qm_map_plot, save_as)
+
     return qm_map_plot
 
