@@ -64,13 +64,13 @@ def quadmesh_map(
     elif map_projection not in ['NorthPolarStereo', 'Orthographic']:
         raise ValueError(f"(quadmesh_map) `map_projection` must be one of the following: 'NorthPolarStereo', 'Orthographic'. Got: {map_projection}")
     if not isinstance(map_bbox, type([])):
-        raise TypeError(f"(get_limited_extent) `map_bbox` must be a list. Got type: {type(map_bbox)}")
+        raise TypeError(f"(quadmesh_map) `map_bbox` must be a list. Got type: {type(map_bbox)}")
     elif not len(map_bbox) == 4:
-        raise ValueError(f"(get_limited_extent) `map_bbox` must have a length of 4. Got length: {len(map_bbox)}")
+        raise ValueError(f"(quadmesh_map) `map_bbox` must have a length of 4. Got length: {len(map_bbox)}")
     else: 
         for i in range(len(map_bbox)):
             if not isinstance(map_bbox[i], (int, float)):
-                raise TypeError(f"(get_limited_extent) `map_bbox[{i}]` must be a number. Got type: {type(map_bbox[i])}")
+                raise TypeError(f"(quadmesh_map) `map_bbox[{i}]` must be a number. Got type: {type(map_bbox[i])}")
     
     # Information to output
     print(f"(quadmesh_map) `save_as`: {save_as}")
@@ -80,7 +80,7 @@ def quadmesh_map(
         # Define the projection for the plot
         map_projection = crs.Orthographic(-90, 77)
     elif map_projection == 'NorthPolarStereo':
-        # Define the boundaries of the box
+        # Unpack the bounding box values
         box_lat_max = map_bbox[0]
         box_lat_min = map_bbox[1]
         box_lon_max = map_bbox[2]
