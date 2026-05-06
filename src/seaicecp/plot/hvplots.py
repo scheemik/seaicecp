@@ -40,15 +40,15 @@ def quadmesh_map(
     """
     # Verify input arguments
     if not isinstance(xr_data, (xr.Dataset, xr.DataArray)):
-        raise TypeError(f"(quadmesh_plot) `xr_data` must be `xr.Dataset` or `xr.DataArray`. Got type: {type(xr_data)}")
+        raise TypeError(f"(quadmesh_map) `xr_data` must be `xr.Dataset` or `xr.DataArray`. Got type: {type(xr_data)}")
     if not isinstance(var, str):
-        raise TypeError(f"(quadmesh_plot) `var` must be a string. Got type: {type(var)}")
+        raise TypeError(f"(quadmesh_map) `var` must be a string. Got type: {type(var)}")
     if var not in xr_data.data_vars:
-        raise ValueError(f"(quadmesh_plot) Variable '{var}' not found in `xr_data`. Available variables are: {list(xr_data.data_vars)}")
+        raise ValueError(f"(quadmesh_map) Variable '{var}' not found in `xr_data`. Available variables are: {list(xr_data.data_vars)}")
     if not isinstance(save_as, (str, type(None))):
-        raise TypeError(f"(quadmesh_plot) `save_as` must be a string or `None`. Got type: {type(save_as)}")
+        raise TypeError(f"(quadmesh_map) `save_as` must be a string or `None`. Got type: {type(save_as)}")
     
-    print(f"(quadmesh_plot) `save_as`: {save_as}")
+    print(f"(quadmesh_map) `save_as`: {save_as}")
 
     # Make the plot
     qm_map_plot = xr_data[var].hvplot.quadmesh(
