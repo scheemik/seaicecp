@@ -74,5 +74,5 @@ CMD ["bash", "-lc", "exec uv run jupyter lab \
     --port=8888 \
     --no-browser \
     --allow-root \
-    --ServerApp.token='' \
+    --IdentityProvider.token='' \
     --ServerApp.password=''"]
