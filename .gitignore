@@ -4,10 +4,17 @@ data/*
 # Extra images
 docs/docs_setup/HighResMIP_choices-img/Extra_images/*
 
+# Outputs
+outputs/*
+
 # UV generated files
 uv.lock
 
+# Jupyter generated files
+.jupyter/*
+
 # esgpull generated files
+esgpull_searches/*
 .esgpull/*
 
 # Byte-compiled / optimized / DLL files

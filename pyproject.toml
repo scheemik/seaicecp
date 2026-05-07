@@ -11,6 +11,7 @@ requires-python = ">=3.13,<3.14"
 dependencies = [
     "bokeh>=3.9.0",
     "cartopy>=0.25.0",
+    "dask>=2026.3.0",
     "esgpull>=0.9.6",
     "geoviews>=1.15.1",
     "hvplot>=0.12.2",
@@ -25,6 +26,8 @@ dependencies = [
 [dependency-groups]
 dev = [
     "myst-nb>=1.4.0",
+    "pytest>=9.0.3",
+    "pytest-cov>=7.1.0",
     "sphinx-autoapi>=3.8.0",
     "sphinx-rtd-theme>=3.1.0",
 ]

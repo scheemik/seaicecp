@@ -16,7 +16,7 @@ if [[ "$MACHINE_STATE" != "running" ]]; then
 fi
 
 # ---- Set parameters ----
-IMAGE="seaicecp_4"
+IMAGE="seaicecp_6"
 CONTAINER_NAME="sicp_cont"
 WORKDIR="/workspace"
 
@@ -25,7 +25,7 @@ podman rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
 
 # ---- Ensure image exists ----
 if ! podman image exists "$IMAGE"; then
-  echo "Image $IMAGE not found. Building from `.devcontainer/Containerfile`..."
+  echo "Image $IMAGE not found. Building from '.devcontainer/Containerfile'..."
   podman build -f .devcontainer/Containerfile -t "$IMAGE" . | tee .devcontainer/build_container_log.txt
 fi
 
