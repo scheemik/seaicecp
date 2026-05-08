@@ -106,11 +106,16 @@ def list_available_models(
 
         Returns
         -------
-        map_extent
+        model_names : List of `str`
+            A list, sorted alphabetically, of the names of the available models.
         
         Examples
         --------
-        >>> 
+        >>> from seaicecp.path.find_data import list_available_models 
+        >>> list_available_models()
+        ['AWI-CM-1-1-HR', 'AWI-CM-1-1-LR', 'BCC-CSM2-HR', 'CESM1-CAM5-SE-HR', 'CESM1-CAM5-SE-LR', 'EC-Earth3P', 'EC-Earth3P-HR', 'HadGEM3-GC31-HM', 'HadGEM3-GC31-LL', 'HadGEM3-GC31-MM']
+        >>> list_available_models(institution_id = 'EC-Earth-Consortium')
+        ['EC-Earth3P', 'EC-Earth3P-HR']
     """
     # Verify input arguments
     if not isinstance(data_dir, str):
@@ -135,7 +140,7 @@ def list_available_models(
     # Verify the paths for each institution ID
     institution_paths = []
     for institution_id in institution_ids:
-        # Verify the file path exists
+        # Verify the file path exists and add it to the list of institution paths
         institution_paths.append(verify_path(f"{full_path}/{institution_id}"))
     # Get the model names using nested iterations to avoid a list of lists
     model_names = [model_name for path in institution_paths for model_name in next(os.walk(path))[1]]
