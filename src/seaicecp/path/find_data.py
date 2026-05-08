@@ -238,16 +238,18 @@ def list_available_variables(
 
         Returns
         -------
-        variable_names : List of `str`
-            A list, sorted alphabetically, of the names of the available variables.
+        avail_var_dict : `dict`
+            A dictionary of experiment ID's whose keys are dictionaries of variant labels whose keys are lists of available variables.
         
         Examples
         --------
-        >>> from seaicecp.path.find_data import list_available_models 
-        >>> list_available_models()
-        ['AWI-CM-1-1-HR', 'AWI-CM-1-1-LR', 'BCC-CSM2-HR', 'CESM1-CAM5-SE-HR', 'CESM1-CAM5-SE-LR', 'EC-Earth3P', 'EC-Earth3P-HR', 'HadGEM3-GC31-HM', 'HadGEM3-GC31-LL', 'HadGEM3-GC31-MM']
-        >>> list_available_models(institution_id = 'EC-Earth-Consortium')
-        ['EC-Earth3P', 'EC-Earth3P-HR']
+        >>> from seaicecp.path.find_data import list_available_variables 
+        >>> list_available_variables(source_id = 'HadGEM3-GC31-HM')
+        {'control-1950': {'r1i1p1f1': ['areacello']},
+        'highres-future': {'r1i1p1f1': ['areacello']},
+        'hist-1950': {'r1i1p1f1': ['areacello']}}
+        >>> list_available_variables(source_id = 'HadGEM3-GC31-HM', experiment_id = 'hist-1950')
+        {'hist-1950': {'r1i1p1f1': ['areacello']}}
     """
     # Verify input arguments
     if not isinstance(source_id, str):
