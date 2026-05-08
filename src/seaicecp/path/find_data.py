@@ -1,4 +1,5 @@
 import os
+import glob
 
 from seaicecp.verify import verify_path
 
@@ -147,3 +148,69 @@ def list_available_models(
 
     return sorted(model_names)
 
+def get_model_path(
+    source_id: str,
+    data_dir: str = '/seaicecp_data/bergybits/data',
+    project: str = 'CMIP6',
+    activity_id: str = 'HighResMIP',
+):
+    """ Find the file path for the specified model.
+
+        Search the data directory that has been populated by `esgpull` for a model's `source_id` and return the file path.
+        This assumes the `esgpull` convention of subdirectories: `data/project/activity_id/institution_id/source_id`.
+
+        Parameters
+        ----------
+        source_id : `str`
+            The name of the source ID (model) for which to find the file path.
+        data_dir : `str`, optional
+            The absolute file path to the data directory.
+            The `esgpull` convention means this should end in `/data`.
+            Default is `/seaicecp_data/bergybits/data`.
+        project : `str`, optional
+            The name of the project in which to search for available models.
+            Default is `CMIP6`.
+        activity_id : `str`, optional
+            The name of the activity ID in which to search for available models.
+            Default is `HighResMIP`.
+
+        Returns
+        -------
+        model_path : `str`
+            The file path to the directory for the specified model.
+        
+        Examples
+        --------
+        >>> from seaicecp.path.find_data import get_model_path
+        >>> get_model_path('HadGEM3-GC31-HM')
+        '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/MOHC/HadGEM3-GC31-HM'
+    """
+    # Verify input arguments
+    if not isinstance(source_id, (str, type(None))):
+        raise TypeError(f"(get_model_path) `source_id` must be a string. Got type: {type(source_id)}")
+    if not isinstance(data_dir, str):
+        raise TypeError(f"(get_model_path) `data_dir` must be a string. Got type: {type(data_dir)}")
+    if not isinstance(project, str):
+        raise TypeError(f"(get_model_path) `project` must be a string. Got type: {type(project)}")
+    if not isinstance(activity_id, str):
+        raise TypeError(f"(get_model_path) `activity_id` must be a string. Got type: {type(activity_id)}")
+    # Assemble the full file path
+    full_path = f"{data_dir}/{project}/{activity_id}"
+    # Verify this full path exists
+    full_path = verify_path(full_path)
+
+    # Use glob to get a file path list down to the `source_id` depth
+    source_id_filepaths = glob.glob(f"{full_path}/*/*")
+    # Loop over those file paths to find which has the specified model
+    for source_id_filepath in source_id_filepaths:
+        # Check whether that file path ends in the specified model
+        if source_id_filepath.endswith(source_id):
+            return source_id_filepath
+    
+    # If no `source_id_filepath` was returned, get list of available model names and raise an error
+    model_names = list_available_models(
+        data_dir=data_dir,
+        project=project,
+        activity_id=activity_id,
+    )
+    raise FileNotFoundError(f"(get_model_path) Model with `source_id` not found. Available `source_id`s: {model_names}")
