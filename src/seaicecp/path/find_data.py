@@ -214,3 +214,82 @@ def get_model_path(
         activity_id=activity_id,
     )
     raise FileNotFoundError(f"(get_model_path) Model with `source_id` not found. Available `source_id`s: {model_names}")
+
+def list_available_variables(
+    source_id: str,
+    experiment_id: str = None,
+    **kwargs,
+):
+    """ List the names of the variables available for the specified model.
+
+        Search the data directory that has been populated by `esgpull` and return a list of all the available varibles, or `variable_id`'s for the specified model.
+        This assumes the `esgpull` convention of subdirectories: `data/project/activity_id/institution_id/source_id/experiment_id/variant_label/table_id/variable_id`.
+
+        Parameters
+        ----------
+        source_id : `str`
+            The name of the source ID (model) for which to find the variable paths.
+        experiment_id : `str` or `None`, optional
+            The name of the experiment ID in which to search for available variables.
+            If `None` is given, all available experiments are included.
+            Default is `None`.
+        **kwargs
+            Keyword arguments to pass to `get_model_path()`.
+
+        Returns
+        -------
+        variable_names : List of `str`
+            A list, sorted alphabetically, of the names of the available variables.
+        
+        Examples
+        --------
+        >>> from seaicecp.path.find_data import list_available_models 
+        >>> list_available_models()
+        ['AWI-CM-1-1-HR', 'AWI-CM-1-1-LR', 'BCC-CSM2-HR', 'CESM1-CAM5-SE-HR', 'CESM1-CAM5-SE-LR', 'EC-Earth3P', 'EC-Earth3P-HR', 'HadGEM3-GC31-HM', 'HadGEM3-GC31-LL', 'HadGEM3-GC31-MM']
+        >>> list_available_models(institution_id = 'EC-Earth-Consortium')
+        ['EC-Earth3P', 'EC-Earth3P-HR']
+    """
+    # Verify input arguments
+    if not isinstance(source_id, str):
+        raise TypeError(f"(list_available_models) `source_id` must be a string. Got type: {type(source_id)}")
+    if not isinstance(experiment_id, (str, type(None))):
+        raise TypeError(f"(list_available_models) `experiment_id` must be a string or `None`. Got type: {type(experiment_id)}")
+    
+    # Get the path of the model
+    model_path = get_model_path(source_id, **kwargs)
+    # Verify this model path exists
+    model_path = verify_path(model_path)
+
+    # Get the experiment ID's 
+    if isinstance(experiment_id, type(None)):
+        experiment_ids = next(os.walk(model_path))[1]
+    else:
+        experiment_ids = [experiment_id]
+    
+    # Make a dictionary to store resulting available variables
+    avail_var_dict = {experiment_id: None for experiment_id in sorted(experiment_ids)}
+
+    # Get the variant labels (ensemble members) for each experiment ID
+    for experiment_id in experiment_ids:
+        # Verify the experiment ID path exists
+        experiment_path = verify_path(f"{model_path}/{experiment_id}")
+        # Get the variant labels
+        variant_labels = next(os.walk(experiment_path))[1]
+        # Add the variant labels as a dictionary to the available variable dictionary
+        avail_var_dict[experiment_id] = {variant_label: [] for variant_label in sorted(variant_labels)}
+
+        # Get the variables available for each variant label
+        for variant_label in variant_labels:
+            # Verify the variant path exists
+            variant_path = verify_path(f"{experiment_path}/{variant_label}")
+            # Get the table ID's
+            table_ids = next(os.walk(variant_path))[1]
+            # Get the variables available for each table ID
+            table_paths = []
+            for table_id in table_ids:
+                # Verify the table path exists and add it to the list of table paths
+                table_paths.append(verify_path(f"{variant_path}/{table_id}"))
+            # Get the variable names using nested iterations to avoid a list of lists
+            avail_var_dict[experiment_id][variant_label] = [var_name for path in table_paths for var_name in next(os.walk(path))[1]]
+
+    return avail_var_dict
