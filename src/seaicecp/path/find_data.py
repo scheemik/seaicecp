@@ -310,7 +310,7 @@ def get_variable_path(
     """ Find the file path for the specified model and variable.
 
         Search the data directory that has been populated by `esgpull` for a model's `source_id` and return the file path.
-        This assumes the `esgpull` convention of subdirectories: `data/project/activity_id/institution_id/source_id`.
+        This assumes the `esgpull` convention of subdirectories: `data/project/activity_id/institution_id/source_id/experiment_id/variant_label/table_id/variable_id`.
 
         Parameters
         ----------
@@ -412,3 +412,57 @@ def get_variable_path(
     else:
         # If there is only one file path remaining, return it
         return variable_id_filepaths[0]
+
+def list_variable_files(
+    source_id: str,
+    variable_id: str,
+    **kwargs,
+):
+    """ Get a list of data files for the specified variable for the specified model.
+
+        Search for all the files for the given model and variable and return them in a list.
+        This assumes the `esgpull` convention of subdirectories: `data/project/activity_id/institution_id/source_id/experiment_id/variant_label/table_id/variable_id/gn/version/data_file.nc`.
+
+        Parameters
+        ----------
+        source_id : `str`
+            The name of the source ID (model) for which to get the variable files.
+        variable_id : `str`
+            The name of the variable ID for which to get the variable files.
+        **kwargs
+            Keyword arguments to pass to `get_variable_path()`.
+
+        Returns
+        -------
+        data_filepaths : List of `str`
+            A list, sorted alphabetically, of the filepaths of the variable data files.
+        
+        Examples
+        --------
+        >>> from seaicecp.path.find import list_variable_files
+        >>> list_variable_files(source_id = 'HadGEM3-GC31-HM', variable_id = 'areacello')
+        ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/MOHC/HadGEM3-GC31-HM/hist-1950/r1i1p1f1/Ofx/areacello/gn/v20190301/areacello_Ofx_HadGEM3-GC31-HM_hist-1950_r1i1p1f1_gn.nc']
+        >>> list_variable_files(source_id = 'EC-Earth3P-HR', variable_id = 'siage')
+        /workspace/src/seaicecp/path/find_data.py:399: UserWarning: (get_variable_path) More than one file path found: ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR/hist-1950/r1i1p2f1/SImon/siage', '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR/hist-1950/r2i1p2f1/SImon/siage', '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR/hist-1950/r3i1p2f1/SImon/siage']
+        Returning first result in list.
+        ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR/hist-1950/r1i1p2f1/SImon/siage/gn/v20181212/siage_SImon_EC-Earth3P-HR_hist-1950_r1i1p2f1_gn_195001-195012.nc',
+        ...
+        '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR/hist-1950/r1i1p2f1/SImon/siage/gn/v20181212/siage_SImon_EC-Earth3P-HR_hist-1950_r1i1p2f1_gn_201401-201412.nc']
+    """
+    # Verify input arguments
+    if not isinstance(source_id, (str, type(None))):
+        raise TypeError(f"(list_variable_files) `source_id` must be a string. Got type: {type(source_id)}")
+    if not isinstance(variable_id, str):
+        raise TypeError(f"(list_variable_files) `variable_id` must be a string. Got type: {type(variable_id)}")
+
+    # Get the path to the variable directory
+    variable_path = get_variable_path(
+        source_id = source_id,
+        variable_id = variable_id,
+        **kwargs,
+    )
+
+    # Use glob to get a file path list down to the `data_file` depth
+    data_filepaths = glob.glob(f"{variable_path}/*/*/*")
+
+    return sorted(data_filepaths)
