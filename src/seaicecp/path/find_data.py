@@ -1,5 +1,6 @@
 import os
 import glob
+import warnings
 
 from seaicecp.verify import verify_path
 
@@ -295,3 +296,112 @@ def list_available_variables(
             avail_var_dict[experiment_id][variant_label] = [var_name for path in table_paths for var_name in next(os.walk(path))[1]]
 
     return avail_var_dict
+
+def get_variable_path(
+    source_id: str,
+    variable_id: str,
+    data_dir: str = '/seaicecp_data/bergybits/data',
+    project: str = 'CMIP6',
+    activity_id: str = 'HighResMIP',
+    experiment_id: str = 'hist-1950',
+    variant_label: str = None,
+    **kwargs,
+):
+    """ Find the file path for the specified model and variable.
+
+        Search the data directory that has been populated by `esgpull` for a model's `source_id` and return the file path.
+        This assumes the `esgpull` convention of subdirectories: `data/project/activity_id/institution_id/source_id`.
+
+        Parameters
+        ----------
+        source_id : `str`
+            The name of the source ID (model) for which to find the variable path.
+        variable_id : `str`
+            The name of the variable ID for which to find the variable path.
+        data_dir : `str`, optional
+            The absolute file path to the data directory.
+            The `esgpull` convention means this should end in `/data`.
+            Default is `/seaicecp_data/bergybits/data`.
+        project : `str`, optional
+            The name of the project in which to search for available models.
+            Default is `CMIP6`.
+        activity_id : `str`, optional
+            The name of the activity ID in which to search for available models.
+            Default is `HighResMIP`.
+        experiment_id : `str`, optional
+            The name of the experiment ID in which to search for available variables.
+            Default is `hist-1950`.
+        variant_label : `str`, `None`, optional
+            The name of the variant label (ensemble member) for which to get the variable path.
+            If `None` is given, the file path for the first variant with the variable is returned.
+            Default is `None`.
+        **kwargs
+            Keyword arguments to pass to `get_model_path()`.
+
+        Returns
+        -------
+        variable_path : `str`
+            The file path to the directory for the specified variable from the specified model.
+        
+        Examples
+        --------
+        >>> from seaicecp.path.find_data import get_variable_path
+        >>> get_variable_path(source_id = 'HadGEM3-GC31-HM', variable_id = 'areacello')
+
+    """
+    # Verify input arguments
+    if not isinstance(source_id, (str, type(None))):
+        raise TypeError(f"(get_variable_path) `source_id` must be a string. Got type: {type(source_id)}")
+    if not isinstance(variable_id, str):
+        raise TypeError(f"(get_variable_path) `variable_id` must be a string. Got type: {type(variable_id)}")
+    if not isinstance(data_dir, str):
+        raise TypeError(f"(get_variable_path) `data_dir` must be a string. Got type: {type(data_dir)}")
+    if not isinstance(project, str):
+        raise TypeError(f"(get_variable_path) `project` must be a string. Got type: {type(project)}")
+    if not isinstance(activity_id, str):
+        raise TypeError(f"(get_variable_path) `activity_id` must be a string. Got type: {type(activity_id)}")
+    if not isinstance(experiment_id, str):
+        raise TypeError(f"(get_variable_path) `experiment_id` must be a string. Got type: {type(experiment_id)}")
+    if not isinstance(variant_label, (str, type(None))):
+        raise TypeError(f"(get_variable_path) `variant_label` must be a string or `None`. Got type: {type(variant_label)}")
+
+    # Get the model path
+    model_path = get_model_path(
+        source_id = source_id,
+        data_dir = data_dir,
+        project = project,
+        activity_id = activity_id,
+    )
+
+    # Use glob to get a file path list down to the `variable_id` depth
+    variable_id_filepaths = glob.glob(f"{model_path}/*/*/*/*")
+
+    # Filter to just those with the specified variable ID
+    variable_id_filepaths = [item for item in variable_id_filepaths if item.endswith(variable_id)]
+
+    # Filter to just those with the specified experiment ID
+    variable_id_filepaths = [item for item in variable_id_filepaths if experiment_id in item]
+
+    # Filter to just those with the specified variant label, if applicable
+    if not isinstance(variant_label, type(None)):
+        variable_id_filepaths = [item for item in variable_id_filepaths if variant_label in item]
+
+    # Check how many file paths remain
+    if len(variable_id_filepaths) > 1:
+        # There is more than one matching file path for the specified variable for the specified model
+        warnings.warn(f"(get_variable_path) More than one file path found: {sorted(variable_id_filepaths)}\nReturning first result in list.", UserWarning)
+        # Return the first variant alphabetically
+        return sorted(variable_id_filepaths)[0]
+    elif len(variable_id_filepaths) == 0:
+        # If no file paths had the variable in it, get the list of available variables and raise an error
+        available_variables = list_available_variables(
+            source_id = source_id,
+            experiment_id = experiment_id,
+            data_dir = data_dir,
+            project = project,
+            activity_id = activity_id,
+        )
+        raise ValueError(f"(get_variable_path) Variable {variable_id} not found for {source_id}. Available variables: {available_variables}")
+    else:
+        # If there is only one file path remaining, return it
+        return variable_id_filepaths[0]
