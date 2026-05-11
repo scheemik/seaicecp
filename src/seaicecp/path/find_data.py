@@ -213,7 +213,7 @@ def get_model_path(
         project=project,
         activity_id=activity_id,
     )
-    raise FileNotFoundError(f"(get_model_path) Model with `source_id` not found. Available `source_id`s: {model_names}")
+    raise FileNotFoundError(f"(get_model_path) Model with `source_id` {source_id} not found. Available `source_id`s: {model_names}")
 
 def list_available_variables(
     source_id: str,
