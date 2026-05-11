@@ -347,7 +347,14 @@ def get_variable_path(
         --------
         >>> from seaicecp.path.find_data import get_variable_path
         >>> get_variable_path(source_id = 'HadGEM3-GC31-HM', variable_id = 'areacello')
-
+        '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/MOHC/HadGEM3-GC31-HM/hist-1950/r1i1p1f1/Ofx/areacello'
+        >>> get_variable_path(source_id = 'EC-Earth3P-HR', variable_id = 'siage')
+        '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR/hist-1950/r3i1p2f1/SImon/siage'
+        /workspace/src/seaicecp/path/find_data.py:396: UserWarning: (get_variable_path) More than one file path found: ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR/hist-1950/r1i1p2f1/SImon/siage', '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR/hist-1950/r2i1p2f1/SImon/siage', '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR/hist-1950/r3i1p2f1/SImon/siage']
+        Returning first result in list.
+        '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR/hist-1950/r1i1p2f1/SImon/siage'
+        >>> get_variable_path(source_id = 'EC-Earth3P-HR', variable_id = 'siage', variant_label = 'r3i1p2f1')
+        '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR/hist-1950/r3i1p2f1/SImon/siage'
     """
     # Verify input arguments
     if not isinstance(source_id, (str, type(None))):
