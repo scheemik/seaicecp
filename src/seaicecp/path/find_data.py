@@ -253,9 +253,9 @@ def list_available_variables(
     """
     # Verify input arguments
     if not isinstance(source_id, str):
-        raise TypeError(f"(list_available_models) `source_id` must be a string. Got type: {type(source_id)}")
+        raise TypeError(f"(list_available_variables) `source_id` must be a string. Got type: {type(source_id)}")
     if not isinstance(experiment_id, (str, type(None))):
-        raise TypeError(f"(list_available_models) `experiment_id` must be a string or `None`. Got type: {type(experiment_id)}")
+        raise TypeError(f"(list_available_variables) `experiment_id` must be a string or `None`. Got type: {type(experiment_id)}")
     
     # Get the path of the model
     model_path = get_model_path(source_id, **kwargs)
