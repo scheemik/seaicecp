@@ -6,10 +6,10 @@ set -e
 cd /workspace
 
 # Activate venv
-if [[ -f ".venv/bin/activate" ]]; then
-    source .venv/bin/activate
+if [[ -f ".cvenv/bin/activate" ]]; then
+    source .cvenv/bin/activate
 else
-    echo "ERROR: Could not activate virtual environment at .venv/bin/activate"
+    echo "ERROR: Could not activate virtual environment at .cvenv/bin/activate"
     exit 1
 fi
 

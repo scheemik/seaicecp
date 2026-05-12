@@ -1,6 +1,8 @@
 import xarray as xr
+import warnings
 
 import seaicecp.params as sps
+from seaicecp.verify import verify_path
 
 def trim_latlon(
     xr_data: xr.Dataset,
@@ -77,4 +79,89 @@ def trim_latlon(
         xr_data_trimmed.to_netcdf(save_as)
 
     return xr_data_trimmed
+
+def trim_files(
+    files_to_trim: [str],
+    name_prefix: str = 'trim_NWP_',
+    overwrite: bool = False,
+    **kwargs,
+):
+    """ Trim the specified files and save them as new files.
+
+        For each given file, load the data, trim the dataset, then save that trimmed dataset as a new file in the same location with a new filename. 
+
+        Parameters
+        ----------
+        files_to_trim : List of `str`
+            A list of paths of the data files to trim. 
+        name_prefix : `str`, optional
+            The prefix to be prepended to each file name when saving.
+            Default is `trim_NWP_`.
+        overwrite : `bool`, optional
+            Whether to overwrite an existing file if it exists.
+            Default is `False`.
+        **kwargs
+            Keyword arguments to pass to `trim_latlon()`.
+
+        Returns
+        -------
+        None
+        
+        Examples
+        --------
+        >>> from seaicecp.path.find_data import list_variable_files
+        >>> list_of_files = list_variable_files('EC-Earth3P-HR', 'siage', variant_label='r3i1p2f1')
+        >>> from seaicecp.dataset.trim_dataset import trim_files
+        >>> trim_files(list_of_files)
+        (trim_files) `name_prefix`: trim_NWP_
+        (trim_latlon) `save_as`: /seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR/hist-1950/r3i1p2f1/SImon/siage/gn/v20190214/trim_NWP_siage_SImon_EC-Earth3P-HR_hist-1950_r3i1p2f1_gn_195001-195012.nc
+        ...
+        (trim_latlon) `save_as`: /seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR/hist-1950/r3i1p2f1/SImon/siage/gn/v20190214/trim_NWP_siage_SImon_EC-Earth3P-HR_hist-1950_r3i1p2f1_gn_201401-201412.nc
+    """
+    # Verify input arguments
+    if isinstance(files_to_trim, str):
+        files_to_trim = [files_to_trim]
+    elif not isinstance(files_to_trim, type([])):
+        raise TypeError(f"(trim_files) `files_to_trim` must be a list. Got type: {type(files_to_trim)}")
+    for item in files_to_trim:
+        if not isinstance(item, str):
+            raise TypeError(f"(trim_files) `files_to_trim` must be a list of strings. Got type: {type(item)} for item {item}")
+    if not isinstance(name_prefix, str):
+        raise TypeError(f"(trim_files) `name_prefix` must be a string. Got type: {type(name_prefix)}")
+    elif not name_prefix.endswith("_"):
+        # Make sure the prefix ends with an underscore
+        name_prefix = f"{name_prefix}_"
+    # Replace any spaces in `name_prefix` with underscores
+    name_prefix = name_prefix.replace(" ", "_")
+    
+    # Information to output
+    print(f"(trim_files) `name_prefix`: {name_prefix}")
+
+    # Loop across each file in the list
+    for filepath in files_to_trim:
+        # Verify the filepath exists
+        filepath = verify_path(filepath)
+        # Assemble the new file name
+        filename = filepath.split('/')[-1]
+        new_filename = f"{name_prefix}{filename}"
+        new_filepath = filepath.replace(filename, new_filename)
+        # Check whether the file exists
+        try:
+            verify_path(new_filepath)
+            if overwrite == False:
+                warnings.warn(f"(trim_files) file `{new_filepath}` exists already. To overwrite this file, set `overwrite` to `True`.", UserWarning)
+                continue
+            else:
+                print(f"\tOverwriting file `{new_filepath}`.")
+        except (FileNotFoundError):
+            foo = 2
+        # Load this file with `xarray`
+        this_xr = xr.open_dataset(filepath)
+        # Trim the dataset and save to file
+        trim_latlon(
+            xr_data = this_xr,
+            save_as = new_filepath,
+        )
+
+    return None
 

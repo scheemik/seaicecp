@@ -53,7 +53,7 @@ COPY src ./src
 # Install dependencies via `uv` and start a kernel for Jupyter notebooks
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync \
- && uv run python -m ipykernel install --sys-prefix --name python3 --display-name "Python (container)"
+ && uv run python -m ipykernel install --sys-prefix --name python3 --display-name "seaicecp (container)"
 
 # Trigger downloads of commonly used Natural Earth datasets
 RUN /workspace/.cvenv/bin/python - <<'EOF'
@@ -61,10 +61,10 @@ import cartopy.io.shapereader as shp
 shp.natural_earth(resolution='110m', category='physical', name='coastline')
 EOF
 
-# # Set up the `esgpull` install (too many nodes are currently down)
-# COPY .devcontainer/esgpull_entrypoint.sh /esgpull_entrypoint.sh
-# RUN chmod +x /esgpull_entrypoint.sh
-# ENTRYPOINT ["/esgpull_entrypoint.sh"]
+# Set up the `esgpull` install
+COPY .devcontainer/esgpull_entrypoint.sh /esgpull_entrypoint.sh
+RUN chmod +x /esgpull_entrypoint.sh
+ENTRYPOINT ["/esgpull_entrypoint.sh"]
 
 # Expose the port for the Jupyter server
 EXPOSE 8888
@@ -74,5 +74,5 @@ CMD ["bash", "-lc", "exec uv run jupyter lab \
     --port=8888 \
     --no-browser \
     --allow-root \
-    --ServerApp.token='' \
+    --IdentityProvider.token='' \
     --ServerApp.password=''"]

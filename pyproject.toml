@@ -12,7 +12,7 @@ dependencies = [
     "bokeh>=3.9.0",
     "cartopy>=0.25.0",
     "dask>=2026.3.0",
-    "esgpull>=0.9.6",
+    "esgpull",
     "geoviews>=1.15.1",
     "hvplot>=0.12.2",
     "ipykernel>=7.2.0",
@@ -38,3 +38,6 @@ seaicecp = "seaicecp:main"
 [build-system]
 requires = ["uv_build>=0.9.15,<0.12.0"]
 build-backend = "uv_build"
+
+[tool.uv.sources]
+esgpull = { git = "https://github.com/ESGF/esgf-download" }
