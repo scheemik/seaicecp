@@ -13,10 +13,6 @@ uv.lock
 # Jupyter generated files
 .jupyter/*
 
-# esgpull generated files
-esgpull_searches/*
-.esgpull/*
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
