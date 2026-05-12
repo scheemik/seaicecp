@@ -7,3 +7,4 @@ source_id:EC-Earth3P-HR \
 frequency:mon \
 variable_id:siage,siconc,sithick,siu,siv
 # Expect to find 25 datasets.
+# Downloads 785 files (17.7 GiB)
