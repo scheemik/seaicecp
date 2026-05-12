@@ -416,6 +416,7 @@ def get_variable_path(
 def list_variable_files(
     source_id: str,
     variable_id: str,
+    with_modification: str = None,
     **kwargs,
 ):
     """ Get a list of data files for the specified variable for the specified model.
@@ -429,6 +430,11 @@ def list_variable_files(
             The name of the source ID (model) for which to get the variable files.
         variable_id : `str`
             The name of the variable ID for which to get the variable files.
+        with_modification : `str`, `None`, optional
+            The prefix of a modification to the data files to find.
+            Ex: `trim_NWP_`.
+            If `None`, returns only the original files.
+            Default is `None`.
         **kwargs
             Keyword arguments to pass to `get_variable_path()`.
 
@@ -454,6 +460,12 @@ def list_variable_files(
         raise TypeError(f"(list_variable_files) `source_id` must be a string. Got type: {type(source_id)}")
     if not isinstance(variable_id, str):
         raise TypeError(f"(list_variable_files) `variable_id` must be a string. Got type: {type(variable_id)}")
+    if isinstance(with_modification, str):
+        if not with_modification.endswith("_"):
+            # Make sure the modificatin prefix ends with an underscore
+            with_modification = f"{with_modification}_"
+    elif not isinstance(with_modification, type(None)):
+        raise TypeError(f"(list_variable_files) `with_modification` must be a string or `None`. Got type: {type(with_modification)}")
 
     # Get the path to the variable directory
     variable_path = get_variable_path(
@@ -464,5 +476,13 @@ def list_variable_files(
 
     # Use glob to get a file path list down to the `data_file` depth
     data_filepaths = glob.glob(f"{variable_path}/*/*/*")
+
+    # Filter files based on modification
+    if isinstance(with_modification, type(None)):
+        # Filter out files with any modification prefixes
+        data_filepaths = [item for item in data_filepaths if not 'trim' in item]
+    else:
+        # Filter to just files with the modification prefix
+        data_filepaths = [item for item in data_filepaths if with_modification in item]
 
     return sorted(data_filepaths)
