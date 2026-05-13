@@ -11,6 +11,7 @@ requires-python = ">=3.13,<3.14"
 dependencies = [
     "bokeh>=3.9.0",
     "cartopy>=0.25.0",
+    "cdo>=1.6.1",
     "dask>=2026.3.0",
     "esgpull",
     "geoviews>=1.15.1",
