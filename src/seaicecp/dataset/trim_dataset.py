@@ -1,5 +1,11 @@
+import numpy as np
 import xarray as xr
 import warnings
+from cdo import Cdo, __version__
+cdo = Cdo()
+# Set path for temporary files in case of a crash
+cdo = Cdo(tempdir='./cdo_tmp/')
+cdo.cleanTempDir()
 
 import seaicecp.params as sps
 from seaicecp.verify import verify_path
@@ -64,14 +70,31 @@ def trim_latlon(
         box_lon_max += 360
     if box_lon_min < 0:
         box_lon_min += 360
+    
+    # cdo expects bounding box coordinates as a string in the order: 
+    ## lon_min, lon_max, lat_min, lat_max
+    this_bbox = f"{box_lon_min},{box_lon_max},{box_lat_min},{box_lat_max}"
 
-    xr_data_trimmed = xr_data.where(
-        (xr_data['latitude'] < box_lat_max) &
-        (xr_data['latitude'] > box_lat_min) &
-        (xr_data['longitude'] > box_lon_min) &
-        (xr_data['longitude'] < box_lon_max),
-        drop=True,
-    )
+    # Use `cdo` to trim the indices which contain no data within the bounding box
+    xr_data_trimmed = cdo.sellonlatbox(this_bbox, input=xr_data, returnXDataset='trim_latlon')
+    
+    # Get the list of data variables
+    data_vars = list(xr_data_trimmed.data_vars.keys())
+    print('data_vars:', data_vars)
+    for meta_var in ['time_bnds', 'vertices_latitude', 'vertices_longitude', 'latitude_bnds', 'longitude_bnds']:
+        if meta_var in data_vars:
+            data_vars.remove(meta_var)
+
+    # Set the values of the data variables outside the bounding box to `nan`
+    for var in data_vars:
+        xr_data_trimmed[var] = xr_data_trimmed[var].where(
+            lambda val:
+                (xr_data_trimmed['latitude'] < box_lat_max) &
+                (xr_data_trimmed['latitude'] > box_lat_min) &
+                (xr_data_trimmed['longitude'] > box_lon_min) &
+                (xr_data_trimmed['longitude'] < box_lon_max),
+            lambda val: np.nan
+        )
 
     # Save the trimmed dataset, if applicable
     if not isinstance(save_as, type(None)):
