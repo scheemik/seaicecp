@@ -14,7 +14,7 @@ uv.lock
 .jupyter/*
 
 # CDO generated files
-tmp/*
+cdo_tmp/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
