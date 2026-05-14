@@ -1,14 +1,9 @@
-import numpy as np
 import xarray as xr
-import warnings
-from cdo import Cdo, __version__
+from cdo import Cdo
 cdo = Cdo()
 # Set path for temporary files in case of a crash
 cdo = Cdo(tempdir='./cdo_tmp/')
 cdo.cleanTempDir()
-
-import seaicecp.params as sps
-from seaicecp.verify import verify_path
 
 def get_field_mean(
     dataset: (str, xr.DataArray, xr.Dataset),
