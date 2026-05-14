@@ -1,0 +1,64 @@
+import numpy as np
+import xarray as xr
+import warnings
+from cdo import Cdo, __version__
+cdo = Cdo()
+# Set path for temporary files in case of a crash
+cdo = Cdo(tempdir='./cdo_tmp/')
+cdo.cleanTempDir()
+
+import seaicecp.params as sps
+from seaicecp.verify import verify_path
+
+def get_field_mean(
+    dataset: (str, xr.DataArray, xr.Dataset),
+    save_as: str = None,
+    **kwargs,
+):
+    """ Get the field mean of the dataset.
+
+        Use the `cdo` function `fldmean` to take the field mean (the mean over the geographic area) of the given dataset.
+
+        Parameters
+        ----------
+        dataset : `str`, `xarray.DataArray`, `xarray.Dataset`
+            The dataset of which to take the field mean.
+        save_as : `str`, `None`, optional
+            The file name to pass to `cdo.fldmean(output=save_as)`.
+            Default is `None`, which doesn't save the dataset to a file.
+        **kwargs
+            Keyword arguments to pass to `cdo.fldmean()`.
+
+        Returns
+        -------
+        fldmean_xr : `xarray.Dataset`
+            A dataset of the field mean of the input data.
+        
+        Examples
+        --------
+        >>> from seaicecp.dataset.field_mean import get_field_mean 
+        >>> fldmean_xr = get_field_mean('data/NWP_cdo_CLI_areacello_Ofx_EC-Earth3P-HR_highres-future_r2i1p2f1_gn.nc')
+        >>> fldmean_xr['areacello'].values[0]
+        (get_field_mean) `save_as`: None
+        array([1.3731426e+08], dtype=float32)
+    """
+    # Verify input arguments
+    if not isinstance(dataset, (str, xr.Dataset, xr.DataArray)):
+        raise TypeError(f"(get_field_mean) `dataset` must be a string, `xr.Dataset`, or `xr.DataArray`. Got type: {type(dataset)}")
+    if not isinstance(save_as, (str, type(None))):
+        raise TypeError(f"(get_field_mean) `save_as` must be a string or `None`. Got type: {type(save_as)}")
+    elif isinstance(save_as, str) and not '.nc' in save_as:
+        raise TypeError(f"(get_field_mean) `save_as` must be a `.nc` filepath. Got: {save_as}")
+    
+    # Information to output
+    print(f"(get_field_mean) `save_as`: {save_as}")
+
+    # Use `cdo` to calculate the field mean
+    fldmean_xr = cdo.fldmean(
+        input = dataset,
+        returnXDataset = 'field_mean',
+        output = 'save_as',
+        **kwargs,
+    )
+
+    return fldmean_xr
