@@ -17,7 +17,7 @@ def test_make_example_dataset():
             'n_size': 10,
         },
         {
-            'actual': example_dataset.make_example_dataset(filepath=test_filepath),
+            'actual': example_dataset.make_example_dataset(save_as=test_filepath),
             'keys': ['test_var'],
             'coords': ['j', 'i', 'longitude', 'latitude'],
             'sizes': ['j', 'i'],
@@ -25,7 +25,7 @@ def test_make_example_dataset():
             'n_size': 10,
         },
         {
-            'actual': example_dataset.make_example_dataset(filepath=test_filepath, n=5),
+            'actual': example_dataset.make_example_dataset(save_as=test_filepath, n=5),
             'keys': ['test_var'],
             'coords': ['j', 'i', 'longitude', 'latitude'],
             'sizes': ['j', 'i'],
@@ -49,7 +49,7 @@ def test_make_example_dataset():
     # Test setting overwrite to `False`
     try:
         actual = example_dataset.make_example_dataset(
-            filepath=test_filepath,
+            save_as=test_filepath,
             overwrite = False,
         )
     except (FileExistsError) as e:
@@ -58,7 +58,7 @@ def test_make_example_dataset():
         assert False, f"`make_example_dataset` did not raise an exception when specifying overwrite=`False`"
 
     # Define invalid test cases
-    # Test for `filepath`
+    # Test for `save_as`
     invalid_values = [
         'not_a_dataset.txt',
         1234,
@@ -69,7 +69,7 @@ def test_make_example_dataset():
     for invalid_value in invalid_values:
         try:
             actual = example_dataset.make_example_dataset(
-                filepath = invalid_value,
+                save_as = invalid_value,
             )
         except (TypeError, ValueError) as e:
             assert True, f"`make_example_dataset` raised an exception on invalid filepath: {e}"
@@ -86,7 +86,7 @@ def test_make_example_dataset():
     for invalid_value in invalid_values:
         try:
             actual = example_dataset.make_example_dataset(
-                filepath=test_filepath,
+                save_as=test_filepath,
                 n = invalid_value,
             )
         except (TypeError, ValueError) as e:
@@ -105,7 +105,7 @@ def test_make_example_dataset():
     for invalid_value in invalid_values:
         try:
             actual = example_dataset.make_example_dataset(
-                filepath=test_filepath,
+                save_as=test_filepath,
                 overwrite = invalid_value,
             )
         except (TypeError, ValueError) as e:

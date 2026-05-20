@@ -4,7 +4,7 @@ import numpy as np
 from seaicecp.verify import verify_path
 
 def make_example_dataset(
-    filepath: str = None,
+    save_as: str = None,
     n : int = 10,
     overwrite: bool = True,
 ):
@@ -14,14 +14,14 @@ def make_example_dataset(
 
         Parameters
         ----------
-        filepath : `str`, `None`, optional
-            The absolute file path to save the example dataset to
-            Default is `None`.
+        save_as : `str`, `None`, optional
+            The absolute file path to which to save the example dataset.
+            Default is `None`, which doesn't save the dataset to a file.
         n : `int`, optional
             The number of values in each dimension.
             Default is `10`.
         overwrite : `bool`, optional
-            Whether to overwrite an existing file at the given filepath.
+            Whether to overwrite an existing file at the given filepath in `save_as`.
             Default is `True`.
 
         Returns
@@ -35,11 +35,11 @@ def make_example_dataset(
         >>> 
     """
     # Verify input arguments
-    if isinstance(filepath, str):
-        if not filepath.endswith('.nc'):
-            raise ValueError(f"(plot_time_series) `filepath` must be a `.nc` filepath. Got: {filepath}")
-    elif not isinstance(filepath, (str, type(None))):
-        raise TypeError(f"(make_example_dataset) `filepath` must be a string or `None`. Got type: {type(filepath)}")
+    if isinstance(save_as, str):
+        if not save_as.endswith('.nc'):
+            raise ValueError(f"(plot_time_series) `save_as` must be a `.nc` save_as. Got: {save_as}")
+    elif not isinstance(save_as, (str, type(None))):
+        raise TypeError(f"(make_example_dataset) `save_as` must be a string or `None`. Got type: {type(save_as)}")
     if not isinstance(n, int):
         raise TypeError(f"(make_example_dataset) `n` must be an integer. Got type: {type(n)}")
     if not isinstance(overwrite, bool):
@@ -68,21 +68,21 @@ def make_example_dataset(
     test_var = np.reshape(np.arange(n*n, dtype=np.float64), (n,n))
     xr_dataset['test_var'] = (['j','i'],test_var)
 
-    if not isinstance(filepath, type(None)):
+    if not isinstance(save_as, type(None)):
         # Check whether the file exists
         try:
-            verify_path(filepath)
+            verify_path(save_as)
             if overwrite == False:
-                raise FileExistsError(f"(trim_files) file `{filepath}` exists already. To overwrite this file, set `overwrite` to `True`.")
+                raise FileExistsError(f"(trim_files) file `{save_as}` exists already. To overwrite this file, set `overwrite` to `True`.")
             else:
-                print(f"\tOverwriting file `{filepath}`.")
+                print(f"\tOverwriting file `{save_as}`.")
         except (FileNotFoundError):
             foo = 2
 
         # Save this dataset to a file
-        xr_dataset.to_netcdf(filepath)
+        xr_dataset.to_netcdf(save_as)
 
         # Verify that file was save correctly
-        filepath = verify_path(filepath)
+        save_as = verify_path(save_as)
 
     return xr_dataset
