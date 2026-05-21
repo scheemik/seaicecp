@@ -12,21 +12,35 @@ def test_list_available_models():
         {
             'institution_id': None,
             'expected_models': [
-                'AWI-CM-1-1-HR',
-                'AWI-CM-1-1-LR',
-                'BCC-CSM2-HR',
-                'CESM1-CAM5-SE-HR',
-                'CESM1-CAM5-SE-LR',
-                'EC-Earth3P',
-                'EC-Earth3P-HR',
-                'HadGEM3-GC31-HM',
-                'HadGEM3-GC31-LL',
-                'HadGEM3-GC31-MM',
-                ],
+                'AWI/AWI-CM-1-1-HR',
+                'AWI/AWI-CM-1-1-LR',
+                'BCC/BCC-CSM2-HR',
+                'EC-Earth-Consortium/EC-Earth3P',
+                'EC-Earth-Consortium/EC-Earth3P-HR',
+                'MOHC/HadGEM3-GC31-HH',
+                'MOHC/HadGEM3-GC31-HM',
+                'MOHC/HadGEM3-GC31-LL',
+                'MOHC/HadGEM3-GC31-MM',
+                'NCAR/CESM1-CAM5-SE-HR',
+                'NCAR/CESM1-CAM5-SE-LR',
+                'NERC/HadGEM3-GC31-HH',
+                'NERC/HadGEM3-GC31-HM'
+            ],
         },
         {
             'institution_id': 'EC-Earth-Consortium',
-            'expected_models': ['EC-Earth3P', 'EC-Earth3P-HR'],
+            'expected_models': ['EC-Earth-Consortium/EC-Earth3P', 'EC-Earth-Consortium/EC-Earth3P-HR'],
+        },
+        {
+            'institution_id': ['MOHC','NERC'],
+            'expected_models': [
+                'MOHC/HadGEM3-GC31-HH',
+                'MOHC/HadGEM3-GC31-HM',
+                'MOHC/HadGEM3-GC31-LL',
+                'MOHC/HadGEM3-GC31-MM',
+                'NERC/HadGEM3-GC31-HH',
+                'NERC/HadGEM3-GC31-HM'
+            ],
         },
     ]
     for test_case in test_cases:
@@ -110,7 +124,7 @@ def test_list_available_models():
         else:
             assert False, f"`list_available_models` did not raise an exception on invalid `activity_id` {invalid_string}"
         # Test with `institution_id`
-        if not isinstance(invalid_string, type(None)):
+        if not isinstance(invalid_string, (type(None), type([]))):
             try:
                 actual = path.list_available_models(
                     institution_id = invalid_string,
@@ -127,45 +141,55 @@ def test_get_model_path():
     test_cases = [
         {
             'source_id': 'AWI-CM-1-1-HR',
-            'expected_path': '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/AWI/AWI-CM-1-1-HR'
+            'expected_path': ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/AWI/AWI-CM-1-1-HR']
         },
         {
             'source_id': 'AWI-CM-1-1-LR',
-            'expected_path': '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/AWI/AWI-CM-1-1-LR'
+            'expected_path': ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/AWI/AWI-CM-1-1-LR']
         },
         {
             'source_id': 'BCC-CSM2-HR',
-            'expected_path': '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/BCC/BCC-CSM2-HR'
+            'expected_path': ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/BCC/BCC-CSM2-HR']
         },
         {
             'source_id': 'CESM1-CAM5-SE-HR',
-            'expected_path': '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/NCAR/CESM1-CAM5-SE-HR'
+            'expected_path': ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/NCAR/CESM1-CAM5-SE-HR']
         },
         {
             'source_id': 'CESM1-CAM5-SE-LR',
-            'expected_path': '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/NCAR/CESM1-CAM5-SE-LR'
+            'expected_path': ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/NCAR/CESM1-CAM5-SE-LR']
         },
         {
             'source_id': 'EC-Earth3P',
-            'expected_path': '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P'
+            'expected_path': ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P']
 
         },
         {
             'source_id': 'EC-Earth3P-HR',
-            'expected_path': '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR'
+            'expected_path': ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR']
 
         },
         {
+            'source_id': 'HadGEM3-GC31-HH',
+            'expected_path': [
+                '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/MOHC/HadGEM3-GC31-HH',
+                '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/NERC/HadGEM3-GC31-HH',
+            ]
+        },
+        {
             'source_id': 'HadGEM3-GC31-HM',
-            'expected_path': '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/MOHC/HadGEM3-GC31-HM'
+            'expected_path': [
+                '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/MOHC/HadGEM3-GC31-HM',
+                '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/NERC/HadGEM3-GC31-HM',
+            ]
         },
         {
             'source_id': 'HadGEM3-GC31-LL',
-            'expected_path': '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/MOHC/HadGEM3-GC31-LL'
+            'expected_path': ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/MOHC/HadGEM3-GC31-LL']
         },
         {
             'source_id': 'HadGEM3-GC31-MM',
-            'expected_path': '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/MOHC/HadGEM3-GC31-MM'
+            'expected_path': ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/MOHC/HadGEM3-GC31-MM']
         },
     ]
     for test_case in test_cases:
@@ -267,35 +291,47 @@ def test_list_available_variables():
             'source_id': 'AWI-CM-1-1-HR',
             'experiment_id': None,
             'expected_var_dict': {
-                'control-1950': {'r1i1p1f2': ['areacello']},
-                'hist-1950': {'r1i1p1f2': ['areacello']},
-                'spinup-1950': {'r1i1p1f2': ['areacello']},
+                'AWI/AWI-CM-1-1-HR': {
+                    'control-1950': {'r1i1p1f2': ['areacello']},
+                    'hist-1950': {'r1i1p1f2': ['areacello']},
+                    'spinup-1950': {'r1i1p1f2': ['areacello']},
+                },
             },
         },
         {
             'source_id': 'BCC-CSM2-HR',
             'experiment_id': None,
             'expected_var_dict': {
-                'hist-1950': {'r1i1p1f1': ['areacello']},
+                'BCC/BCC-CSM2-HR': {
+                    'hist-1950': {'r1i1p1f1': ['areacello']},
+                },
             },
         },
         {
             'source_id': 'CESM1-CAM5-SE-HR',
             'experiment_id': None,
             'expected_var_dict': {
-                'highres-future': {'r1i1p1f1': ['areacello']},
-                'hist-1950': {'r1i1p1f1': ['areacello']},
+                'NCAR/CESM1-CAM5-SE-HR': {
+                    'highres-future': {'r1i1p1f1': ['areacello']},
+                    'hist-1950': {'r1i1p1f1': ['areacello']},
+                },
             },
         },
         {
             'source_id': 'EC-Earth3P-HR',
             'experiment_id': None,
             'expected_var_dict': {
-                'highres-future': {'r2i1p2f1': ['areacello']},
-                'hist-1950': {
-                    'r1i1p2f1': ['siu', 'siv', 'sithick', 'siage', 'siconc'],
-                    'r2i1p2f1': ['siage', 'sithick', 'siv', 'siu', 'siconc'],
-                    'r3i1p2f1': ['sithick', 'siage', 'siu', 'siv', 'siconc'],
+                'EC-Earth-Consortium/EC-Earth3P-HR': {
+                    'highres-future': {
+                        'r1i1p2f1': ['sithick', 'siage', 'siv', 'siu', 'siconc'],
+                        'r2i1p2f1': ['areacello', 'siv', 'sithick', 'siu', 'siage', 'siconc'],
+                        'r3i1p2f1': ['siconc', 'siage', 'siu', 'sithick', 'siv']
+                    },
+                    'hist-1950': {
+                        'r1i1p2f1': ['siu', 'siv', 'sithick', 'siage', 'siconc'],
+                        'r2i1p2f1': ['siage', 'sithick', 'siv', 'siu', 'siconc'],
+                        'r3i1p2f1': ['sithick', 'siage', 'siu', 'siv', 'siconc']
+                    },
                 },
             },
         },
@@ -303,22 +339,33 @@ def test_list_available_variables():
             'source_id': 'HadGEM3-GC31-HM',
             'experiment_id': None,
             'expected_var_dict': {
-                'control-1950': {'r1i1p1f1': ['areacello']},
-                'highres-future': {'r1i1p1f1': ['areacello']},
-                'hist-1950': {'r1i1p1f1': ['areacello']},
-            },
-        },
-        {
-            'source_id': 'HadGEM3-GC31-HM',
-            'experiment_id': 'hist-1950',
-            'expected_var_dict': {
-                'hist-1950': {'r1i1p1f1': ['areacello']},
+                'MOHC/HadGEM3-GC31-HM': {
+                    'control-1950': {
+                        'r1i1p1f1': ['areacello']
+                    },
+                    'highres-future': {
+                        'r1i1p1f1': ['areacello', 'siu', 'siv', 'sithick', 'siconc', 'siage'],
+                        'r1i3p1f1': ['siconc', 'siage', 'siv', 'sithick', 'siu']
+                    },
+                    'hist-1950': {
+                        'r1i1p1f1': ['areacello', 'siage', 'siv', 'siu', 'siconc', 'sithick'],
+                        'r1i3p1f1': ['siconc', 'sithick', 'siu', 'siage', 'siv']
+                    },
+                },
+                'NERC/HadGEM3-GC31-HM': {
+                    'highres-future': {
+                        'r1i2p1f1': ['siv', 'siu', 'siconc', 'sithick', 'siage']
+                    },
+                    'hist-1950': {
+                        'r1i2p1f1': ['siconc', 'siu', 'sithick', 'siv', 'siage']
+                    },
+                },
             },
         },
     ]
     for test_case in test_cases:
         actual = path.list_available_variables(source_id=test_case['source_id'], experiment_id=test_case['experiment_id'])
-        assert actual == test_case['expected_var_dict'], f"`list_available_variables` failed on test case: {test_case}.\nHas the expected list in `tests/test_path/test_find_data.py` been updated?"
+        assert actual == test_case['expected_var_dict'], f"`list_available_variables` failed on test case: {test_case}. \nActual: {actual}\nExpected: {test_case['expected_var_dict']}\nHas the expected list in `tests/test_path/test_find_data.py` been updated?"
 
     # Define invalid test cases
     invalid_test_cases = [
@@ -791,6 +838,13 @@ def test_list_variable_files():
             'variable_id': 'siu',
             'experiment_id': 'hist-1950',
             'variant_label': 'r3i1p2f1',
+            'expected_list_len': 65,
+        },
+        {
+            'source_id': 'HadGEM3-GC31-HH',
+            'variable_id': 'siage',
+            'experiment_id': 'hist-1950',
+            'variant_label': None,
             'expected_list_len': 65,
         },
         {

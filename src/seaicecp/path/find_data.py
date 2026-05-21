@@ -82,7 +82,7 @@ def list_available_models(
     data_dir: str = '/seaicecp_data/bergybits/data',
     project: str = 'CMIP6',
     activity_id: str = 'HighResMIP',
-    institution_id: str = None,
+    institution_id: (str, [str]) = None,
 ):
     """ List the names of the models available alphabetically.
 
@@ -101,8 +101,8 @@ def list_available_models(
         activity_id : `str`, optional
             The name of the activity ID in which to search for available models.
             Default is `HighResMIP`.
-        institution_id : `str` or `None`, optional
-            The name of the institution ID in which to search for available models.
+        institution_id : `str`, list of `str`, or `None`, optional
+            The name(s) of the institution ID(s) in which to search for available models.
             If `None` is given, all available institutions are included.
             Default is `None`.
 
@@ -115,9 +115,13 @@ def list_available_models(
         --------
         >>> from seaicecp.path.find_data import list_available_models 
         >>> list_available_models()
-        ['AWI-CM-1-1-HR', 'AWI-CM-1-1-LR', 'BCC-CSM2-HR', 'CESM1-CAM5-SE-HR', 'CESM1-CAM5-SE-LR', 'EC-Earth3P', 'EC-Earth3P-HR', 'HadGEM3-GC31-HM', 'HadGEM3-GC31-LL', 'HadGEM3-GC31-MM']
+        ['AWI/AWI-CM-1-1-HR', 'AWI/AWI-CM-1-1-LR', 'BCC/BCC-CSM2-HR', 'EC-Earth-Consortium/EC-Earth3P', 'EC-Earth-Consortium/EC-Earth3P-HR', 'MOHC/HadGEM3-GC31-HH', 'MOHC/HadGEM3-GC31-HM', 'MOHC/HadGEM3-GC31-LL', 'MOHC/HadGEM3-GC31-MM', 'NCAR/CESM1-CAM5-SE-HR', 'NCAR/CESM1-CAM5-SE-LR', 'NERC/HadGEM3-GC31-HH', 'NERC/HadGEM3-GC31-HM']
         >>> list_available_models(institution_id = 'EC-Earth-Consortium')
-        ['EC-Earth3P', 'EC-Earth3P-HR']
+        ['EC-Earth-Consortium/EC-Earth3P', 'EC-Earth-Consortium/EC-Earth3P-HR']
+        >>> list_available_models(institution_id = 'MOHC')
+        ['MOHC/HadGEM3-GC31-HH', 'MOHC/HadGEM3-GC31-HM', 'MOHC/HadGEM3-GC31-LL', 'MOHC/HadGEM3-GC31-MM']
+        >>> list_available_models(institution_id = ['MOHC', 'NERC'])
+        ['MOHC/HadGEM3-GC31-HH', 'MOHC/HadGEM3-GC31-HM', 'MOHC/HadGEM3-GC31-LL', 'MOHC/HadGEM3-GC31-MM', 'NERC/HadGEM3-GC31-HH', 'NERC/HadGEM3-GC31-HM']
     """
     # Verify input arguments
     if not isinstance(data_dir, str):
@@ -126,7 +130,11 @@ def list_available_models(
         raise TypeError(f"(list_available_models) `project` must be a string. Got type: {type(project)}")
     if not isinstance(activity_id, str):
         raise TypeError(f"(list_available_models) `activity_id` must be a string. Got type: {type(activity_id)}")
-    if not isinstance(institution_id, (str, type(None))):
+    if isinstance(institution_id, type([])):
+        for this_institution_id in institution_id:
+            if not isinstance(this_institution_id, str):
+                raise TypeError(f"(list_available_models) Each `institution_id` must be a string. Got type: {type(this_institution_id)}")
+    elif not isinstance(institution_id, (str, type(None))):
         raise TypeError(f"(list_available_models) `institution_id` must be a string or `None`. Got type: {type(institution_id)}")
     # Assemble the full file path
     full_path = f"{data_dir}/{project}/{activity_id}"
@@ -136,16 +144,22 @@ def list_available_models(
     # Get the institution ID's 
     if isinstance(institution_id, type(None)):
         institution_ids = next(os.walk(full_path))[1]
-    else:
+    elif isinstance(institution_id, str):
         institution_ids = [institution_id]
+    else:
+        institution_ids = institution_id
 
-    # Verify the paths for each institution ID
-    institution_paths = []
-    for institution_id in institution_ids:
-        # Verify the file path exists and add it to the list of institution paths
-        institution_paths.append(verify_path(f"{full_path}/{institution_id}"))
-    # Get the model names using nested iterations to avoid a list of lists
-    model_names = [model_name for path in institution_paths for model_name in next(os.walk(path))[1]]
+    model_names = []
+    # Loop through each institution ID
+    for this_institution_id in institution_ids:
+        # Verify the institution file path exists
+        this_institution_path = verify_path(f"{full_path}/{this_institution_id}")
+        # Loop across each model for that institution
+        for this_model in next(os.walk(this_institution_path))[1]:
+            # Verify the model path
+            verify_path(f"{this_institution_path}/{this_model}")
+            # Add this model to the list
+            model_names.append(f"{this_institution_id}/{this_model}")
 
     return sorted(model_names)
 
@@ -177,14 +191,16 @@ def get_model_path(
 
         Returns
         -------
-        model_path : `str`
-            The file path to the directory for the specified model.
+        model_filepaths : List of `str`
+            A list of the file path(s) for the specified model.
         
         Examples
         --------
         >>> from seaicecp.path.find_data import get_model_path
+        >>> get_model_path(source_id='AWI-CM-1-1-HR')
+        ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/AWI/AWI-CM-1-1-HR']
         >>> get_model_path('HadGEM3-GC31-HM')
-        '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/MOHC/HadGEM3-GC31-HM'
+        ['/seaicecp_data/bergybits/data/CMIP6/HighResMIP/MOHC/HadGEM3-GC31-HM', '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/NERC/HadGEM3-GC31-HM']
     """
     # Verify input arguments
     if not isinstance(source_id, (str, type(None))):
@@ -200,13 +216,16 @@ def get_model_path(
     # Verify this full path exists
     full_path = verify_path(full_path)
 
+    model_filepaths = []
     # Use glob to get a file path list down to the `source_id` depth
     source_id_filepaths = glob.glob(f"{full_path}/*/*")
     # Loop over those file paths to find which has the specified model
     for source_id_filepath in source_id_filepaths:
         # Check whether that file path ends in the specified model
         if source_id_filepath.endswith(source_id):
-            return source_id_filepath
+            model_filepaths.append(source_id_filepath)
+    if len(model_filepaths) > 0:
+        return model_filepaths
     
     # If no `source_id_filepath` was returned, get list of available model names and raise an error
     model_names = list_available_models(
@@ -246,11 +265,28 @@ def list_available_variables(
         --------
         >>> from seaicecp.path.find_data import list_available_variables 
         >>> list_available_variables(source_id = 'HadGEM3-GC31-HM')
-        {'control-1950': {'r1i1p1f1': ['areacello']},
-        'highres-future': {'r1i1p1f1': ['areacello']},
-        'hist-1950': {'r1i1p1f1': ['areacello']}}
+        {'MOHC/HadGEM3-GC31-HM': {
+            'control-1950': {
+                'r1i1p1f1': ['areacello']},
+            'highres-future': {
+                'r1i1p1f1': ['areacello', 'siu', 'siv', 'sithick', 'siconc', 'siage'],
+                'r1i3p1f1': ['siconc', 'siage', 'siv', 'sithick', 'siu']},
+            'hist-1950': {
+                'r1i1p1f1': ['areacello', 'siage', 'siv', 'siu', 'siconc', 'sithick'],
+                'r1i3p1f1': ['siconc', 'sithick', 'siu', 'siage', 'siv']}},
+        'NERC/HadGEM3-GC31-HM': {
+            'highres-future': {
+                'r1i2p1f1': ['siv', 'siu', 'siconc', 'sithick', 'siage']},
+            'hist-1950': {
+                'r1i2p1f1': ['siconc', 'siu', 'sithick', 'siv', 'siage']}}}
         >>> list_available_variables(source_id = 'HadGEM3-GC31-HM', experiment_id = 'hist-1950')
-        {'hist-1950': {'r1i1p1f1': ['areacello']}}
+        {'MOHC/HadGEM3-GC31-HM': {
+            'hist-1950': {
+                'r1i1p1f1': ['areacello', 'siage', 'siv', 'siu', 'siconc', 'sithick'],
+                'r1i3p1f1': ['siconc', 'sithick', 'siu', 'siage', 'siv']}},
+        'NERC/HadGEM3-GC31-HM': {
+            'hist-1950': {
+                'r1i2p1f1': ['siconc', 'siu', 'sithick', 'siv', 'siage']}}}
     """
     # Verify input arguments
     if not isinstance(source_id, str):
@@ -259,41 +295,49 @@ def list_available_variables(
         raise TypeError(f"(list_available_variables) `experiment_id` must be a string or `None`. Got type: {type(experiment_id)}")
     
     # Get the path of the model
-    model_path = get_model_path(source_id, **kwargs)
+    model_paths = get_model_path(source_id, **kwargs)
     # Verify this model path exists
-    model_path = verify_path(model_path)
+    for i in range(len(model_paths)):
+        model_paths[i] = verify_path(model_paths[i])
 
-    # Get the experiment ID's 
-    if isinstance(experiment_id, type(None)):
-        experiment_ids = next(os.walk(model_path))[1]
-    else:
-        experiment_ids = [experiment_id]
-    
     # Make a dictionary to store resulting available variables
-    avail_var_dict = {experiment_id: None for experiment_id in sorted(experiment_ids)}
+    avail_var_dict = {f"{model_path.split('/')[-2]}/{model_path.split('/')[-1]}": None for model_path in sorted(model_paths)}
 
-    # Get the variant labels (ensemble members) for each experiment ID
-    for experiment_id in experiment_ids:
-        # Verify the experiment ID path exists
-        experiment_path = verify_path(f"{model_path}/{experiment_id}")
-        # Get the variant labels
-        variant_labels = next(os.walk(experiment_path))[1]
-        # Add the variant labels as a dictionary to the available variable dictionary
-        avail_var_dict[experiment_id] = {variant_label: [] for variant_label in sorted(variant_labels)}
+    # Loop across the model paths
+    for model_path in model_paths:
+        short_model_path = f"{model_path.split('/')[-2]}/{model_path.split('/')[-1]}"
+        
+        # Get the experiment ID's 
+        if isinstance(experiment_id, type(None)):
+            experiment_ids = next(os.walk(model_path))[1]
+        else:
+            experiment_ids = [experiment_id]
+        
+        # Make a dictionary to store resulting available variables
+        avail_var_dict[short_model_path] = {experiment_id: None for experiment_id in sorted(experiment_ids)}
 
-        # Get the variables available for each variant label
-        for variant_label in variant_labels:
-            # Verify the variant path exists
-            variant_path = verify_path(f"{experiment_path}/{variant_label}")
-            # Get the table ID's
-            table_ids = next(os.walk(variant_path))[1]
-            # Get the variables available for each table ID
-            table_paths = []
-            for table_id in table_ids:
-                # Verify the table path exists and add it to the list of table paths
-                table_paths.append(verify_path(f"{variant_path}/{table_id}"))
-            # Get the variable names using nested iterations to avoid a list of lists
-            avail_var_dict[experiment_id][variant_label] = [var_name for path in table_paths for var_name in next(os.walk(path))[1]]
+        # Get the variant labels (ensemble members) for each experiment ID
+        for this_experiment_id in experiment_ids:
+            # Verify the experiment ID path exists
+            experiment_path = verify_path(f"{model_path}/{this_experiment_id}")
+            # Get the variant labels
+            variant_labels = next(os.walk(experiment_path))[1]
+            # Add the variant labels as a dictionary to the available variable dictionary
+            avail_var_dict[short_model_path][this_experiment_id] = {variant_label: [] for variant_label in sorted(variant_labels)}
+
+            # Get the variables available for each variant label
+            for variant_label in variant_labels:
+                # Verify the variant path exists
+                variant_path = verify_path(f"{experiment_path}/{variant_label}")
+                # Get the table ID's
+                table_ids = next(os.walk(variant_path))[1]
+                # Get the variables available for each table ID
+                table_paths = []
+                for table_id in table_ids:
+                    # Verify the table path exists and add it to the list of table paths
+                    table_paths.append(verify_path(f"{variant_path}/{table_id}"))
+                # Get the variable names using nested iterations to avoid a list of lists
+                avail_var_dict[short_model_path][this_experiment_id][variant_label] = [var_name for path in table_paths for var_name in next(os.walk(path))[1]]
 
     return avail_var_dict
 
@@ -373,33 +417,40 @@ def get_variable_path(
         raise TypeError(f"(get_variable_path) `variant_label` must be a string or `None`. Got type: {type(variant_label)}")
 
     # Get the model path
-    model_path = get_model_path(
+    model_paths = get_model_path(
         source_id = source_id,
         data_dir = data_dir,
         project = project,
         activity_id = activity_id,
     )
 
-    # Use glob to get a file path list down to the `variable_id` depth
-    variable_id_filepaths = glob.glob(f"{model_path}/*/*/*/*")
+    full_variable_id_filepath_list = []
 
-    # Filter to just those with the specified variable ID
-    variable_id_filepaths = [item for item in variable_id_filepaths if item.endswith(variable_id)]
+    # Loop across model paths
+    for model_path in model_paths:
+        # Use glob to get a file path list down to the `variable_id` depth
+        variable_id_filepaths = glob.glob(f"{model_path}/*/*/*/*")
 
-    # Filter to just those with the specified experiment ID
-    variable_id_filepaths = [item for item in variable_id_filepaths if experiment_id in item]
+        # Filter to just those with the specified variable ID
+        variable_id_filepaths = [item for item in variable_id_filepaths if item.endswith(variable_id)]
 
-    # Filter to just those with the specified variant label, if applicable
-    if not isinstance(variant_label, type(None)):
-        variable_id_filepaths = [item for item in variable_id_filepaths if variant_label in item]
+        # Filter to just those with the specified experiment ID
+        variable_id_filepaths = [item for item in variable_id_filepaths if experiment_id in item]
+
+        # Filter to just those with the specified variant label, if applicable
+        if not isinstance(variant_label, type(None)):
+            variable_id_filepaths = [item for item in variable_id_filepaths if variant_label in item]
+        
+        # Add this list to the full list
+        full_variable_id_filepath_list += variable_id_filepaths
 
     # Check how many file paths remain
-    if len(variable_id_filepaths) > 1:
+    if len(full_variable_id_filepath_list) > 1:
         # There is more than one matching file path for the specified variable for the specified model
-        warnings.warn(f"(get_variable_path) More than one file path found: {sorted(variable_id_filepaths)}\nReturning first result in list.", UserWarning)
+        warnings.warn(f"(get_variable_path) More than one file path found: {sorted(full_variable_id_filepath_list)}\nReturning first result in list.", UserWarning)
         # Return the first variant alphabetically
-        return sorted(variable_id_filepaths)[0]
-    elif len(variable_id_filepaths) == 0:
+        return sorted(full_variable_id_filepath_list)[0]
+    elif len(full_variable_id_filepath_list) == 0:
         # If no file paths had the variable in it, get the list of available variables and raise an error
         available_variables = list_available_variables(
             source_id = source_id,
@@ -411,7 +462,7 @@ def get_variable_path(
         raise ValueError(f"(get_variable_path) Variable {variable_id} not found for {source_id}. Available variables: {available_variables}")
     else:
         # If there is only one file path remaining, return it
-        return variable_id_filepaths[0]
+        return full_variable_id_filepath_list[0]
 
 def list_variable_files(
     source_id: str,
