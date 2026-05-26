@@ -88,3 +88,133 @@ def test_get_grid_type():
             assert True, f"`get_grid_type` raised an exception on invalid `dataset`: {e}"
         else:
             assert False, f"`get_grid_type` did not raise an exception on invalid `dataset` {invalid_string}"
+
+def test_summarize_grid_types():
+    """Test the `summarize_grid_types` function."""
+    # Define test cases
+    test_cases = [
+        {
+            'datasets': [make_example_dataset()],
+            'expected_grid_type_dict': {'total': 1, 'irregular': 1},
+        },
+        {
+            'datasets': list_variable_files(
+                source_id = 'EC-Earth3P-HR',
+                variable_id = 'siconc',
+                experiment_id = 'hist-1950',
+                # experiment_id = 'highres-future',
+                # variant_label = 'r1i1p1f1',
+                variant_label = 'r1i1p2f1',
+                # variant_label = 'r2i1p2f1',
+                # variant_label = 'r3i1p2f1',
+            ),
+            'expected_grid_type_dict': {'total': 65, 'irregular': 65},
+        },
+        {
+            'datasets': list_variable_files(
+                source_id = 'EC-Earth3P-HR',
+                variable_id = 'areacello',
+                experiment_id = 'highres-future',
+            ),
+            'expected_grid_type_dict': {'total': 1, 'irregular': 1},
+        },
+        {
+            'datasets': list_variable_files(
+                source_id = 'EC-Earth3P-HR',
+                variable_id = 'siconc',
+                experiment_id = 'highres-future',
+                variant_label = 'r1i1p2f1',
+            ),
+            'expected_grid_type_dict': {'total': 36, 'irregular': 36},
+        },
+        {
+            'datasets': list_variable_files(
+                source_id = 'EC-Earth3P-HR',
+                variable_id = 'siconc',
+                experiment_id = 'highres-future',
+                variant_label = 'r3i1p2f1',
+            ),
+            'expected_grid_type_dict': {'total': 85, 'irregular': 85},
+        },
+        {
+            'datasets': list_variable_files(
+                source_id = 'HadGEM3-GC31-HH',
+                variable_id = 'siconc',
+                experiment_id = 'hist-1950',
+            ),
+            'expected_grid_type_dict': {'total': 64, 'irregular': 64},
+        },
+        {
+            'datasets': list_variable_files(
+                source_id = 'HadGEM3-GC31-HM',
+                variable_id = 'sithick',
+                experiment_id = 'hist-1950',
+                variant_label = 'r1i2p1f1',
+            ),
+            'expected_grid_type_dict': {'total': 65, 'irregular': 65},
+        },
+        {
+            'datasets': list_variable_files(
+                source_id = 'HadGEM3-GC31-MM',
+                variable_id = 'siconc',
+                experiment_id = 'highres-future',
+                variant_label = 'r1i1p1f1',
+            ),
+            'expected_grid_type_dict': {'total': 36, 'regular': 36},
+        },
+        {
+            'datasets': list_variable_files(
+                source_id = 'HadGEM3-GC31-MM',
+                variable_id = 'siconc',
+                experiment_id = 'highres-future',
+                variant_label = 'r1i3p1f1',
+            ),
+            'expected_grid_type_dict': {'total': 36, 'regular': 36},
+        },
+        {
+            'datasets': list_variable_files(
+                source_id = 'HadGEM3-GC31-MM',
+                variable_id = 'sithick',
+                experiment_id = 'hist-1950',
+                variant_label = 'r1i2p1f1',
+            ),
+            'expected_grid_type_dict': {'total': 65, 'irregular': 65},
+        },
+        {
+            'datasets': list_variable_files(
+                source_id = 'EC-Earth3P-HR',
+                variable_id = 'siconc',
+                experiment_id = 'hist-1950',
+                variant_label = 'r1i1p2f1',
+            ) + list_variable_files(
+                source_id = 'HadGEM3-GC31-MM',
+                variable_id = 'siconc',
+                experiment_id = 'hist-1950',
+                variant_label = 'r1i2p1f1',
+            ),
+            'expected_grid_type_dict': {'total': 130, 'irregular': 65, 'regular': 65},
+        },
+    ]
+    for test_case in test_cases:
+        actual = grid_type.summarize_grid_types(
+            datasets = test_case['datasets']
+        )
+        assert actual == test_case['expected_grid_type_dict'], f"`summarize_grid_types` failed on test case: {test_case}.\nExpected: {test_case['expected_grid_type_dict']}\nActual: {actual}"
+    
+    # Define a list of invalid datasets
+    invalid_strings = [
+        1234,
+        3.14,
+        None,
+        {}
+    ]
+    for invalid_string in invalid_strings:
+        # Test with `datasets`
+        try:
+            actual = grid_type.summarize_grid_types(
+                datasets = invalid_string,
+            )
+        except (TypeError, ValueError) as e:
+            assert True, f"`summarize_grid_types` raised an exception on invalid `datasets`: {e}"
+        else:
+            assert False, f"`summarize_grid_types` did not raise an exception on invalid `datasets` {invalid_string}"
