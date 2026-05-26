@@ -2,18 +2,25 @@ import xarray as xr
 
 from seaicecp.dataset import grid_type
 from seaicecp.dataset.example_dataset import make_example_dataset
+from seaicecp.path import list_variable_files
 
 def test_get_grid_type():
     """Test the `get_grid_type` function."""
     # Define test cases
+    modified_example_dataset = make_example_dataset()
+    modified_example_dataset = modified_example_dataset.isel(i=0)
     test_cases = [
         {
             'dataset': make_example_dataset(),
             'expected_grid_type': 'irregular',
         },
         {
+            'dataset': modified_example_dataset,
+            'expected_grid_type': 'other',
+        },
+        {
             'dataset': '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/EC-Earth-Consortium/EC-Earth3P-HR/hist-1950/r1i1p2f1/SImon/siconc/gn/v20181212/siconc_SImon_EC-Earth3P-HR_hist-1950_r1i1p2f1_gn_201401-201412.nc',
-            'expected_var_name': 'irregular',
+            'expected_grid_type': 'irregular',
         },
         {
             'dataset': '/seaicecp_data/bergybits/data/CMIP6/HighResMIP/MOHC/HadGEM3-GC31-MM/hist-1950/r1i1p1f1/Ofx/areacello/gn/v20190301/areacello_Ofx_HadGEM3-GC31-MM_hist-1950_r1i1p1f1_gn.nc',
@@ -41,7 +48,7 @@ def test_get_grid_type():
         },
     ]
     for test_case in test_cases:
-        actual = get_variable.get_grid_type(
+        actual = grid_type.get_grid_type(
             dataset = test_case['dataset']
         )
         assert actual == test_case['expected_grid_type'], f"`get_grid_type` failed on test case: {test_case}.\nExpected: {test_case['expected_grid_type']}\nActual: {actual}"
@@ -62,7 +69,7 @@ def test_get_grid_type():
     ]
     for invalid_test_case in invalid_test_cases:
         try:
-            actual = get_variable.get_grid_type(
+            actual = grid_type.get_grid_type(
                 dataset = invalid_test_case['dataset'],
             )
         except (FileNotFoundError, TypeError, ValueError) as e:
@@ -81,7 +88,7 @@ def test_get_grid_type():
     for invalid_string in invalid_strings:
         # Test with `dataset`
         try:
-            actual = get_variable.get_grid_type(
+            actual = grid_type.get_grid_type(
                 dataset = invalid_string,
             )
         except (TypeError, ValueError) as e:
