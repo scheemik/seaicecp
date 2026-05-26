@@ -163,6 +163,7 @@ def select_files_by_time(
     """ Filter the list to be only the files in the given date range. 
 
         From the given list of datafiles, find the ones that are in between the given start and end dates and return those in a list.
+        If the start and end are given as years, the returned list will include both the start and end years, if available.
 
         Parameters
         ----------
