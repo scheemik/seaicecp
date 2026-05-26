@@ -29,10 +29,10 @@ def get_variable_name(
     if not isinstance(dataset, (str, xr.Dataset, xr.DataArray)):
         raise TypeError(f"(get_variable_name) `dataset` must be a string, `xr.Dataset`, or `xr.DataArray`. Got type: {type(dataset)}")
     if isinstance(dataset, str):
-        # Verify this is a valid path
-        dataset = verify_path(dataset)
         if not dataset.endswith('.nc'):
             raise TypeError(f"(get_variable_name) `dataset` must be a `.nc` filepath. Got: {dataset}")
+        # Verify this is a valid path
+        dataset = verify_path(dataset)
         # Open the dataset
         dataset = xr.open_dataset(dataset)
     
