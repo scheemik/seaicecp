@@ -14,6 +14,7 @@ def test_make_example_dataset():
             'coords': ['j', 'i', 'longitude', 'latitude'],
             'sizes': ['j', 'i'],
             'test_var_size': 100,
+            'test_latlon_size': 100,
             'n_size': 10,
         },
         {
@@ -22,6 +23,7 @@ def test_make_example_dataset():
             'coords': ['j', 'i', 'longitude', 'latitude'],
             'sizes': ['j', 'i'],
             'test_var_size': 100,
+            'test_latlon_size': 100,
             'n_size': 10,
         },
         {
@@ -30,7 +32,17 @@ def test_make_example_dataset():
             'coords': ['j', 'i', 'longitude', 'latitude'],
             'sizes': ['j', 'i'],
             'test_var_size': 25,
+            'test_latlon_size': 25,
             'n_size': 5,
+        },
+        {
+            'actual': dataset.make_example_dataset(time_axis=True),
+            'keys': ['test_var'],
+            'coords': ['time', 'j', 'i', 'longitude', 'latitude'],
+            'sizes': ['time', 'j', 'i'],
+            'test_var_size': 200,
+            'test_latlon_size': 100,
+            'n_size': 10,
         },
     ]
     for test_case in test_cases:
@@ -41,8 +53,8 @@ def test_make_example_dataset():
         # Check the sizes
         assert list(test_case['actual'].sizes) == test_case['sizes'], f"`make_example_dataset` created a dataset with the sizes: {list(test_case['actual'].sizes)}.\nExpected sizes: {test_case['sizes']}"
         assert test_case['actual']['test_var'].size == test_case['test_var_size'], f"`make_example_dataset` created a dataset with a variable size: {test_case['actual']['test_var'].size}.\nExpected variable size: {test_case['test_var_size']}"
-        assert test_case['actual']['longitude'].size == test_case['test_var_size'], f"`make_example_dataset` created a dataset with a longitude size: {test_case['actual']['longitude'].size}.\nExpected variable size: {test_case['test_var_size']}"
-        assert test_case['actual']['latitude'].size == test_case['test_var_size'], f"`make_example_dataset` created a dataset with a latitude size: {test_case['actual']['latitude'].size}.\nExpected variable size: {test_case['test_var_size']}"
+        assert test_case['actual']['longitude'].size == test_case['test_latlon_size'], f"`make_example_dataset` created a dataset with a longitude size: {test_case['actual']['longitude'].size}.\nExpected variable size: {test_case['test_latlon_size']}"
+        assert test_case['actual']['latitude'].size == test_case['test_latlon_size'], f"`make_example_dataset` created a dataset with a latitude size: {test_case['actual']['latitude'].size}.\nExpected variable size: {test_case['test_latlon_size']}"
         assert test_case['actual']['i'].size == test_case['n_size'], f"`make_example_dataset` created a dataset with a variable size: {test_case['actual']['i'].size}.\nExpected variable size: {test_case['n_size']}"
         assert test_case['actual']['j'].size == test_case['n_size'], f"`make_example_dataset` created a dataset with a variable size: {test_case['actual']['j'].size}.\nExpected variable size: {test_case['n_size']}"
     
@@ -72,10 +84,10 @@ def test_make_example_dataset():
                 save_as = invalid_value,
             )
         except (TypeError, ValueError) as e:
-            assert True, f"`make_example_dataset` raised an exception on invalid filepath: {e}"
+            assert True, f"`make_example_dataset` raised an exception on invalid `save_as`: {e}"
         else:
-            assert False, f"`make_example_dataset` did not raise an exception on invalid filepath {invalid_value}"
-    # Test for `n`
+            assert False, f"`make_example_dataset` did not raise an exception on invalid `save_as` {invalid_value}"
+    
     invalid_values = [
         'not_a_value',
         3.14,
@@ -84,34 +96,38 @@ def test_make_example_dataset():
         {},
     ]
     for invalid_value in invalid_values:
+        # Test for `n`
         try:
             actual = dataset.make_example_dataset(
                 save_as=test_filepath,
                 n = invalid_value,
             )
         except (TypeError, ValueError) as e:
-            assert True, f"`make_example_dataset` raised an exception on invalid n: {e}"
+            assert True, f"`make_example_dataset` raised an exception on invalid `n`: {e}"
         else:
-            assert False, f"`make_example_dataset` did not raise an exception on invalid n {invalid_value}"
-    # Test for `overwrite`
-    invalid_values = [
-        'not_a_value',
-        1234,
-        3.14,
-        None,
-        [],
-        {},
-    ]
-    for invalid_value in invalid_values:
-        try:
-            actual = dataset.make_example_dataset(
-                save_as=test_filepath,
-                overwrite = invalid_value,
-            )
-        except (TypeError, ValueError) as e:
-            assert True, f"`make_example_dataset` raised an exception on invalid overwrite: {e}"
-        else:
-            assert False, f"`make_example_dataset` did not raise an exception on invalid overwrite {invalid_value}"
+            assert False, f"`make_example_dataset` did not raise an exception on invalid `n` {invalid_value}"
+        # Test for `time_axis`
+        for invalid_value in invalid_values:
+            try:
+                actual = dataset.make_example_dataset(
+                    save_as=test_filepath,
+                    time_axis = invalid_value,
+                )
+            except (TypeError, ValueError) as e:
+                assert True, f"`make_example_dataset` raised an exception on invalid `time_axis`: {e}"
+            else:
+                assert False, f"`make_example_dataset` did not raise an exception on invalid `time_axis` {invalid_value}"
+        # Test for `overwrite`
+        for invalid_value in invalid_values:
+            try:
+                actual = dataset.make_example_dataset(
+                    save_as=test_filepath,
+                    overwrite = invalid_value,
+                )
+            except (TypeError, ValueError) as e:
+                assert True, f"`make_example_dataset` raised an exception on invalid `overwrite`: {e}"
+            else:
+                assert False, f"`make_example_dataset` did not raise an exception on invalid `overwrite` {invalid_value}"
     
     # Clean up the example dataset
     os.remove(test_filepath)

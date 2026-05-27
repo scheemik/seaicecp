@@ -5,7 +5,8 @@ from seaicecp.verify import verify_path
 
 def make_example_dataset(
     save_as: str = None,
-    n : int = 10,
+    n: int = 10,
+    time_axis: bool = False,
     overwrite: bool = True,
 ):
     """ Create an example dataset for testing.
@@ -20,6 +21,9 @@ def make_example_dataset(
         n : `int`, optional
             The number of values in each dimension.
             Default is `10`.
+        time_axis : `bool`, optional
+            Whether to include a time axis in the example dataset.
+            Default is `False`.
         overwrite : `bool`, optional
             Whether to overwrite an existing file at the given filepath in `save_as`.
             Default is `True`.
@@ -42,6 +46,8 @@ def make_example_dataset(
         raise TypeError(f"(make_example_dataset) `save_as` must be a string or `None`. Got type: {type(save_as)}")
     if not isinstance(n, int):
         raise TypeError(f"(make_example_dataset) `n` must be an integer. Got type: {type(n)}")
+    if not isinstance(time_axis, bool):
+        raise TypeError(f"(make_example_dataset) `time_axis` must be `bool`. Got type: {type(time_axis)}")
     if not isinstance(overwrite, bool):
         raise TypeError(f"(make_example_dataset) `overwrite` must be `bool`. Got type: {type(overwrite)}")
 
@@ -67,6 +73,17 @@ def make_example_dataset(
     # Add a test variable
     test_var = np.reshape(np.arange(n*n, dtype=np.float64), (n,n))
     xr_dataset['test_var'] = (['j','i'],test_var)
+
+    # Add time dimension, if applicable
+    if time_axis == True:
+        # Create an array of dates, one per month ('M')
+        time_arr = np.arange('2026-01', '2026-03', dtype='datetime64[M]')
+        # Set the date format to `[ns]`
+        time_arr = time_arr.astype('datetime64[ns]')
+        # Add 15 days to each date to match monthly average datetimes
+        time_arr += np.timedelta64(15, 'D')
+        # Expand the dimensions to include time
+        xr_dataset = xr_dataset.expand_dims(dim={'time': time_arr}, axis=0)
 
     if not isinstance(save_as, type(None)):
         # Check whether the file exists
