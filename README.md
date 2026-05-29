@@ -4,7 +4,8 @@ Investigate sea ice choke points in the Canadian Arctic Archipelago using high-r
 
 ## Installation
 
-- TODO
+- This project makes use of Python libraries managed by `uv` using the `pyproject.toml` file.
+- It also makes use of command line interfaces such as `cdo` and `esgpull` for managing data from global climate models.
 
 <!-- ```bash
 $ pip install seaicecp
