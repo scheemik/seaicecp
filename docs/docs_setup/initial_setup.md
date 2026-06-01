@@ -16,6 +16,28 @@ Link to the {doc}`README <../index>`.
     - [Using a `cookiecutter` template](#cookiecutter)
     - [Combining `uv` and `cookiecutter` structures](#uv_and_cookiecutter)
 - [Version control and GitHub](#version_control)
+- [Podman](#podman)
+    - [Installing Podman](#podman_install)
+    - [Testing Podman](#podman_test)
+    - [Pod Manager extension for VSCodium](#pod_manager_extension)
+    - [Building a simple container](#podman_simple_container)
+    - [The Containerfile](#podman_containerfile)
+        - [Pinning the versions of `uv` and `trixie-slim`](#podman_containerfile_pin_versions)
+        - [Defining environment variables](#podman_containerfile_env_vars)
+        - [Installing system and scientific dependencies](#podman_containerfile_apt-get)
+        - [Preparing Python, `uv`, and working directory](#podman_containerfile_misc_prep)
+        - [`uv` dependencies and Jupyter kernel](#podman_containerfile_uv_jupyter)
+        - [Download commonly used Natural Earth shapefiles](#podman_containerfile_natural_earth)
+        - [Set up `esgpull` install](#podman_containerfile_esgpull)
+        - [Set up the Jupyter server](#podman_containerfile_jupyter_server)
+    - [The `start_container` script](#podman_start_container)
+        - [Set the script to fail on common errors](#podman_start_container_pipefail)
+        - [Ensure the virtual machine is running](#podman_start_container_machine_status)
+        - [Set the parameters](#podman_start_container_params)
+        - [Check existing containers and images](#podman_start_container_cleanup)
+        - [Set up access to external volumes](#podman_start_container_external_vol)
+        - [Create the list of volumes](#podman_start_container_list_vol)
+        - [Run the container](#podman_start_container_run)
 - [Virtual environment and packages](#venv)
     - [Activating the virtual environment](#venv_activate)
     - [Adding package dependencies](#venv_dependencies)
@@ -266,6 +288,1086 @@ Initialized empty Git repository in /<absolute/path/to/project>/seaicecp/.git/
 
 I then added and committed the initial structure and pushed to a new [GitHub repository for the project](https://github.com/scheemik/seaicecp).
 I am working in VSCodium, which I'd already set up to [connect to my GitHub account](https://github.com/VSCodium/vscodium/blob/master/docs/usage.md#signin-github), so the process was as simple as pressing the "push" button in the GUI.
+
+---
+<a id='podman'></a>
+[back to top](#top)
+
+## Podman
+
+[Podman](https://podman.io/) is an open-source tool by [Red Hat](https://www.redhat.com/en0) for creating and managing containers, similar to [Docker](https://www.docker.com/).
+[Containerization](https://en.wikipedia.org/wiki/Containerization_(computing)) allows the creation of isolated, reproducible computing environments, making it easier to ensure code will run the same way across different systems.
+While virtual environments for Python, such as [`venv`](https://docs.python.org/3/library/venv.html) or [`conda`](https://www.anaconda.com/download), create reproducible environments for Python packages, containers create an entire operating system.
+This allows the inclusion and management of non-Python software in a project, such as the `cdo` and `esgpull` tools used in this project.
+
+<a id='podman_install'></a>
+[back to top](#top)
+
+### Installing Podman
+<!-- See GPBS_Log 2026/04/28 -->
+
+I installed `podman` on my MacBook following the [Podman Installation Instructions](https://podman.io/docs/installation). 
+I downloaded the `podman-installer-macos-universal.pkg` version from the [`podman` GitHub latest release (v5.8.2) page](https://github.com/containers/podman/releases). 
+Opening that brought me through the familiar GUI software installation process common to many applications for macOS. 
+I agreed to the [license](https://www.apache.org/licenses/), selected which users for whom I will install it, then watched the loading bar. 
+It took less than a minute. 
+
+This process also added an item from "Red Hat" in Settings -> Login Items & Extensions -> Allow in the Background. 
+I assume this is necessary for this to actually run properly. 
+I then moved the `.pkg` file to the trash.
+
+The next step in the [Podman Installation Instructions](https://podman.io/docs/installation) for macOS is to setup the Podman virtual machine.
+This is necessary when running Podman on macOS or Windows as it needs to run on a Linux system, therefore I need to initialize a virtual machine to actually run Podman.
+```console
+Grey@Audron:~$ podman machine init
+Looking up Podman Machine image at quay.io/podman/machine-os:5.8 to create VM
+Getting image source signatures
+Copying blob 5efcf56a5999 done   | 
+Copying config 44136fa355 done   | 
+Writing manifest to image destination
+5efcf56a599919c786136faf8e4f48b25bf3865b5e8ea3302f6d705ba750afec
+Extracting compressed file: podman-machine-default-amd64.raw: done  
+Machine init complete
+To start your machine run:
+
+	podman machine start
+```
+That took about 3 minutes.
+Next, I started the virtual machine.
+```console
+Grey@Audron:~$ podman machine start
+Starting machine "podman-machine-default"
+
+This machine is currently configured in rootless mode. If your containers
+require root permissions (e.g. ports < 1024), or if you run into compatibility
+issues with non-podman clients, you can switch using the following command:
+
+	podman machine set --rootful
+
+API forwarding listening on: /var/run/docker.sock
+Docker API clients default to this address. You do not need to set DOCKER_HOST.
+
+Machine "podman-machine-default" started successfully
+```
+That took about a minute. 
+Then, I took a look at the `podman` information.
+There is quite a lot of information, so I'll collapse most of the output.
+```console
+Grey@Audron:~$ podman info
+Client:
+  APIVersion: 5.8.2
+  BuildOrigin: pkginstaller
+  Built: 1776189122
+  BuiltTime: Tue Apr 14 13:52:02 2026
+  GitCommit: 5b263b5f5b48004a87caac44e67349a8266d9ef4
+  GoVersion: go1.26.2
+  Os: darwin
+  OsArch: darwin/amd64
+  Version: 5.8.2
+...
+```
+<details>
+
+<summary>Expand for more output</summary>
+
+```console
+...
+host:
+  arch: amd64
+  buildahVersion: 1.43.1
+  cgroupControllers:
+  - cpu
+  - io
+  - memory
+  - pids
+  cgroupManager: systemd
+  cgroupVersion: v2
+  conmon:
+    package: conmon-2.2.1-2.fc43.x86_64
+    path: /usr/bin/conmon
+    version: 'conmon version 2.2.1, commit: '
+  cpuUtilization:
+    idlePercent: 92.76
+    systemPercent: 4.49
+    userPercent: 2.75
+  cpus: 4
+  databaseBackend: sqlite
+  distribution:
+    distribution: fedora
+    variant: coreos
+    version: "43"
+  emulatedArchitectures:
+  - linux/arm64
+  - linux/arm64be
+  eventLogger: journald
+  freeLocks: 2048
+  hostname: localhost.localdomain
+  idMappings:
+    gidmap:
+    - container_id: 0
+      host_id: 1000
+      size: 1
+    - container_id: 1
+      host_id: 100000
+      size: 1000000
+    uidmap:
+    - container_id: 0
+      host_id: 502
+      size: 1
+    - container_id: 1
+      host_id: 100000
+      size: 1000000
+  kernel: 6.19.7-200.fc43.x86_64
+  linkmode: dynamic
+  logDriver: journald
+  memFree: 1404866560
+  memTotal: 2046451712
+  networkBackend: netavark
+  networkBackendInfo:
+    backend: netavark
+    defaultNetwork: podman
+    dns:
+      package: aardvark-dns-1.17.0-1.fc43.x86_64
+      path: /usr/libexec/podman/aardvark-dns
+      version: aardvark-dns 1.17.0
+    package: netavark-1.17.2-1.fc43.x86_64
+    path: /usr/libexec/podman/netavark
+    version: netavark 1.17.2
+  ociRuntime:
+    name: crun
+    package: crun-1.25.1-1.fc43.x86_64
+    path: /usr/bin/crun
+    version: |-
+      crun version 1.25.1
+      commit: 156ae065d4a322d149c7307034f98d9637aa92a2
+      rundir: /run/user/502/crun
+      spec: 1.0.0
+      +SYSTEMD +SELINUX +APPARMOR +CAP +SECCOMP +EBPF +CRIU +LIBKRUN +WASM:wasmedge +YAJL
+  os: linux
+  pasta:
+    executable: /usr/bin/pasta
+    package: passt-0^20260120.g386b5f5-1.fc43.x86_64
+    version: |
+      pasta 0^20260120.g386b5f5-1.fc43.x86_64
+      Copyright Red Hat
+      GNU General Public License, version 2 or later
+        <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
+      This is free software: you are free to change and redistribute it.
+      There is NO WARRANTY, to the extent permitted by law.
+  remoteSocket:
+    exists: true
+    path: unix:///run/user/502/podman/podman.sock
+  rootlessNetworkCmd: pasta
+  security:
+    apparmorEnabled: false
+    capabilities: CAP_CHOWN,CAP_DAC_OVERRIDE,CAP_FOWNER,CAP_FSETID,CAP_KILL,CAP_NET_BIND_SERVICE,CAP_SETFCAP,CAP_SETGID,CAP_SETPCAP,CAP_SETUID,CAP_SYS_CHROOT
+    rootless: true
+    seccompEnabled: true
+    seccompProfilePath: /usr/share/containers/seccomp.json
+    selinuxEnabled: true
+  serviceIsRemote: true
+  slirp4netns:
+    executable: /usr/bin/slirp4netns
+    package: slirp4netns-1.3.1-3.fc43.x86_64
+    version: |-
+      slirp4netns version 1.3.1
+      commit: e5e368c4f5db6ae75c2fce786e31eef9da6bf236
+      libslirp: 4.9.1
+      SLIRP_CONFIG_VERSION_MAX: 6
+      libseccomp: 2.6.0
+  swapFree: 0
+  swapTotal: 0
+  uptime: 0h 1m 23.00s
+  variant: ""
+plugins:
+  authorization: null
+  log:
+  - k8s-file
+  - none
+  - passthrough
+  - journald
+  network:
+  - bridge
+  - macvlan
+  - ipvlan
+  volume:
+  - local
+registries:
+  search:
+  - docker.io
+store:
+  configFile: /var/home/core/.config/containers/storage.conf
+  containerStore:
+    number: 0
+    paused: 0
+    running: 0
+    stopped: 0
+  graphDriverName: overlay
+  graphOptions: {}
+  graphRoot: /var/home/core/.local/share/containers/storage
+  graphRootAllocated: 106769133568
+  graphRootUsed: 4263370752
+  graphStatus:
+    Backing Filesystem: xfs
+    Native Overlay Diff: "true"
+    Supports d_type: "true"
+    Supports shifting: "false"
+    Supports volatile: "true"
+    Using metacopy: "false"
+  imageCopyTmpDir: /var/tmp
+  imageStore:
+    number: 0
+  runRoot: /run/user/502/containers
+  transientStore: false
+  volumePath: /var/home/core/.local/share/containers/storage/volumes
+...
+```
+
+</details>
+
+```console
+...
+version:
+  APIVersion: 5.8.2
+  BuildOrigin: 'Copr: packit/containers-podman-28501'
+  Built: 1776038400
+  BuiltTime: Sun Apr 12 20:00:00 2026
+  GitCommit: 5b263b5f5b48004a87caac44e67349a8266d9ef4
+  GoVersion: go1.25.9 X:nodwarf5
+  Os: linux
+  OsArch: linux/amd64
+  Version: 5.8.2
+```
+
+I can also simply check the version of `podman`.
+```console
+Grey@Audron:~$ podman version
+Client:        Podman Engine
+Version:       5.8.2
+API Version:   5.8.2
+Go Version:    go1.26.2
+Git Commit:    5b263b5f5b48004a87caac44e67349a8266d9ef4
+Built:         Tue Apr 14 13:52:02 2026
+Build Origin:  pkginstaller
+OS/Arch:       darwin/amd64
+
+Server:       Podman Engine
+Version:      5.8.2
+API Version:  5.8.2
+Go Version:   go1.25.9 X:nodwarf5
+Git Commit:   5b263b5f5b48004a87caac44e67349a8266d9ef4
+Built:        Sun Apr 12 20:00:00 2026
+OS/Arch:      linux/amd64
+```
+I could also see that I now have `podman` files in my user's configuration folder.
+```console
+Grey@Audron:~$ ls -la ~/.config/containers/
+total 8
+drwxr-xr-x  5 Grey  staff  160 Apr 28 10:57 .
+drwx------  8 Grey  staff  256 Apr 28 10:55 ..
+drwxr-xr-x  3 Grey  staff   96 Apr 28 10:55 podman
+-rw-r--r--  1 Grey  staff  440 Apr 28 10:57 podman-connections.json
+-rw-r--r--  1 Grey  staff    0 Apr 28 10:57 podman-connections.json.lock
+```
+<a id='podman_test'></a>
+[back to top](#top)
+
+---
+
+### Testing Podman
+
+Next, I followed the [Basic Setup and Use of Podman](https://github.com/containers/podman/blob/main/docs/tutorials/podman_tutorial.md) guide.
+To start, I ran the sample `nginx` container, calling it `basic_httpd`.
+```console
+Grey@Audron:~$ podman run --name basic_httpd -d -p 8080:80/tcp docker.io/nginx
+Trying to pull docker.io/library/nginx:latest...
+Getting image source signatures
+Copying blob sha256:677c631968686eeb23ab8dd436d49bde041266df5d8952f03d7a8c418643d4b5
+Copying blob sha256:ce776bbcda0d6bf4da8df324b82066a03f45bfbbbe520df535293ae069994e84
+Copying blob sha256:4677c2a9a3d4f9290cb784d95a9e16378655ecdd7df9e77668d3915262730d0b
+Copying blob sha256:85c66128325abc04138f6944d943e5279375665f6dbefe7f4f6b5e9646d31998
+Copying blob sha256:ff048f1f2159a060f69b1861ea262b839cc6e77a9389848929f70275eb7c9e29
+Copying blob sha256:3531af2bc2a9c8883754652783cf96207d53189db279c9637b7157d034de7ecd
+Copying blob sha256:801a1ad15b4e00add388aca409568400fb8071019d6ba83995f43170af7656fe
+Copying config sha256:6c3a6ea6608c89c79027066654a2ef4f0fe58a7bf2c08cc3894733406e476602
+Writing manifest to image destination
+774a97cf2828429b1feeddae152869417a57cbdcc1e13c0b97ba777aafc762fc
+```
+This pulls the image from the web, builds it, and starts a container running that image.
+If the above command is run a second time, it will be able to skip the part where it downloads and builds the image.
+I can now list my running containers.
+```console
+Grey@Audron:~$ podman ps -a
+CONTAINER ID  IMAGE                           COMMAND               CREATED             STATUS             PORTS                 NAMES
+774a97cf2828  docker.io/library/nginx:latest  nginx -g daemon o...  About a minute ago  Up About a minute  0.0.0.0:8080->80/tcp  basic_httpd
+```
+Adding the `-a` flag shows "all" containers, but that doesn't result in any different output than without it at this moment because I just have the one container.
+
+Then, I can inspect that running container.
+```console
+Grey@Audron:~$ podman inspect basic_httpd | grep IPAddress
+               "IPAddress": "10.88.0.3",
+                         "IPAddress": "10.88.0.3",
+```
+This is different than what is shown in the guide which says:
+> "As the container is running in rootless mode, an IP address is not assigned and the value will be listed as 'none' in the output from inspect." 
+
+<!-- So, I'm not sure if I am running rootless or not as I did, in fact, get an IP address. -->
+
+Next, I tested the `httpd` server to make sure it is running on the expected port, displaying the index page.
+```console
+Grey@Audron:~$ curl http://localhost:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, nginx is successfully installed and working.
+Further configuration is required for the web server, reverse proxy, 
+API gateway, load balancer, content cache, or other features.</p>
+
+<p>For online documentation and support please refer to
+<a href="https://nginx.org/">nginx.org</a>.<br/>
+To engage with the community please visit
+<a href="https://community.nginx.org/">community.nginx.org</a>.<br/>
+For enterprise grade support, professional services, additional 
+security features and capabilities please refer to
+<a href="https://f5.com/nginx">f5.com/nginx</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+```
+Using the Container ID from the `podman ps` command above, I can see the logs of this container.
+```console
+Grey@Audron:~$ podman logs 774a97cf2828
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+2026/04/28 15:13:47 [notice] 1#1: using the "epoll" event method
+2026/04/28 15:13:47 [notice] 1#1: nginx/1.29.8
+2026/04/28 15:13:47 [notice] 1#1: built by gcc 14.2.0 (Debian 14.2.0-19) 
+2026/04/28 15:13:47 [notice] 1#1: OS: Linux 6.19.7-200.fc43.x86_64
+2026/04/28 15:13:47 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 524288:524288
+2026/04/28 15:13:47 [notice] 1#1: start worker processes
+2026/04/28 15:13:47 [notice] 1#1: start worker process 24
+2026/04/28 15:13:47 [notice] 1#1: start worker process 25
+2026/04/28 15:13:47 [notice] 1#1: start worker process 26
+2026/04/28 15:13:47 [notice] 1#1: start worker process 27
+10.88.0.2 - - [28/Apr/2026:15:21:21 +0000] "GET / HTTP/1.1" 200 896 "-" "curl/8.7.1" "-"
+```
+I can also see the `httpd pid` with `top` using the same container ID.
+```console
+Grey@Audron:~$ podman top 774a97cf2828
+USER      PID     PPID    %CPU    ELAPSED           TTY     TIME    COMMAND
+root      1       0       0.000   10m43.083334622s  ?       0s      nginx: master process nginx -g daemon off;
+nginx     24      1       0.000   10m42.083710443s  ?       0s      nginx: worker process
+nginx     25      1       0.000   10m42.083812615s  ?       0s      nginx: worker process
+nginx     26      1       0.000   10m42.083879016s  ?       0s      nginx: worker process
+nginx     27      1       0.000   10m42.083942087s  ?       0s      nginx: worker process
+```
+<!-- [Checkpointing podman containers](https://podman.io/docs/checkpoint) is only available with root containers, so I'm going to skip that for now. -->
+
+Next, I'll be following part of the guide [How to run your first rootless container with Podman](https://cloudqubes.com/letters/how-to-run-your-first-rootless-container-with-podman).
+One of the benefits of Podman is the ability to run containers as "rootless" which adds an extra layer of security. 
+The `podman exec <container_name>` command allows you to execute commands within a container.
+I will use this to execute the `whoami` command to ask who the container thinks they are.
+```console
+Grey@Audron:~$ podman exec basic_httpd whoami
+root
+```
+So, the container is running as `root`. 
+Next, I'll see who owns the process.
+```console
+Grey@Audron:~$ podman top basic_httpd user huser
+USER        HUSER
+root        502
+nginx       100100
+nginx       100100
+nginx       100100
+nginx       100100
+```
+I can see here that the user id between `root` and the `nginx` container don't match, so it seems like that confirms that even though, inside the container, the service is running as `root`, outside the container, it is not.
+
+Next, I can stop the container.
+```console
+Grey@Audron:~$ podman stop basic_httpd
+basic_httpd
+```
+Then, I'll remove this container and check to make sure it is gone.
+```console
+Grey@Audron:~$ podman rm basic_httpd
+basic_httpd
+Grey@Audron:~$ podman ps -a
+CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES
+```
+
+<a id='pod_manager_extension'></a>
+[back to top](#top)
+
+---
+
+### Pod Manager extension for VSCodium
+
+I went to VSCodium and installed the "Pod Manager" extension from user `dreamcatcher45`. 
+When I first went into the extension, I got the following error:
+```console
+Failed to get containers: Error: Command failed: podman container ls -a --format "{{.ID}}|{{.Names}}|{{.Status}}|{{.Labels}}"
+/bin/sh: podman: command not found
+```
+I figured out that VSCodium had been open since before I installed `podman`, and I couldn't actually run `podman version` in the VSCodium terminal panel. 
+After I restarted VSCodium, both the `podman version` command and the Pod Manager extension worked.
+
+In the sidebar of VSCodium, I clicked on the Pod Manger icon, which looks like a stylized seal.
+Currently, the dropdown for "Containers" is empty because I remove the ones I was testing above.
+However, under the "Images" dropdown, I see "docker.io/library/nginx:latest (7aaca76c508f)."
+This is the image that was built when [Testing Podman](#podman_test).
+
+Containers get added to the list in the Pod Manager sidebar when they start running. 
+I can start the `basic_httpd` container again.
+```console
+Grey@Audron:seaicecp$ podman run --name basic_httpd -d -p 8080:80/tcp docker.io/nginx
+9ab04fb2f7c04e2a1cf263ee46b33a00cde5fc7c89e71926f7a65aeae4e35dd7
+```
+Since this image was already built, all that needed to be done was start a container with the image.
+Hitting the refresh button next to the overall "Resources" dropdown at the top of the Pod Manager sidebar reveals this `basic_httpd` container. 
+The container name has a long alphanumeric string in parentheses appended which changes every time the container is started.
+
+When hovering over the name of the container, several options appear.
+One of these is to "Open in Terminal" which does the equivalent of opening a new terminal inside VSCodium and entering the container, all in one click.
+From there, commands can be executed inside the container.
+```console
+podman exec -it 9ab04fb2f7c0 /bin/sh
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+Grey@Audron:seaicecp$ podman exec -it 9ab04fb2f7c0 /bin/sh
+# basic_httpd whoami
+root
+# 
+```
+Then, to clean up, I will stop and remove this `basic_httpd` from outside the container.
+```console
+Grey@Audron:~$ podman stop basic_httpd
+basic_httpd
+Grey@Audron:~$ podman rm basic_httpd
+basic_httpd
+Grey@Audron:~$ podman ps -a
+CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES
+```
+If any terminals had been left open inside the container, they will have automatically exited.
+
+<a id='podman_simple_container'></a>
+[back to top](#top)
+
+---
+
+### Building a simple container
+
+Above, I downloaded an existing image `docker.io/nginx` from a repository. 
+For this project, I want to define my own.
+The setup of a container is defined by a scripted that is always named `Containerfile` with no file extension. 
+A good way to start a container is to load an existing minimal distribution.
+I chose the `trixie-slim` version of Debian as it is lightweight and [uses Python 3.13 by default](https://packages.debian.org/trixie/python3).
+
+In [Python Packages Chapter 2](https://py-pkgs.org/02-setup), they suggest using Miniconda to create an environment and the [`poetry`](https://python-poetry.org/) package to manage dependencies. 
+For this project, I decided to use [`uv`](https://docs.astral.sh/uv/) instead as it has the ability to manage tools and add ephemeral packages when testing out builds.
+
+I can create a minimal `Containerfile` to test running `trixie-slim` with Python 3.13 and `uv` installed.
+```Containerfile
+# ---- Stage 1: get uv binary ----
+FROM ghcr.io/astral-sh/uv:latest AS uv
+
+# ---- Stage 2: main image ----
+FROM debian:trixie-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# ---- System dependencies ----
+RUN apt-get update && apt-get install -y python3.13 
+
+# ---- Make python command available ----
+RUN ln -s /usr/bin/python3.13 /usr/bin/python
+
+# ---- Copy uv from official image ----
+COPY --from=uv /uv /usr/local/bin/uv
+
+# ---- Set working directory ----
+WORKDIR /workspace
+
+# Default shell
+CMD ["/bin/bash"]
+```
+Next, I build the image.
+A lot of information in the build process, so I'll collapse most of the output.
+```console
+Grey@Audron:seaicecp$ podman build -f Containerfile -t test_trixie .
+[1/2] STEP 1/1: FROM ghcr.io/astral-sh/uv:latest AS uv
+Trying to pull ghcr.io/astral-sh/uv:latest...
+Getting image source signatures
+Copying blob sha256:dfd617f69b3af15e1fad323e893c535ef022c9efb9528fb53ad6c8ec44741d5a
+Copying blob sha256:b4aebd139799aa429f45564ceac662ba2bc66115fb8c0318cd3b2368ea7517e4
+Copying config sha256:b960411dc937f9b4d9762349f5f77772d36dead003baa3bc01330abe8e1f38a6
+Writing manifest to image destination
+--> b960411dc937
+[2/2] STEP 1/7: FROM debian:trixie-slim
+Resolved "debian" as an alias (/etc/containers/registries.conf.d/000-shortnames.conf)
+Trying to pull docker.io/library/debian:trixie-slim...
+...
+```
+<details>
+
+<summary>Expand for more output</summary>
+
+```console
+...
+Getting image source signatures
+Copying blob sha256:5b4d6ff92fc4e14e911b7753c954fac965d48c40fe1075758d284148ccace970
+Copying config sha256:f283d70f878433b889e4b9252110fad858e0e0887df5bac91cd2ad4ccb2b3a2a
+Writing manifest to image destination
+[2/2] STEP 2/7: ENV DEBIAN_FRONTEND=noninteractive
+--> 5808b4b9aad3
+[2/2] STEP 3/7: RUN apt-get update && apt-get install -y python3.13 
+Get:1 http://deb.debian.org/debian trixie InRelease [140 kB]
+Get:2 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
+Get:3 http://deb.debian.org/debian-security trixie-security InRelease [43.4 kB]
+Get:4 http://deb.debian.org/debian trixie/main amd64 Packages [9671 kB]
+Get:5 http://deb.debian.org/debian trixie-updates/main amd64 Packages [5412 B]
+Get:6 http://deb.debian.org/debian-security trixie-security/main amd64 Packages [192 kB]
+Fetched 10.1 MB in 2s (4109 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  ca-certificates libexpat1 libffi8 libgpm2 libncursesw6 libpython3.13-minimal
+  libpython3.13-stdlib libreadline8t64 media-types netbase openssl
+  python3.13-minimal readline-common
+Suggested packages:
+  gpm python3.13-venv python3.13-doc binutils binfmt-support readline-doc
+The following NEW packages will be installed:
+  ca-certificates libexpat1 libffi8 libgpm2 libncursesw6 libpython3.13-minimal
+  libpython3.13-stdlib libreadline8t64 media-types netbase openssl python3.13
+  python3.13-minimal readline-common
+0 upgraded, 14 newly installed, 0 to remove and 0 not upgraded.
+Need to get 8020 kB of archives.
+After this operation, 27.1 MB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian trixie/main amd64 libexpat1 amd64 2.7.1-2 [108 kB]
+Get:2 http://deb.debian.org/debian trixie/main amd64 libpython3.13-minimal amd64 3.13.5-2+deb13u2 [862 kB]
+Get:3 http://deb.debian.org/debian trixie/main amd64 python3.13-minimal amd64 3.13.5-2+deb13u2 [2217 kB]
+Get:4 http://deb.debian.org/debian trixie/main amd64 netbase all 6.5 [12.4 kB]
+Get:5 http://deb.debian.org/debian trixie/main amd64 readline-common all 8.2-6 [69.4 kB]
+Get:6 http://deb.debian.org/debian trixie/main amd64 openssl amd64 3.5.6-1~deb13u1 [1503 kB]
+Get:7 http://deb.debian.org/debian trixie/main amd64 ca-certificates all 20250419 [162 kB]
+Get:8 http://deb.debian.org/debian trixie/main amd64 media-types all 13.0.0 [29.3 kB]
+Get:9 http://deb.debian.org/debian trixie/main amd64 libffi8 amd64 3.4.8-2 [24.1 kB]
+Get:10 http://deb.debian.org/debian trixie/main amd64 libgpm2 amd64 1.20.7-11+b2 [14.4 kB]
+Get:11 http://deb.debian.org/debian trixie/main amd64 libncursesw6 amd64 6.5+20250216-2 [135 kB]
+Get:12 http://deb.debian.org/debian trixie/main amd64 libreadline8t64 amd64 8.2-6 [169 kB]
+Get:13 http://deb.debian.org/debian trixie/main amd64 libpython3.13-stdlib amd64 3.13.5-2+deb13u2 [1958 kB]
+Get:14 http://deb.debian.org/debian trixie/main amd64 python3.13 amd64 3.13.5-2+deb13u2 [757 kB]
+Preconfiguring packages ...
+Fetched 8020 kB in 1s (6819 kB/s)
+Selecting previously unselected package libexpat1:amd64.
+(Reading database ... 4936 files and directories currently installed.)
+Preparing to unpack .../00-libexpat1_2.7.1-2_amd64.deb ...
+Unpacking libexpat1:amd64 (2.7.1-2) ...
+Selecting previously unselected package libpython3.13-minimal:amd64.
+Preparing to unpack .../01-libpython3.13-minimal_3.13.5-2+deb13u2_amd64.deb ...
+Unpacking libpython3.13-minimal:amd64 (3.13.5-2+deb13u2) ...
+Selecting previously unselected package python3.13-minimal.
+Preparing to unpack .../02-python3.13-minimal_3.13.5-2+deb13u2_amd64.deb ...
+Unpacking python3.13-minimal (3.13.5-2+deb13u2) ...
+Selecting previously unselected package netbase.
+Preparing to unpack .../03-netbase_6.5_all.deb ...
+Unpacking netbase (6.5) ...
+Selecting previously unselected package readline-common.
+Preparing to unpack .../04-readline-common_8.2-6_all.deb ...
+Unpacking readline-common (8.2-6) ...
+Selecting previously unselected package openssl.
+Preparing to unpack .../05-openssl_3.5.6-1~deb13u1_amd64.deb ...
+Unpacking openssl (3.5.6-1~deb13u1) ...
+Selecting previously unselected package ca-certificates.
+Preparing to unpack .../06-ca-certificates_20250419_all.deb ...
+Unpacking ca-certificates (20250419) ...
+Selecting previously unselected package media-types.
+Preparing to unpack .../07-media-types_13.0.0_all.deb ...
+Unpacking media-types (13.0.0) ...
+Selecting previously unselected package libffi8:amd64.
+Preparing to unpack .../08-libffi8_3.4.8-2_amd64.deb ...
+Unpacking libffi8:amd64 (3.4.8-2) ...
+Selecting previously unselected package libgpm2:amd64.
+Preparing to unpack .../09-libgpm2_1.20.7-11+b2_amd64.deb ...
+Unpacking libgpm2:amd64 (1.20.7-11+b2) ...
+Selecting previously unselected package libncursesw6:amd64.
+Preparing to unpack .../10-libncursesw6_6.5+20250216-2_amd64.deb ...
+Unpacking libncursesw6:amd64 (6.5+20250216-2) ...
+Selecting previously unselected package libreadline8t64:amd64.
+Preparing to unpack .../11-libreadline8t64_8.2-6_amd64.deb ...
+Adding 'diversion of /lib/x86_64-linux-gnu/libhistory.so.8 to /lib/x86_64-linux-gnu/libhistory.so.8.usr-is-merged by libreadline8t64'
+Adding 'diversion of /lib/x86_64-linux-gnu/libhistory.so.8.2 to /lib/x86_64-linux-gnu/libhistory.so.8.2.usr-is-merged by libreadline8t64'
+Adding 'diversion of /lib/x86_64-linux-gnu/libreadline.so.8 to /lib/x86_64-linux-gnu/libreadline.so.8.usr-is-merged by libreadline8t64'
+Adding 'diversion of /lib/x86_64-linux-gnu/libreadline.so.8.2 to /lib/x86_64-linux-gnu/libreadline.so.8.2.usr-is-merged by libreadline8t64'
+Unpacking libreadline8t64:amd64 (8.2-6) ...
+Selecting previously unselected package libpython3.13-stdlib:amd64.
+Preparing to unpack .../12-libpython3.13-stdlib_3.13.5-2+deb13u2_amd64.deb ...
+Unpacking libpython3.13-stdlib:amd64 (3.13.5-2+deb13u2) ...
+Selecting previously unselected package python3.13.
+Preparing to unpack .../13-python3.13_3.13.5-2+deb13u2_amd64.deb ...
+Unpacking python3.13 (3.13.5-2+deb13u2) ...
+Setting up libexpat1:amd64 (2.7.1-2) ...
+Setting up media-types (13.0.0) ...
+Setting up libgpm2:amd64 (1.20.7-11+b2) ...
+Setting up libpython3.13-minimal:amd64 (3.13.5-2+deb13u2) ...
+Setting up libncursesw6:amd64 (6.5+20250216-2) ...
+Setting up libffi8:amd64 (3.4.8-2) ...
+Setting up python3.13-minimal (3.13.5-2+deb13u2) ...
+Setting up netbase (6.5) ...
+Setting up openssl (3.5.6-1~deb13u1) ...
+Setting up readline-common (8.2-6) ...
+Setting up ca-certificates (20250419) ...
+Updating certificates in /etc/ssl/certs...
+150 added, 0 removed; done.
+Setting up libreadline8t64:amd64 (8.2-6) ...
+Setting up libpython3.13-stdlib:amd64 (3.13.5-2+deb13u2) ...
+Setting up python3.13 (3.13.5-2+deb13u2) ...
+Processing triggers for libc-bin (2.41-12+deb13u3) ...
+Processing triggers for ca-certificates (20250419) ...
+Updating certificates in /etc/ssl/certs...
+0 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d...
+done.
+--> 4f123f8d89fe
+[2/2] STEP 4/7: RUN ln -s /usr/bin/python3.13 /usr/bin/python
+--> 6dd8a6c94600
+[2/2] STEP 5/7: COPY --from=uv /uv /usr/local/bin/uv
+--> b907eed1ae8b
+[2/2] STEP 6/7: WORKDIR /workspace
+--> 55b854bc8dcd
+[2/2] STEP 7/7: CMD ["/bin/bash"]
+[2/2] COMMIT test_trixie
+--> 7bab3cfc2aa3
+...
+```
+</details>
+
+```console
+...
+Successfully tagged localhost/test_trixie:latest
+7bab3cfc2aa34bf43d9a63ccb8428a859c9f64a807186a4262b17bc5ffe0b4eb
+```
+
+Then, I'll run the container with the following flags (see the [Podman run docs](https://docs.podman.io/en/latest/markdown/podman-run.1.html) for details):
+- `-i`: Interactive
+    - "When set to true, make `stdin` available to the contained process. If false, the `stdin` of the contained process is empty and immediately closed."
+- `-t`: TTY
+    - "Allocate a pseudo-TTY. The default is false. When set to true, Podman allocates a pseudo-tty and attach to the standard input of the container. This can be used, for example, to run a throwaway interactive shell."
+- `--rm`: Remove upon exit
+    - "Automatically remove the container and any anonymous unnamed volume associated with the container when it exits. The default is false."
+- `--name`: Container name
+    - "Assign a name to the container." This can be completely different from the name of the image it is built from.
+```console
+Grey@Audron:seaicecp$ podman run -it --rm --name container_name test_trixie
+root@c6dc2f68fd76:/workspace# 
+```
+While this container is running, I can hit the refresh button in the Pod Manager sidebar to see that there is a new container named `container_name`.
+I can also verify that Python and `uv` are installed inside the container.
+```console
+root@c6dc2f68fd76:/workspace# python
+Python 3.13.5 (main, May  5 2026, 21:05:52) [GCC 14.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> exit()
+root@c6dc2f68fd76:/workspace# uv --version
+uv 0.11.17 (x86_64-unknown-linux-musl)
+root@c6dc2f68fd76:/workspace#
+```
+When I am done, I can exit both the Python prompt and the container.
+```console
+>>> exit()
+root@c6dc2f68fd76:/workspace# exit
+exit
+Grey@Audron:seaicecp$ 
+```
+Upon exiting the container, I can refresh the Pod Manager sidebar again to see that the container removed itself upon exit because of the `--rm` flag.
+This is important to keep from building up a large number of idle containers whenever starting a particular image.
+
+With this working, the next step is to build out the `Containerfile` to set up the development environment with all the necessary packages, tools, and data access.
+
+---
+
+<a id='podman_containerfile'></a>
+[back to top](#top)
+
+### The `Containerfile`
+
+Below is the `Containerfile` used to build the image for this project.
+
+```{literalinclude} ../../.devcontainer/Containerfile
+```
+
+Note that this is meant to be executed by the [`start_container.sh` script](#podman_start_container).
+However, if testing a new build, it can be useful to pipe the output to a log file using `tee`.
+```console
+Grey@Audron:seaicecp$ podman build -f .devcontainer/Containerfile -t <image_name> . | tee .devcontainer/<log_file_name>.log
+```
+
+I'll explain each section of the `Containerfile` in detail below.
+
+<a id='podman_containerfile_pin_versions'></a>
+[back to top](#top)
+
+#### Pinning the versions of `uv` and `trixie-slim`
+
+For reproducibility purposes, I decided to pin the exact versions of `uv` and `trixie-slim` that my container uses. 
+After [Building a simple container](#podman_simple_container), I now see the following images in the Pod Manger sidebar:
+- `ghcr.io/astral-sh/uv:latest`
+- `docker.io/library/debian:trixie-slim`
+I can get the exact hashes of the versions of `uv` and `trixie-slim` from their manifests.
+```console
+Grey@Audron:seaicecp$ podman image inspect debian:trixie-slim --format '{{.Digest}}'
+sha256:e18da95f66066b7c5fa31491b524e83121271eca59a3d140f4906c8d0a090367
+Grey@Audron:seaicecp$ podman image inspect ghcr.io/astral-sh/uv --format '{{.Digest}}'
+sha256:5cbec7ab7753a6c763c6dda6a38f085c8c585ec9f53cfb4e7368b79ca30bc881
+```
+
+<a id='podman_containerfile_env_vars'></a>
+[back to top](#top)
+
+#### Defining environment variables
+
+The `Containerfile` defines a few environment variables to facilitate building the image.
+- `DEBIAN_FRONTEND=noninteractive`
+    - According to the askUbuntu post [DEBIAN_FRONTEND environment variable](https://askubuntu.com/questions/972516/debian-frontend-environment-variable), this prevents installations from getting stuck on interactive processes, such as when the user is asked to confirm or select something.
+- `ENV UV_PROJECT_ENVIRONMENT=/workspace/.cvenv`
+    - According to the Python Developer Tooling Handbook on [How to customize uv's virtual environment location](https://pydevtools.com/handbook/how-to/how-to-customize-uvs-virtual-environment-location/), this renames the default directory for the `uv` virtual environment from `.venv` to `.cvenv` to avoid conflicts with using the environment inside vs. outside the container.
+    - Note that the use of the directory `/workspace` is detailed below.
+- `ENV UV_LINK_MODE=copy`
+    - According to the Python Developer Tooling Handbook on [How to use `uv` in a Dockerfile](https://pydevtools.com/handbook/how-to/how-to-use-uv-in-a-dockerfile/), this "tells uv to copy files instead of hard-linking them. When using Docker cache mounts, the cache and the target directory live on separate filesystems, so uv falls back to copying anyway. Setting this explicitly avoids the warning message."
+
+<a id='podman_containerfile_apt-get'></a>
+[back to top](#top)
+
+#### Installing system and scientific dependencies
+
+The next block in the `Containerfile` uses `apt-get` to install the necessary system-level dependencies for the project. 
+The flags used here are:
+- `-y`: Assume yes
+    - From the [Linux manual page for `apt-get`](https://linux.die.net/man/8/apt-get), "Automatic yes to prompts. Assume "yes" as answer to all prompts and run non-interactively. If an undesirable situation, such as changing a held package or removing an essential package, occurs then `apt-get` will abort."
+- `--no-install-recommends`: 
+    - According to the askUbuntu post [How to not install recommended and suggested packages?](https://askubuntu.com/questions/179060/how-to-not-install-recommended-and-suggested-packages), this flag prevents `apt-get` from automatically installing recommended packages, keeping the container's stack to a minimum, installing only what is required.
+
+The packages installed in this block are:
+- `ca-certificates`
+- `curl`
+- `git`
+    - For version control.
+- `build-essential`
+- `pkg-config`
+- `unzip`
+- `libnetcdf-dev`
+    - For working with netCDF files.
+- `netcdf-bin`
+    - For working with netCDF files.
+- `libhdf5-dev`
+    - For working with netCDF files.
+- `libcurl4-openssl-dev`
+    - For establishing Secure Sockets Layer (SSL) for internet connections.
+- `libssl-dev`
+    - For establishing Secure Sockets Layer (SSL) for internet connections.
+- `cdo`
+    - [Climate Data Operators](https://code.mpimet.mpg.de/projects/cdo)
+- `nco`
+    - [netCDF Operators](https://nco.sourceforge.net/nco.html)
+- `python3.13`
+    - The version of Python used in this project.
+- `python3.13-venv`
+    - For using Python in a virtual environment.
+- `python3-pip`
+    - For installing packages that `uv` cannot handle natively.
+
+<a id='podman_containerfile_misc_prep'></a>
+[back to top](#top)
+
+#### Preparing Python, `uv`, and working directory
+
+- `RUN ln -s /usr/bin/python3.13 /usr/bin/python`
+    - This command creates a symlink such that using the command `python` calls Python 3.13.
+    - This removes the need to specify the version of Python to use every time.
+- `COPY --from=uv /uv /usr/local/bin/uv`
+    - This command copies `uv` from where it was downloaded into the `usr` directory for ease of use.
+- `WORKDIR /workspace`
+    - This sets the working directory to be named `/workspace`.
+    - The choice of the name is arbitrary, however sets a specific file path that can be expected by other parts of the project.
+    - This essentially renames the root of the project directory on your computer (`seaicecp`) to be `/workspace` inside the container. 
+- The next three commands set up dependency files for the virtual environment.
+    - `COPY pyproject.toml uv.lock ./`
+    - `COPY README.md ./`
+    - `COPY src ./src`
+
+<a id='podman_containerfile_uv_jupyter'></a>
+[back to top](#top)
+
+#### `uv` dependencies and Jupyter kernel
+
+The next block in the `Containerfile` is:
+```Containerfile
+...
+# Install dependencies via `uv` and start a kernel for Jupyter notebooks
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync \
+ && uv run python -m ipykernel install --sys-prefix --name python3 --display-name "seaicecp (container)"
+...
+```
+
+This installs and/or updates all the dependencies defined in the `pyproject.toml` file using `uv sync`.
+Then, it starts a kernel for using the Python virtual environment in Jupyter notebooks. 
+
+<a id='podman_containerfile_natural_earth'></a>
+[back to top](#top)
+
+#### Download commonly used Natural Earth shapefiles
+
+When making maps, it is often useful to plot coastlines or other shapes to give context. 
+A common way of doing this in Python is from Natural Earth shape files.
+There are a couple of common files that the next block of the `Containerfile` downloads so that it won't need to be downloaded the first time a plot is made that requires them.
+```Containerfile
+# Trigger downloads of commonly used Natural Earth datasets
+RUN /workspace/.cvenv/bin/python - <<'EOF'
+import cartopy.io.shapereader as shp
+shp.natural_earth(resolution='110m', category='physical', name='coastline')
+EOF
+```
+If this is not present in the image, the following warning occurs when making a plot that requires downloading shape files.
+```console
+/workspace/.venv/lib/python3.13/site-packages/cartopy/io/__init__.py:242: DownloadWarning: Downloading: https://naturalearth.s3.amazonaws.com/110m_physical/ne_110m_land.zip
+  warnings.warn(f'Downloading: {url}', DownloadWarning)
+```
+
+<a id='podman_containerfile_esgpull'></a>
+[back to top](#top)
+
+#### Set up `esgpull` install
+
+This project uses the `esgpull` tool to download HighResMIP data files.
+This next block uses the separate script included with this project at `.devcontainer/esgpull_entrypoint.sh` to set up the install on an external volume. 
+
+```Containerfile
+# Set up the `esgpull` install
+COPY .devcontainer/esgpull_entrypoint.sh /esgpull_entrypoint.sh
+RUN chmod +x /esgpull_entrypoint.sh
+ENTRYPOINT ["/esgpull_entrypoint.sh"]
+```
+
+The `.devcontainer/esgpull_entrypoint.sh` script assumes that the directory in which the data on the external volume is stored has been defined as `/seaicecp_data`, something which is set when executing the `podman run` command.
+
+<a id='podman_containerfile_jupyter_server'></a>
+[back to top](#top)
+
+#### Set up the Jupyter server
+
+The last block of the `Containerfile` exposes port 8888 of the container and sets up the Jupyter server to run on that port with no password or identity token.
+
+```Containerfile
+...
+# Expose the port for the Jupyter server
+EXPOSE 8888
+
+CMD ["bash", "-lc", "exec uv run jupyter lab \
+    --ip=0.0.0.0 \
+    --port=8888 \
+    --no-browser \
+    --allow-root \
+    --IdentityProvider.token='' \
+    --ServerApp.password=''"]
+```
+
+Note that port 8888 in the container will be set to connect to a different port on the host machine later.
+
+---
+
+<a id='podman_start_container'></a>
+[back to top](#top)
+
+### The `start_container` script
+
+[The `Containerfile`](#podman_containerfile) defines how the image for this project should be built.
+I created a script called `start_container.sh` which ultimately starts the container from that image, but first checkes to make sure the Podman virtual machine is running and that the image exists already.
+The script is shown below:
+
+```{literalinclude} ../../.devcontainer/Containerfile
+```
+
+I'll explain each section in detail below.
+
+<a id='podman_start_container_pipefail'></a>
+[back to top](#top)
+
+#### Set the script to fail on common errors
+
+The first line is `set -euo pipefail`. 
+The GitHub Gist by `akrasic` [`bash_strict_mode`](https://gist.github.com/akrasic/380bda362e0420be08709152c91ca1f9) explains that the `set` command is used to cause a script to fail very explicitly when encountering errors. 
+This can be helpful to track down where exactly the bugs are, especially if the script calls other scripts. 
+
+<a id='podman_start_container_machine_status'></a>
+[back to top](#top)
+
+#### Ensure the virtual machine is running
+
+The next block checks the status of the virtual machine, which is required for running on macOS.
+First, it checks whether the machine has been initialized.
+
+```bash
+# ---- Ensure podman machine is running (macOS) ----
+if ! podman machine inspect >/dev/null 2>&1; then
+  echo "No podman machine found. Initializing..."
+  podman machine init
+fi
+```
+Then, it gets the state of the machine to see whether it has already been started.
+```bash
+...
+MACHINE_STATE=$(podman machine inspect --format '{{.State}}')
+
+if [[ "$MACHINE_STATE" != "running" ]]; then
+  echo "Starting podman machine..."
+  podman machine start
+fi
+...
+```
+
+This block allows you to re-run the `start_container.sh` script even if you already have the Podman machine running.
+This is useful when testing the code in a way which requires restarting the container frequently.
+
+<a id='podman_start_container_params'></a>
+[back to top](#top)
+
+#### Set the parameters
+
+Next, the scripts sets the following parameters.
+
+- `IMAGE="seaicecp_7"`
+    - This will be the name of the image that is built. 
+    - If an image with this name already exists, a new one will not be built.
+    - If you want to try a new build, change this parameter.
+- `CONTAINER_NAME="sicp_cont"`
+    - This is the name that the container will have when it is running.
+    - If you want to have multiple containers running at the same time, you might need to change this.
+- `WORKDIR="/workspace"`
+    - This defines the name of the working directory for the container.
+    - This must be the same name used in the `Containerfile`.
+
+<a id='podman_start_container_cleanup'></a>
+[back to top](#top)
+
+#### Check existing containers and images
+
+The next two blocks clean up any existing images and builds the image, if necessary.
+```bash
+...
+# ---- Cleanup old container if it exists ----
+podman rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
+
+# ---- Ensure image exists ----
+if ! podman image exists "$IMAGE"; then
+  echo "Image $IMAGE not found. Building from '.devcontainer/Containerfile'..."
+  podman build -f .devcontainer/Containerfile -t "$IMAGE" . | tee .devcontainer/build_container_log.txt
+fi
+...
+```
+
+The `|| true` in the first command ensures that it executes successfully, even when there is no old container to clean up. 
+In the second part, the image building step will be skipped if an image with the given name already exists.
+
+<a id='podman_start_container_external_vol'></a>
+[back to top](#top)
+
+#### Set up access to external volumes
+
+The next block sets up access to data on an external volume.
+The value of `SICP_DATA_DIR` should be changed to match the absolute file path of your external hard drive where `esgpull` will store the HighResMIP data.
+
+```bash
+...
+# ---- Setup external hard drive access ----
+export SICP_DATA_DIR=/Volumes/BERGY_BITS/seaicecp_data/
+SICP_DATA_DIR="${SICP_DATA_DIR:-}"
+
+if [[ -n "$SICP_DATA_DIR" ]]; then
+  if [[ ! -d "$SICP_DATA_DIR" ]]; then
+    echo "ERROR: SICP_DATA_DIR does not exist: $SICP_DATA_DIR"
+    exit 1
+  fi
+fi
+...
+```
+
+<a id='podman_start_container_list_vol'></a>
+[back to top](#top)
+
+#### Create the list of volumes
+
+The next block creates the list of arguments to be used to define the volumes.
+This should include the working directory and the external volume.
+```bash
+...
+# ---- Build volume args ----
+VOLUMES=(-v "$(pwd)":"$WORKDIR")
+
+if [[ -n "$SICP_DATA_DIR" ]]; then
+  VOLUMES+=(-v "$SICP_DATA_DIR:/seaicecp_data")
+fi
+...
+```
+
+<a id='podman_start_container_run'></a>
+[back to top](#top)
+
+#### Run the container
+
+Finally, the script starts the container with the `podman run` command.
+```bash
+...
+# ---- Run container (Jupyter starts automatically from CMD) ----
+podman run -it --rm \
+  --name "$CONTAINER_NAME" \
+  -p 8889:8888 \
+  "${VOLUMES[@]}" \
+  -w "$WORKDIR" \
+  "$IMAGE"
+```
+The arguments of the command are, similar to [Building a simple container](#podman_simple_container) (see the [Podman run docs](https://docs.podman.io/en/latest/markdown/podman-run.1.html) for details):
+- `-i`: Interactive
+    - "When set to true, make `stdin` available to the contained process. If false, the `stdin` of the contained process is empty and immediately closed."
+- `-t`: TTY
+    - "Allocate a pseudo-TTY. The default is false. When set to true, Podman allocates a pseudo-tty and attach to the standard input of the container. This can be used, for example, to run a throwaway interactive shell."
+- `--rm`: Remove upon exit
+    - "Automatically remove the container and any anonymous unnamed volume associated with the container when it exits. The default is false."
+- `--name`: Container name
+    - "Assign a name to the container." This can be completely different from the name of the image it is built from.
+- `-p`: Publish (Ports)
+    - "Publish a container’s port, or range of ports, to the host. Both hostPort and containerPort can be specified as a range of ports. When specifying ranges for both, the number of container ports in the range must match the number of host ports in the range."
+    - This is set here as `8889:8888` to specify that the host system (my laptop) will use port 8889 (to avoid conflicts with existing Jupyter servers) to connect to the container's port 8888 where it's Jupyter server is running.
+- `"${VOLUMES[@]}"`: List of volumes
+    - The list of directories (`/workspace` and the external volume) that the container should have access to.
+- `-w`: Working directory
+    - "Working directory inside the container. The default working directory for running binaries within a container is the root directory (`/`). The image developer can set a different default with the `WORKDIR` instruction. The operator can override the working directory by using the `-w` option."
+- `"$IMAGE"`
+    - The name of the image to use for this container.
+
 
 <a id='venv'></a>
 [back to top](#top)
