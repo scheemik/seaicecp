@@ -788,7 +788,7 @@ In [Python Packages Chapter 2](https://py-pkgs.org/02-setup), they suggest using
 For this project, I decided to use [`uv`](https://docs.astral.sh/uv/) instead as it has the ability to manage tools and add ephemeral packages when testing out builds.
 
 I can create a minimal `Containerfile` to test running `trixie-slim` with Python 3.13 and `uv` installed.
-```Containerfile
+```dockerfile
 # ---- Stage 1: get uv binary ----
 FROM ghcr.io/astral-sh/uv:latest AS uv
 
@@ -1017,6 +1017,7 @@ With this working, the next step is to build out the `Containerfile` to set up t
 Below is the `Containerfile` used to build the image for this project.
 
 ```{literalinclude} ../../.devcontainer/Containerfile
+:language: dockerfile
 ```
 
 Note that this is meant to be executed by the [`start_container.sh` script](#podman_start_container).
@@ -1124,7 +1125,7 @@ The packages installed in this block are:
 #### `uv` dependencies and Jupyter kernel
 
 The next block in the `Containerfile` is:
-```Containerfile
+```dockerfile
 ...
 # Install dependencies via `uv` and start a kernel for Jupyter notebooks
 RUN --mount=type=cache,target=/root/.cache/uv \
@@ -1144,12 +1145,14 @@ Then, it starts a kernel for using the Python virtual environment in Jupyter not
 When making maps, it is often useful to plot coastlines or other shapes to give context. 
 A common way of doing this in Python is from Natural Earth shape files.
 There are a couple of common files that the next block of the `Containerfile` downloads so that it won't need to be downloaded the first time a plot is made that requires them.
-```Containerfile
+```dockerfile
+...
 # Trigger downloads of commonly used Natural Earth datasets
 RUN /workspace/.cvenv/bin/python - <<'EOF'
 import cartopy.io.shapereader as shp
 shp.natural_earth(resolution='110m', category='physical', name='coastline')
 EOF
+...
 ```
 If this is not present in the image, the following warning occurs when making a plot that requires downloading shape files.
 ```console
@@ -1165,11 +1168,13 @@ If this is not present in the image, the following warning occurs when making a 
 This project uses the `esgpull` tool to download HighResMIP data files.
 This next block uses the separate script included with this project at `.devcontainer/esgpull_entrypoint.sh` to set up the install on an external volume. 
 
-```Containerfile
+```dockerfile
+...
 # Set up the `esgpull` install
 COPY .devcontainer/esgpull_entrypoint.sh /esgpull_entrypoint.sh
 RUN chmod +x /esgpull_entrypoint.sh
 ENTRYPOINT ["/esgpull_entrypoint.sh"]
+...
 ```
 
 The `.devcontainer/esgpull_entrypoint.sh` script assumes that the directory in which the data on the external volume is stored has been defined as `/seaicecp_data`, something which is set when executing the `podman run` command.
@@ -1181,7 +1186,7 @@ The `.devcontainer/esgpull_entrypoint.sh` script assumes that the directory in w
 
 The last block of the `Containerfile` exposes port 8888 of the container and sets up the Jupyter server to run on that port with no password or identity token.
 
-```Containerfile
+```dockerfile
 ...
 # Expose the port for the Jupyter server
 EXPOSE 8888
@@ -1208,7 +1213,8 @@ Note that port 8888 in the container will be set to connect to a different port 
 I created a script called `start_container.sh` which ultimately starts the container from that image, but first checkes to make sure the Podman virtual machine is running and that the image exists already.
 The script is shown below:
 
-```{literalinclude} ../../.devcontainer/Containerfile
+```{literalinclude} ../../start_container.sh
+:language: bash
 ```
 
 I'll explain each section in detail below.
