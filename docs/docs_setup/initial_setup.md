@@ -8,6 +8,7 @@ Link to the {doc}`README <../index>`.
 
 ## Contents
 
+- [The Order of Operations](#order_of_operations)
 - [The `uv` package manager](#uv_manager)
 - [Creating a package structure](#pkg_structure)
     - [Using `uv init`](#uv_init)
@@ -30,10 +31,21 @@ Link to the {doc}`README <../index>`.
     - [Enabling easy DOI links](#doi_links)
 
 ---
+<a id='order_of_operations'></a>
+[back to top](#top)
+
+## The Order of Operations
+
+When initially setting up this project, I installed the [`uv` package manager](#uv_manager), [created the package structure](#pkg_structure) of the project, and [installed Python dependencies in a virtual environment](#venv) all before writing the [Podman](#podman) container.
+It is likely that one could avoid installing `uv` on their host system by first setting up the container and, once inside the container, create the package structure.
+However, I present those steps first as I have not tested that possibility and thus present them in the manner I followed, outside the container.
+I do, however, place the section on installing package dependencies after creating the container in this document because I have confirmed that adding packages with `uv` inside the container works.
+
+---
 <a id='uv_manager'></a>
 [back to top](#top)
 
-## The `uv` package manager
+## The `uv` Package Manager
 
 In [Python Packages Chapter 2](https://py-pkgs.org/02-setup), the suggest using Miniconda to create an environment and the [`poetry`](https://python-poetry.org/) package to manage dependencies. 
 For this project, I decided to use [`uv`](https://docs.astral.sh/uv/) instead. 
