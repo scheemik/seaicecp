@@ -13,10 +13,10 @@ Several of the sections below are summarizations of parts of that guide, with de
 - [The `uv` package manager](#uv_manager)
 - [Creating a package structure](#pkg_structure)
     - [Using `uv init`](#uv_init)
-    - [Setting the default branch](#default_branch)
     - [Using a `cookiecutter` template](#cookiecutter)
     - [Combining `uv` and `cookiecutter` structures](#uv_and_cookiecutter)
 - [Version control and GitHub](#version_control)
+    - [Setting the default branch](#default_branch)
 - [Podman](#podman)
     - [Installing Podman](#podman_install)
     - [Testing Podman](#podman_test)
@@ -122,39 +122,6 @@ $ tree seaicecp
 ├── main.py
 └── pyproject.toml
 ```
-
-<a id='default_branch'></a>
-[back to top](#top)
-
-### Setting the default branch
-
-For the version of `git` I have, it still sets the default branch as `master`. 
-I'm following the guide from Geeks for Geeks on [How to Change Git Default Branch From Master?](https://www.geeksforgeeks.org/git/how-to-change-git-default-branch-from-master/).
-
-First, I renamed the local branch.
-```console
-Grey@Audron:seaicecp$ git branch -m master main
-Grey@Audron:seaicecp$ git push -u origin main
-Total 0 (delta 0), reused 0 (delta 0)
-remote: 
-remote: Create a pull request for 'main' on GitHub by visiting:
-remote:      https://github.com/scheemik/seaicecp/pull/new/main
-remote: 
-To https://github.com/scheemik/seaicecp.git
- * [new branch]      main -> main
-Branch 'main' set up to track remote branch 'main' from 'origin'.
-```
-
-Then, on GitHub, I went to the "Settings" tab for the repository, then confirmed I was in the "General" section on the sidebar.
-Under the heading "Default branch," I clicked the button to "Switch to another branch," selected `main`, then hit "Update."
-Next, I deleted the `master` branch from the remote.
-```console
-Grey@Audron:seaicecp$ git push origin --delete master
-To https://github.com/scheemik/seaicecp.git
- - [deleted]         master
-```
-
-Since the repository wasn't being used anywhere else, that was all I needed to do.
 
 <a id='cookiecutter'></a>
 [back to top](#top)
@@ -289,6 +256,40 @@ Initialized empty Git repository in /<absolute/path/to/project>/seaicecp/.git/
 
 I then added and committed the initial structure and pushed to a new [GitHub repository for the project](https://github.com/scheemik/seaicecp).
 I am working in VSCodium, which I'd already set up to [connect to my GitHub account](https://github.com/VSCodium/vscodium/blob/master/docs/usage.md#signin-github), so the process was as simple as pressing the "push" button in the GUI.
+
+<a id='default_branch'></a>
+[back to top](#top)
+
+### Setting the default branch
+
+For the version of `git` I have, it still sets the default branch as `master` instead of `main`. 
+I'm following the guide from Geeks for Geeks on [How to Change Git Default Branch From Master?](https://www.geeksforgeeks.org/git/how-to-change-git-default-branch-from-master/)
+
+First, I renamed the local branch.
+```console
+Grey@Audron:/<absolute/path/to/project>$ cd seaicecp
+Grey@Audron:seaicecp$ git branch -m master main
+Grey@Audron:seaicecp$ git push -u origin main
+Total 0 (delta 0), reused 0 (delta 0)
+remote: 
+remote: Create a pull request for 'main' on GitHub by visiting:
+remote:      https://github.com/scheemik/seaicecp/pull/new/main
+remote: 
+To https://github.com/scheemik/seaicecp.git
+ * [new branch]      main -> main
+Branch 'main' set up to track remote branch 'main' from 'origin'.
+```
+
+Then, on GitHub, I went to the "Settings" tab for the repository, then confirmed I was in the "General" section on the sidebar.
+Under the heading "Default branch," I clicked the button to "Switch to another branch," selected `main`, then hit "Update."
+Next, I deleted the `master` branch from the remote.
+```console
+Grey@Audron:seaicecp$ git push origin --delete master
+To https://github.com/scheemik/seaicecp.git
+ - [deleted]         master
+```
+
+Since the repository had not been cloned anywhere else at this point, that was all I needed to do.
 
 ---
 <a id='podman'></a>
