@@ -62,7 +62,7 @@ Several of the sections below are summarizations of parts of that guide, with de
 When initially setting up this project, I installed the [`uv` package manager](#uv_manager), [created the package structure](#pkg_structure) of the project, and [installed Python dependencies in a virtual environment](#venv) all before writing the [Podman](#podman) container.
 It is likely that one could avoid installing `uv` on their host system by first setting up the container and, once inside the container, create the package structure.
 However, I present those steps first as I have not tested that possibility and thus present them in the manner I followed, outside the container.
-I do, however, place the section on installing package dependencies after creating the container in this document because I have confirmed that adding packages with `uv` inside the container works.
+I do, however, place the section on the [virtual environment and installing package dependencies](#venv) after creating the container in this document because I have confirmed that adding packages with `uv` inside the container works.
 
 ---
 <a id='uv_manager'></a>
@@ -70,7 +70,7 @@ I do, however, place the section on installing package dependencies after creati
 
 ## The `uv` Package Manager
 
-In [Python Packages Chapter 2](https://py-pkgs.org/02-setup), the suggest using Miniconda to create an environment and the [`poetry`](https://python-poetry.org/) package to manage dependencies. 
+In [Python Packages Chapter 2](https://py-pkgs.org/02-setup), they suggest to use Miniconda to create an environment and use [`poetry`](https://python-poetry.org/) to manage dependencies. 
 For this project, I decided to use [`uv`](https://docs.astral.sh/uv/) instead. 
 From the instructions for [Installing `uv`](https://docs.astral.sh/uv/getting-started/installation/), I used Homebrew.
 I've truncated the output below for brevity. 
@@ -108,6 +108,8 @@ Warning: uv 0.11.6 already installed
 ### Using `uv init`
 
 To start a project, I simply need to use `uv` to initiate one, following the [Working on projects](https://docs.astral.sh/uv/guides/projects/) guide.
+I chose the name `seaicecp` to stand for "Sea Ice Choke Points," trying to balance brevity and descriptiveness.
+First, I navigated to the directory in which I want my project to be, `<absolute/path/to/project>`, then used the `uv init` command with the name for the project and the `--package` flag.
 ```console
 $ uv init seaicecp --package
 Initialized project `seaicecp` at `/<absolute/path/to/project>/seaicecp`
@@ -132,11 +134,11 @@ In [Py-Pkgs Section 2.2.2](https://py-pkgs.org/02-setup#install-packaging-softwa
 This package is then actually used in [Section 3.2.2](https://py-pkgs.org/03-how-to-package-a-python#creating-a-package-structure). 
 I do like the package structure they provide with their `cookiecutter` template, but I will need to integrate it with the directory structure generated above with `uv init` as their template assumes using `poetry` as a dependency manager.
 
-With `uv` comes the ability to [invoke a tool without installing it by using `uvx`](https://docs.astral.sh/uv/guides/tools/#running-tools). 
-This is helpful when trying something out, or using a tool that is just for set up, like [`cookiecutter`](https://github.com/cookiecutter/cookiecutter), a tool for setting up the structure of the package.
+`uv` comes the ability to [invoke a tool without installing it by using `uvx`](https://docs.astral.sh/uv/guides/tools/#running-tools). 
+This is helpful when trying something out, or when using a tool that is just for an initial set up, like [`cookiecutter`](https://github.com/cookiecutter/cookiecutter), which can be used to create a package structure.
 By using `uvx`, you don't need to commit to actually installing `cookiecutter` on your system.
 
-First, I went into a temporary directory, then generated the package structure.
+First, I created and went into a temporary directory, `tmp_dir`, then generated the package structure.
 This is to ensure I didn't accidentally overwrite the structure I made with `uv init` earlier.
 ```console
 $ uvx cookiecutter https://github.com/py-pkgs/py-pkgs-cookiecutter.git
@@ -240,7 +242,11 @@ requires = ["uv_build>=0.9.15,<0.10.0"]
 build-backend = "uv_build"
 ```
 
-After completing those steps, I deleted the redundant instance of my project directory. 
+After completing those steps, I deleted the redundant instance of my project directory in `tmp_dir`. 
+```console
+Grey@Audron:tmp_dir$ cd ..
+Grey@Audron:seaicecp$ rm -rf tmp_dir/
+```
 
 <a id='version_control'></a>
 [back to top](#top)
@@ -299,7 +305,7 @@ Since the repository had not been cloned anywhere else at this point, that was a
 
 [Podman](https://podman.io/) is an open-source tool by [Red Hat](https://www.redhat.com/en0) for creating and managing containers, similar to [Docker](https://www.docker.com/).
 [Containerization](https://en.wikipedia.org/wiki/Containerization_(computing)) allows the creation of isolated, reproducible computing environments, making it easier to ensure code will run the same way across different systems.
-While virtual environments for Python, such as [`venv`](https://docs.python.org/3/library/venv.html) or [`conda`](https://www.anaconda.com/download), create reproducible environments for Python packages, containers create an entire operating system.
+While virtual environments for Python, such as [`venv`](https://docs.python.org/3/library/venv.html) or [`conda`](https://www.anaconda.com/download), create reproducible environments for Python packages, containers create reproducible environments for an entire operating system.
 This allows the inclusion and management of non-Python software in a project, such as the `cdo` and `esgpull` tools used in this project.
 
 <a id='podman_install'></a>
@@ -561,7 +567,7 @@ Git Commit:   5b263b5f5b48004a87caac44e67349a8266d9ef4
 Built:        Sun Apr 12 20:00:00 2026
 OS/Arch:      linux/amd64
 ```
-I could also see that I now have `podman` files in my user's configuration folder.
+I can also see that I now have `podman` files in my user's configuration folder.
 ```console
 Grey@Audron:~$ ls -la ~/.config/containers/
 total 8
@@ -771,7 +777,7 @@ basic_httpd
 Grey@Audron:~$ podman ps -a
 CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES
 ```
-If any terminals had been left open inside the container, they will have automatically exited.
+If any terminals had been left open inside the container, they will have automatically exited when the container is removed.
 
 <a id='podman_simple_container'></a>
 [back to top](#top)
@@ -782,7 +788,7 @@ If any terminals had been left open inside the container, they will have automat
 
 Above, I downloaded an existing image `docker.io/nginx` from a repository. 
 For this project, I want to define my own.
-The setup of a container is defined by a scripted that is always named `Containerfile` with no file extension. 
+The setup of a container is defined by a scripted that is named `Containerfile` with no file extension. 
 A good way to start a container is to load an existing minimal distribution.
 I chose the `trixie-slim` version of Debian as it is lightweight and [uses Python 3.13 by default](https://packages.debian.org/trixie/python3).
 
@@ -814,8 +820,8 @@ WORKDIR /workspace
 # Default shell
 CMD ["/bin/bash"]
 ```
-Next, I build the image.
-A lot of information in the build process, so I'll collapse most of the output.
+Next, I'll build the image.
+A lot of information is output to the console in the build process, so I'll collapse most of the output for brevity.
 ```console
 Grey@Audron:seaicecp$ podman build -f Containerfile -t test_trixie .
 [1/2] STEP 1/1: FROM ghcr.io/astral-sh/uv:latest AS uv
@@ -997,15 +1003,14 @@ root@c6dc2f68fd76:/workspace# uv --version
 uv 0.11.17 (x86_64-unknown-linux-musl)
 root@c6dc2f68fd76:/workspace#
 ```
-When I am done, I can exit both the Python prompt and the container.
+When I am done, I can exit the container.
 ```console
->>> exit()
 root@c6dc2f68fd76:/workspace# exit
 exit
 Grey@Audron:seaicecp$ 
 ```
 Upon exiting the container, I can refresh the Pod Manager sidebar again to see that the container removed itself upon exit because of the `--rm` flag.
-This is important to keep from building up a large number of idle containers whenever starting a particular image.
+This is important to keep from building up a large number of idle containers when starting a particular image many times.
 
 With this working, the next step is to build out the `Containerfile` to set up the development environment with all the necessary packages, tools, and data access.
 
@@ -1016,14 +1021,14 @@ With this working, the next step is to build out the `Containerfile` to set up t
 
 ### The `Containerfile`
 
-Below is the `Containerfile` used to build the image for this project.
+Below is the current `Containerfile` used to build the image for this project.
 
 ```{literalinclude} ../../.devcontainer/Containerfile
 :language: dockerfile
 ```
 
-Note that this is meant to be executed by the [`start_container.sh` script](#podman_start_container).
-However, if testing a new build, it can be useful to pipe the output to a log file using `tee`.
+Note that this is meant to be executed via the [`start_container.sh` script](#podman_start_container).
+However, if testing a new build, it can be useful to pipe the output of `podman build` to a log file using `tee`.
 ```console
 Grey@Audron:seaicecp$ podman build -f .devcontainer/Containerfile -t <image_name> . | tee .devcontainer/<log_file_name>.log
 ```
@@ -1039,6 +1044,7 @@ For reproducibility purposes, I decided to pin the exact versions of `uv` and `t
 After [Building a simple container](#podman_simple_container), I now see the following images in the Pod Manger sidebar:
 - `ghcr.io/astral-sh/uv:latest`
 - `docker.io/library/debian:trixie-slim`
+
 I can get the exact hashes of the versions of `uv` and `trixie-slim` from their manifests.
 ```console
 Grey@Audron:seaicecp$ podman image inspect debian:trixie-slim --format '{{.Digest}}'
@@ -1057,7 +1063,7 @@ The `Containerfile` defines a few environment variables to facilitate building t
     - According to the askUbuntu post [DEBIAN_FRONTEND environment variable](https://askubuntu.com/questions/972516/debian-frontend-environment-variable), this prevents installations from getting stuck on interactive processes, such as when the user is asked to confirm or select something.
 - `ENV UV_PROJECT_ENVIRONMENT=/workspace/.cvenv`
     - According to the Python Developer Tooling Handbook on [How to customize uv's virtual environment location](https://pydevtools.com/handbook/how-to/how-to-customize-uvs-virtual-environment-location/), this renames the default directory for the `uv` virtual environment from `.venv` to `.cvenv` to avoid conflicts with using the environment inside vs. outside the container.
-    - Note that the use of the directory `/workspace` is detailed below.
+    - Note that the use of the directory `/workspace` is [detailed below](#podman_containerfile_misc_prep).
 - `ENV UV_LINK_MODE=copy`
     - According to the Python Developer Tooling Handbook on [How to use `uv` in a Dockerfile](https://pydevtools.com/handbook/how-to/how-to-use-uv-in-a-dockerfile/), this "tells uv to copy files instead of hard-linking them. When using Docker cache mounts, the cache and the target directory live on separate filesystems, so uv falls back to copying anyway. Setting this explicitly avoids the warning message."
 
@@ -1069,7 +1075,7 @@ The `Containerfile` defines a few environment variables to facilitate building t
 The next block in the `Containerfile` uses `apt-get` to install the necessary system-level dependencies for the project. 
 The flags used here are:
 - `-y`: Assume yes
-    - From the [Linux manual page for `apt-get`](https://linux.die.net/man/8/apt-get), "Automatic yes to prompts. Assume "yes" as answer to all prompts and run non-interactively. If an undesirable situation, such as changing a held package or removing an essential package, occurs then `apt-get` will abort."
+    - From the [Linux manual page for `apt-get`](https://linux.die.net/man/8/apt-get), "Automatic yes to prompts. Assume 'yes' as answer to all prompts and run non-interactively. If an undesirable situation, such as changing a held package or removing an essential package, occurs then `apt-get` will abort."
 - `--no-install-recommends`: 
     - According to the askUbuntu post [How to not install recommended and suggested packages?](https://askubuntu.com/questions/179060/how-to-not-install-recommended-and-suggested-packages), this flag prevents `apt-get` from automatically installing recommended packages, keeping the container's stack to a minimum, installing only what is required.
 
@@ -1168,8 +1174,7 @@ If this is not present in the image, the following warning occurs when making a 
 #### Set up `esgpull` install
 
 This project uses the `esgpull` tool to download HighResMIP data files.
-This next block uses the separate script included with this project at `.devcontainer/esgpull_entrypoint.sh` to set up the install on an external volume. 
-
+This next block sets up an install of `esgpull` on an external volume.
 ```dockerfile
 ...
 # Set up the `esgpull` install
@@ -1177,6 +1182,10 @@ COPY .devcontainer/esgpull_entrypoint.sh /esgpull_entrypoint.sh
 RUN chmod +x /esgpull_entrypoint.sh
 ENTRYPOINT ["/esgpull_entrypoint.sh"]
 ...
+```
+This uses the separate script included with this project at `.devcontainer/esgpull_entrypoint.sh` which is shown below.
+```{literalinclude} ../../.devcontainer/esgpull_entrypoint.sh
+:language: bash
 ```
 
 The `.devcontainer/esgpull_entrypoint.sh` script assumes that the directory in which the data on the external volume is stored has been defined as `/seaicecp_data`, something which is set when executing the `podman run` command.
@@ -1202,7 +1211,7 @@ CMD ["bash", "-lc", "exec uv run jupyter lab \
     --ServerApp.password=''"]
 ```
 
-Note that port 8888 in the container will be set to connect to a different port on the host machine later.
+Note that port 8888 in the container will be set to connect to a different port (8889) on the host machine later.
 
 ---
 
@@ -1212,7 +1221,7 @@ Note that port 8888 in the container will be set to connect to a different port 
 ### The `start_container` script
 
 [The `Containerfile`](#podman_containerfile) defines how the image for this project should be built.
-I created a script called `start_container.sh` which ultimately starts the container from that image, but first checkes to make sure the Podman virtual machine is running and that the image exists already.
+I created a script called `start_container.sh` which ultimately starts the container from that image, but first checkes to make sure the Podman virtual machine is running and whether the image exists already.
 The script is shown below:
 
 ```{literalinclude} ../../start_container.sh
@@ -1227,7 +1236,7 @@ I'll explain each section in detail below.
 #### Set the script to fail on common errors
 
 The first line is `set -euo pipefail`. 
-The GitHub Gist by `akrasic` [`bash_strict_mode`](https://gist.github.com/akrasic/380bda362e0420be08709152c91ca1f9) explains that the `set` command is used to cause a script to fail very explicitly when encountering errors. 
+The GitHub Gist by `akrasic` called [`bash_strict_mode`](https://gist.github.com/akrasic/380bda362e0420be08709152c91ca1f9) explains that the `set` command is used to cause a script to fail very explicitly when encountering errors. 
 This can be helpful to track down where exactly the bugs are, especially if the script calls other scripts. 
 
 <a id='podman_start_container_machine_status'></a>
@@ -1239,11 +1248,13 @@ The next block checks the status of the virtual machine, which is required for r
 First, it checks whether the machine has been initialized.
 
 ```bash
+...
 # ---- Ensure podman machine is running (macOS) ----
 if ! podman machine inspect >/dev/null 2>&1; then
   echo "No podman machine found. Initializing..."
   podman machine init
 fi
+...
 ```
 Then, it gets the state of the machine to see whether it has already been started.
 ```bash
