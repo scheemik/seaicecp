@@ -1120,7 +1120,7 @@ The packages installed in this block are:
     - This command creates a symlink such that using the command `python` calls Python 3.13.
     - This removes the need to specify the version of Python to use every time.
 - `COPY --from=uv /uv /usr/local/bin/uv`
-    - This command copies `uv` from where it was downloaded into the `usr` directory for ease of use.
+    - From [Using `uv` in Docker](https://docs.astral.sh/uv/guides/integration/docker/), this command copies `uv` from where it was downloaded into the `usr` directory for ease of use.
 - `WORKDIR /workspace`
     - This sets the working directory to be named `/workspace`.
     - The choice of the name is arbitrary, however sets a specific file path that can be expected by other parts of the project.
@@ -1146,6 +1146,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 ```
 
 This installs and/or updates all the dependencies defined in the `pyproject.toml` file using `uv sync`.
+Specifying `--mount=type=cache,target=/root/.cache/uv` will cache the packages with `uv`, making subsequent builds much faster.
 Then, it starts a kernel for using the Python virtual environment in Jupyter notebooks. 
 
 <a id='podman_containerfile_natural_earth'></a>
@@ -1335,6 +1336,21 @@ if [[ -n "$SICP_DATA_DIR" ]]; then
   fi
 fi
 ...
+```
+If you need to change the external volume setup, you will need to restart the Podman machine, not just the container, to see whether the change worked.
+```console
+Grey@Audron:seaicecp$ podman machine stop
+Machine "podman-machine-default" stopped successfully
+Grey@Audron:seaicecp$ podman machine rm
+The following files will be deleted:
+
+
+/Users/Grey/.config/containers/podman/machine/applehv/podman-machine-default.json
+/var/folders/30/czkm3xpn6fx2v22bz_r2g37r0000gp/T/podman/podman-machine-default.sock
+/var/folders/30/czkm3xpn6fx2v22bz_r2g37r0000gp/T/podman/podman-machine-default-gvproxy.sock
+/var/folders/30/czkm3xpn6fx2v22bz_r2g37r0000gp/T/podman/podman-machine-default-api.sock
+/var/folders/30/czkm3xpn6fx2v22bz_r2g37r0000gp/T/podman/podman-machine-default.log
+Are you sure you want to continue? [y/N] y
 ```
 
 <a id='podman_start_container_list_vol'></a>
