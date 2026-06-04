@@ -1244,7 +1244,41 @@ The script is shown below:
 :language: bash
 ```
 
-I'll explain each section in detail below.
+This script can be run with a simple `bash` command.
+```console
+Grey@Audron:seaicecp$ bash start_container.sh 
+Starting podman machine...
+Starting machine "podman-machine-default"
+
+This machine is currently configured in rootless mode. If your containers
+require root permissions (e.g. ports < 1024), or if you run into compatibility
+issues with non-podman clients, you can switch using the following command:
+
+        podman machine set --rootful
+
+API forwarding listening on: /var/run/docker.sock
+Docker API clients default to this address. You do not need to set DOCKER_HOST.
+
+Machine "podman-machine-default" started successfully
+───────────────────────────────────────────────────── esgpull installation ──────────────────────────────────────────────────────
+Using existing install at /seaicecp_data/bergybits
+Install config added to /root/.config/esgpull/installs.json
+      Built seaicecp @ file:///workspace
+Uninstalled 1 package in 13ms
+Installed 1 package in 62ms
+[I 2026-06-03 23:49:58.897 ServerApp] jupyter_lsp | extension was successfully linked.
+[I 2026-06-03 23:49:58.907 ServerApp] jupyter_server_terminals | extension was successfully linked.
+[I 2026-06-03 23:49:58.924 ServerApp] jupyterlab | extension was successfully linked.
+[I 2026-06-03 23:49:58.940 ServerApp] notebook | extension was successfully linked.
+[I 2026-06-03 23:49:58.945 ServerApp] Writing Jupyter server cookie secret to /root/.local/share/jupyter/runtime/jupyter_cookie_secret
+[I 2026-06-03 23:50:00.562 ServerApp] notebook_shim | extension was successfully linked.
+[I 2026-06-03 23:50:00.563 ServerApp] panel.io.jupyter_server_extension | extension was successfully linked.
+...
+```
+Leave this terminal running to have access to the Jupyter server and see relevant updates.
+The output that continues to appear in this terminal as the Jupyter server is being used can be very helpful in debugging Jupyter-related issues.
+
+I'll explain each section of the `start_container.sh` script in detail below.
 
 <a id='podman_start_container_pipefail'></a>
 [back to top](#top)
