@@ -1452,19 +1452,57 @@ The arguments of the command are, similar to [Building a simple container](#podm
 - `"$IMAGE"`
     - The name of the image to use for this container.
 
-
-<a id='venv'></a>
+<a id='podman_clean_images'></a>
 [back to top](#top)
 
-## Virtual environment and packages
+### Cleaning up old images
 
-<a id='venv_activate'></a>
-[back to top](#top)
+During the testing above, several images were generated.
+In the Pod Manager sidebar, under the "Overview" dropdown, a summary of the images can be seen.
+Usually, you will need to hit the refresh button next to this dropdown to see any information.
+For the images, containers, and local volumes, it lists the total number, the number active, the disk space used, and the reclaimable disk space.
 
-### Activating the virtual environment
+When testing out new builds of the `Containerfile`, it is easy to generate many images.
+Podman can list the existing images. 
+```console
+Grey@Audron:seaicecp$ podman images -a
+REPOSITORY                TAG          IMAGE ID      CREATED      SIZE
+<none>                    <none>       55b854bc8dcd  2 days ago   199 MB
+localhost/test_trixie     latest       7bab3cfc2aa3  2 days ago   199 MB
+<none>                    <none>       b907eed1ae8b  2 days ago   199 MB
+<none>                    <none>       6dd8a6c94600  2 days ago   142 MB
+<none>                    <none>       4f123f8d89fe  2 days ago   142 MB
+<none>                    <none>       5808b4b9aad3  2 days ago   81.1 MB
+ghcr.io/astral-sh/uv      latest       b960411dc937  6 days ago   58.2 MB
+docker.io/library/nginx   latest       7aaca76c508f  12 days ago  165 MB
+docker.io/library/debian  trixie-slim  f283d70f8784  2 weeks ago  81.1 MB
+localhost/seaicecp_7      latest       b05b6acdb72b  3 weeks ago  2.78 GB
+```
+While the image for this project is a reasonable 2.78 GB, it adds up quickly when there are dozens of copies.
+Podman provides an easy `prune` command to clean this up. 
+When this command is run, it will remove all images that do not have an associated container that is currently running. 
+This makes it convenient as I can just start a container from the image that I want to keep then, from outside that container, run a `prune` command.
+```console
+Grey@Audron:seaicecp$ podman image prune -a
+WARNING! This command removes all images without at least one container associated with them.
+Are you sure you want to continue? [y/N] y
+7aaca76c508f7d121ff29cbe9dd071012486d00c21e17655eb1a1dfb711e9330
+b960411dc937f9b4d9762349f5f77772d36dead003baa3bc01330abe8e1f38a6
+f283d70f878433b889e4b9252110fad858e0e0887df5bac91cd2ad4ccb2b3a2a
+5808b4b9aad30e55a565efe96b48bb0628439d44dc31883d7be8b24998e52bfd
+4f123f8d89feb6111a63528bf05c56cb2831684cda3ef4b7e2cad3c87d567a58
+6dd8a6c94600c177a0a4a6f0166574c35d720766c981bbd10f34d77be956f0bc
+b907eed1ae8b4ec83fe12df4292630c67ca77d99f5e966dfa0e99e8077d2bae7
+55b854bc8dcd53e9a5d01887214276422374802dd565dd165b3b78af8af79f18
+7bab3cfc2aa34bf43d9a63ccb8428a859c9f64a807186a4262b17bc5ffe0b4eb
+```
+I can then confirm that only one image remains.
+```console
+Grey@Audron:seaicecp$ podman images -a
+REPOSITORY            TAG         IMAGE ID      CREATED      SIZE
+localhost/seaicecp_7  latest      b05b6acdb72b  3 weeks ago  2.78 GB
+```
 
-When initializing the project, `uv` automatically creates a virtual environment in `.venv/`.
-I can easily activate it by sourcing that directory.
 ```console
 seaicecp$ source .venv/bin/activate
 (seaicecp) seaicecp$ 
