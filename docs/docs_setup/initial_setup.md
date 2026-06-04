@@ -1652,9 +1652,16 @@ In the GitHub issue [How to convert cftime.Datetime360Day() object to python dat
 
 Adding `nc-time-axis` indeed fixed the issue. 
 ```console
-uv add nc-time-axis
+(seaicecp) root@fb318a3146d8:/workspace# uv add nc-time-axis
+Resolved 200 packages in 697ms
+      Built seaicecp @ file:///workspace
+Prepared 2 packages in 174ms
+Uninstalled 1 package in 20ms
+Installed 2 packages in 139ms
+ + nc-time-axis==1.4.1
+ ~ seaicecp==0.1.0 (from file:///workspace)
 ```
-I had tried to use [`xarray.convert_calendar()`](https://docs.xarray.dev/en/stable/generated/xarray.Dataset.convert_calendar.html) instead of installing `nc-time-axis`, but with no luck. 
+I had also tried to use [`xarray.convert_calendar()`](https://docs.xarray.dev/en/stable/generated/xarray.Dataset.convert_calendar.html) instead of installing `nc-time-axis`, but with no luck. 
 They have notes in the documentation about how to deal with "360_day" calendars.
 However, I still found that some dates being dropped or set to the missing value, even though all the dates are the 16th of each month.
 I'm sticking with just using `nc-time-axis` as my solution.
