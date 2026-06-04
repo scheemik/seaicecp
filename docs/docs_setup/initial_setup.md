@@ -51,9 +51,9 @@ Several of the sections below are summarizations of parts of that guide, with de
         - [Packages for documentation](#venv_dependencies_docs)
     - [The `.pyproject.toml` file](#venv_pyproject_toml)
     - [Building the package](#venv_build_pkg)
+    - [Using a Jupyter notebook in the container](#jupyter_notebook)
     - [Adding `esgpull`](#esgpull)
         - [Adding `esgpull` install on an external drive](#esgpull_ext_HD)
-    - [Using a Jupyter notebook](#jupyter_notebook)
     - [Adding `cdo`](#cdo_install)
 - [Documentation](#docs)
     - [Building documentation](#build_docs)
@@ -1997,6 +1997,21 @@ Type "help", "copyright", "credits" or "license" for more information.
 0.1.0
 ```
 
+<a id='jupyter_notebook'></a>
+[back to top](#top)
+
+### Using a Jupyter notebook in the container
+
+Instructions on how to test whether you can access the Jupyter server inside the container are shown in the {doc}`Jupyter Notebook Test <jupyter_test>` guide.
+Once that is working, I can test to see whether the Jupyter server has access to the `seaicecp` package by executing a cell with the following code.
+```python
+import seaicecp
+print(seaicecp.__version__)
+```
+```
+0.1.0
+```
+
 
 ### old
 
@@ -2497,51 +2512,6 @@ Installed 28 packages in 162ms
 (seaicecp) Grey@Audron:seaicecp$ esgpull --version
 esgpull, version 0.9.6
 ```
-
-<a id='jupyter_notebook'></a>
-[back to top](#top)
-
-### Using a Jupyter notebook
-
-I'm now following the `uv` guide on [Using `uv` with Jupyter](https://docs.astral.sh/uv/guides/integration/jupyter/). I'm actually also following the Medium blog post [Create virtual environments with UV to use Jupyter Notebooks inside VS Code](https://medium.com/@luismarcelobp/create-virtual-environments-with-uv-to-use-jupyter-notebooks-inside-vs-code-48f336023e7f).
-
-```console
-Grey@Audron:seaicecp$ source .venv/bin/activate
-(seaicecp) Grey@Audron:seaicecp$ uv add --dev ipykernel
-Resolved 76 packages in 1.08s
-Prepared 26 packages in 1.47s
-Installed 26 packages in 178ms
- + appnope==0.1.4
- + asttokens==3.0.1
- + comm==0.2.3
- + debugpy==1.8.20
- + decorator==5.2.1
- + executing==2.2.1
- + ipykernel==7.2.0
- + ipython==9.12.0
- + ipython-pygments-lexers==1.1.1
- + jedi==0.19.2
- + jupyter-client==8.8.0
- + jupyter-core==5.9.1
- + matplotlib-inline==0.2.1
- + nest-asyncio==1.6.0
- + parso==0.8.6
- + pexpect==4.9.0
- + platformdirs==4.9.6
- + prompt-toolkit==3.0.52
- + psutil==7.2.2
- + ptyprocess==0.7.0
- + pure-eval==0.2.3
- + pygments==2.20.0
- + pyzmq==27.1.0
- + stack-data==0.6.3
- + traitlets==5.14.3
- + wcwidth==0.6.0
-(seaicecp) Grey@Audron:seaicecp$ uv run ipython kernel install --user --env VIRTUAL_ENV $(pwd)/.venv --name=seaicecp_kernel
-Installed kernelspec seaicecp_kernel in /Users/Grey/Library/Jupyter/kernels/seaicecp_kernel
-```
-
-At this point, I restarted VSCodium. Then, I made a notebook called `testing.ipynb`, then tried to import `xarray`. This brought up a dialogue where I didn't see `seaicecp_kernel`, but I selected ".venv (Python 3.14.1) .venv/bin/python". I then successfully imported `xarray` and `geoviews`. However, I encoutered the following error when I tried to open the dataset:
 
 <a id='cdo_install'></a>
 [back to top](#top)
