@@ -7,7 +7,7 @@ The script called `start_container.sh` will ultimately start the container for t
 
 This script can be run with a simple `bash` command.
 ```console
-Grey@Audron:seaicecp$ bash start_container.sh 
+user@local:seaicecp$ bash start_container.sh 
 Starting podman machine...
 Starting machine "podman-machine-default"
 

@@ -27,8 +27,8 @@ If running on macOS or Windows, this will necessitate the use of the Podman virt
 
 Choose a location in which to clone the repository for this project.
 ```console
-Grey@Audron:~$ cd /<absolute/path/to/project>
-Grey@Audron:/<absolute/path/to/project>$ git clone git@github.com:scheemik/seaicecp.git
+user@local:~$ cd /<absolute/path/to/project>
+user@local:/<absolute/path/to/project>$ git clone git@github.com:scheemik/seaicecp.git
 ```
 
 <a id='specify_fpaths'></a>
@@ -46,7 +46,7 @@ This can, and probably should, be a different location than the project director
 If you choose an external drive, make sure that drive is connected and mounted before every time you start the container.
 When using an external drive, if it is missing when starting the container, you may encounter the following error.
 ```console
-Grey@Audron:seaicecp$ bash start_container.sh
+user@local:seaicecp$ bash start_container.sh
 Error: vfkit exited unexpectedly with exit code 1
 ```
 If connecting the external drive does not solve that error, check the GitHub issue [Error: vfkit exited unexpectedly with exit code 1 on M4 MacMini #25046](https://github.com/podman-container-tools/podman/issues/25046) for more details.
@@ -65,7 +65,7 @@ However, once the image is built, the subsequent runs of `start_container.sh` wi
 <summary>Expand for example output for running the first time.</summary>
 
 ```console
-Grey@Audron:seaicecp$ bash start_container.sh 
+user@local:seaicecp$ bash start_container.sh 
 Starting podman machine...
 Starting machine "podman-machine-default"
 
