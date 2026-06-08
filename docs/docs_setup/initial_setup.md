@@ -2375,98 +2375,116 @@ enabled = false
 
 ### Building documentation
 
-Adding necessary packages as shown in [Py-Pkgs 3.8.4. Building documentation](https://py-pkgs.org/03-how-to-package-a-python#building-documentation).
+In the section, [Packages for documentation](#venv_dependencies_docs), I added the `myst-nb` `sphinx-autoapi` and `sphinx-rtd-theme` packages to the development group of the project. 
+To build the documentation, activate the virtual environment, go into the `docs/` directory, and run the `make` command.
+This will produce a lot of output, so I have hidden most of it.
 ```console
-Grey@Audron:seaicecp$ source .venv/bin/activate
-(seaicecp) Grey@Audron:seaicecp$ uv add --dev myst-nb sphinx-autoapi sphinx-rtd-theme
-Resolved 112 packages in 1.08s
-      Built seaicecp @ file:///Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp
-Prepared 31 packages in 3.20s
-Uninstalled 1 package in 8ms
-Installed 35 packages in 317ms
- + alabaster==1.0.0
- + astroid==4.1.2
- + attrs==26.1.0
- + babel==2.18.0
- + click==8.3.2
- + docutils==0.22.4
- + fastjsonschema==2.21.2
- + greenlet==3.4.0
- + imagesize==2.0.0
- + importlib-metadata==9.0.0
- + jsonschema==4.26.0
- + jsonschema-specifications==2025.9.1
- + jupyter-cache==1.0.1
- + myst-nb==1.4.0
- + myst-parser==5.0.0
- + nbclient==0.10.4
- + nbformat==5.10.4
- + referencing==0.37.0
- + roman-numerals==4.1.0
- + rpds-py==0.30.0
- ~ seaicecp==0.1.0 (from file:///Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp)
- + snowballstemmer==3.0.1
- + sphinx==9.1.0
- + sphinx-autoapi==3.8.0
- + sphinx-rtd-theme==3.1.0
- + sphinxcontrib-applehelp==2.0.0
- + sphinxcontrib-devhelp==2.0.0
- + sphinxcontrib-htmlhelp==2.1.0
- + sphinxcontrib-jquery==4.1
- + sphinxcontrib-jsmath==1.0.1
- + sphinxcontrib-qthelp==2.0.0
- + sphinxcontrib-serializinghtml==2.0.0
- + sqlalchemy==2.0.49
- + tabulate==0.10.0
- + zipp==3.23.1
-```
-
-Then, building the docs. It is necessary to have the environment activated for this step. 
-```console
-(seaicecp) Grey@Audron:seaicecp$ cd docs
-(seaicecp) Grey@Audron:docs$ make html
+(seaicecp) root@c11f20a93021:/workspace# cd docs
+(seaicecp) root@c11f20a93021:/workspace/docs# make html
 Running Sphinx v9.1.0
 loading translations [en]... done
-making output directory... done
-myst v5.0.0: MdParserConfig(commonmark_only=False, gfm_only=False, enable_extensions=set(), disable_syntax=[], all_links_external=False, links_external_new_tab=False, url_schemes=('http', 'https', 'mailto', 'ftp'), ref_domains=None, fence_as_directive=set(), number_code_blocks=[], title_to_header=False, heading_anchors=0, heading_slug_func=None, html_meta={}, footnote_sort=True, footnote_transition=True, words_per_minute=200, substitutions={}, linkify_fuzzy_links=True, dmath_allow_labels=True, dmath_allow_space=True, dmath_allow_digits=True, dmath_double_inline=False, update_mathjax=True, mathjax_classes='tex2jax_process|mathjax_process|math|output_area', enable_checkboxes=False, suppress_warnings=[], highlight_code_blocks=True)
-myst-nb v1.4.0: NbParserConfig(custom_formats={}, metadata_key='mystnb', cell_metadata_key='mystnb', kernel_rgx_aliases={}, eval_name_regex='^[a-zA-Z_][a-zA-Z0-9_]*$', execution_mode='auto', execution_cache_path='', execution_excludepatterns=(), execution_timeout=30, execution_in_temp=False, execution_allow_errors=False, execution_raise_on_error=False, execution_show_tb=False, merge_streams=False, render_plugin='default', remove_code_source=False, remove_code_outputs=False, scroll_outputs=False, code_prompt_show='Show code cell {type}', code_prompt_hide='Hide code cell {type}', number_source_lines=False, output_stderr='show', render_text_lexer='myst-ansi', render_error_lexer='ipythontb', render_image_options={}, render_figure_options={}, render_markdown_format='commonmark', output_folder='build', append_css=True, metadata_to_fm=False)
-Using jupyter-cache at: /Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp/docs/_build/.jupyter_cache
-[AutoAPI] Reading files... [ 50%] /Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp/src/
-[AutoAPI] Reading files... [100%] /Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp/src/seaicecp/__init__.py
-[AutoAPI] Mapping Data... [ 50%] /Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp/src/s
-[AutoAPI] Mapping Data... [100%] /Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp/src/seaicecp/__init__.py
-[AutoAPI] Rendering Data... [ 50%] seaicecp
-[AutoAPI] Rendering Data... [100%] seaicecp.seaicecp
+loading pickled environment... The configuration has changed (3 options: 'html_permalinks_icon', 'jquery_use_sri', 'mathjax3_config')
+done
+...
+```
 
-[autosummary] generating autosummary for: changelog.md, conduct.md, contributing.md, example.ipynb, index.md
+<details>
+
+<summary>Expand for more output.</summary>
+
+```console
+...
+myst v5.0.0: MdParserConfig(commonmark_only=False, gfm_only=False, enable_extensions={'amsmath', 'dollarmath'}, disable_syntax=[], all_links_external=False, links_external_new_tab=False, url_schemes=('http', 'https', 'wiki', 'doi', 'gh-issue'), ref_domains=None, fence_as_directive=set(), number_code_blocks=[], title_to_header=False, heading_anchors=0, heading_slug_func=None, html_meta={}, footnote_sort=True, footnote_transition=True, words_per_minute=200, substitutions={}, linkify_fuzzy_links=True, dmath_allow_labels=True, dmath_allow_space=True, dmath_allow_digits=True, dmath_double_inline=False, update_mathjax=True, mathjax_classes='tex2jax_process|mathjax_process|math|output_area', enable_checkboxes=False, suppress_warnings=[], highlight_code_blocks=True)
+myst-nb v1.4.0: NbParserConfig(custom_formats={}, metadata_key='mystnb', cell_metadata_key='mystnb', kernel_rgx_aliases={}, eval_name_regex='^[a-zA-Z_][a-zA-Z0-9_]*$', execution_mode='auto', execution_cache_path='', execution_excludepatterns=(), execution_timeout=30, execution_in_temp=False, execution_allow_errors=False, execution_raise_on_error=False, execution_show_tb=False, merge_streams=False, render_plugin='default', remove_code_source=False, remove_code_outputs=False, scroll_outputs=False, code_prompt_show='Show code cell {type}', code_prompt_hide='Hide code cell {type}', number_source_lines=False, output_stderr='show', render_text_lexer='myst-ansi', render_error_lexer='ipythontb', render_image_options={}, render_figure_options={}, render_markdown_format='commonmark', output_folder='build', append_css=True, metadata_to_fm=False)
+Using jupyter-cache at: /workspace/docs/_build/.jupyter_cache
+[AutoAPI] Reading files... [100%] /workspace/src/seaicecp/params/var_params.py
+[AutoAPI] Mapping Data... [100%] /workspace/src/seaicecp/params/var_params.py
+[AutoAPI] Rendering Data... [  4%] seaicecp
+[AutoAPI] Rendering Data... [  7%] seaicecp.plot
+[AutoAPI] Rendering Data... [ 11%] seaicecp.path
+[AutoAPI] Rendering Data... [ 15%] seaicecp.verify
+[AutoAPI] Rendering Data... [ 19%] seaicecp.params
+[AutoAPI] Rendering Data... [ 22%] seaicecp.dataset
+[AutoAPI] Rendering Data... [ 26%] seaicecp.seaicecp
+[AutoAPI] Rendering Data... [ 30%] seaicecp.dataset.tmp
+[AutoAPI] Rendering Data... [ 33%] seaicecp.plot.hvplots
+[AutoAPI] Rendering Data... [ 37%] seaicecp.path.file_lists
+[AutoAPI] Rendering Data... [ 41%] seaicecp.plot.time_series
+[AutoAPI] Rendering Data... [ 44%] seaicecp.path.model_paths
+[AutoAPI] Rendering Data... [ 48%] seaicecp.plot.save_hvplots
+[AutoAPI] Rendering Data... [ 52%] seaicecp.plot.limit_extent
+[AutoAPI] Rendering Data... [ 56%] seaicecp.dataset.date_type
+[AutoAPI] Rendering Data... [ 59%] seaicecp.dataset.grid_type
+[AutoAPI] Rendering Data... [ 63%] seaicecp.params.var_params
+[AutoAPI] Rendering Data... [ 67%] seaicecp.verify.verify_path
+[AutoAPI] Rendering Data... [ 70%] seaicecp.dataset.field_mean
+[AutoAPI] Rendering Data... [ 74%] seaicecp.plot.seasonal_cycle
+[AutoAPI] Rendering Data... [ 78%] seaicecp.path.variable_paths
+[AutoAPI] Rendering Data... [ 81%] seaicecp.dataset.get_variable
+[AutoAPI] Rendering Data... [ 85%] seaicecp.dataset.trim_dataset
+[AutoAPI] Rendering Data... [ 89%] seaicecp.params.latlon_params
+[AutoAPI] Rendering Data... [ 93%] seaicecp.dataset.set_date_type
+[AutoAPI] Rendering Data... [ 96%] seaicecp.path.manipulate_paths
+[AutoAPI] Rendering Data... [100%] seaicecp.dataset.example_dataset
+
+[autosummary] generating autosummary for: autoapi/index.rst, autoapi/seaicecp/dataset/date_type/index.rst, autoapi/seaicecp/dataset/example_dataset/index.rst, autoapi/seaicecp/dataset/field_mean/index.rst, autoapi/seaicecp/dataset/get_variable/index.rst, autoapi/seaicecp/dataset/grid_type/index.rst, autoapi/seaicecp/dataset/index.rst, autoapi/seaicecp/dataset/set_date_type/index.rst, autoapi/seaicecp/dataset/tmp/index.rst, autoapi/seaicecp/dataset/trim_dataset/index.rst, ..., docs_setup/HighResMIP_choices.md, docs_setup/data_dir_structure.md, docs_setup/esgpull_downloads.md, docs_setup/globus_downloads.md, docs_setup/initial_setup.md, docs_setup/installation.md, docs_setup/jupyter_test.md, docs_setup/start_container.md, example.ipynb, index.md
 building [mo]: targets for 0 po files that are out of date
 writing output... 
-building [html]: targets for 5 source files that are out of date
-updating environment: [new config] 8 added, 0 changed, 0 removed
-/Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp/docs/example.ipynb: Executing notebook using local CWD [mystnb]
-/Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp/docs/example.ipynb: Executed notebook in 1.85 seconds [mystnb]
-reading sources... [100%] index
+building [html]: targets for 28 source files that are out of date
+updating environment: 0 added, 28 changed, 0 removed
+reading sources... [100%] autoapi/seaicecp/verify/verify_path/index
+/workspace/docs/autoapi/seaicecp/dataset/field_mean/index.rst:29: WARNING: duplicate object description of seaicecp.dataset.field_mean.cdo, other instance in autoapi/seaicecp/dataset/field_mean/index, use :no-index: for one of them
+/workspace/docs/autoapi/seaicecp/dataset/index.rst:144: WARNING: duplicate object description of seaicecp.dataset.cdo, other instance in autoapi/seaicecp/dataset/index, use :no-index: for one of them
+/workspace/docs/autoapi/seaicecp/dataset/index.rst:146: WARNING: duplicate object description of seaicecp.dataset.meta_vars, other instance in autoapi/seaicecp/dataset/index, use :no-index: for one of them
+/workspace/docs/autoapi/seaicecp/dataset/index.rst:161: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
+/workspace/docs/autoapi/seaicecp/dataset/trim_dataset/index.rst:30: WARNING: duplicate object description of seaicecp.dataset.trim_dataset.cdo, other instance in autoapi/seaicecp/dataset/trim_dataset/index, use :no-index: for one of them
+/workspace/docs/autoapi/seaicecp/dataset/trim_dataset/index.rst:43: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
+/workspace/docs/autoapi/seaicecp/path/index.rst:269: WARNING: duplicate object description of seaicecp.path.get_model_path, other instance in autoapi/seaicecp/path/index, use :no-index: for one of them
+/workspace/docs/autoapi/seaicecp/path/index.rst:301: WARNING: duplicate object description of seaicecp.path.list_available_models, other instance in autoapi/seaicecp/path/index, use :no-index: for one of them
+/workspace/docs/autoapi/seaicecp/path/index.rst:388: WARNING: duplicate object description of seaicecp.path.get_variable_path, other instance in autoapi/seaicecp/path/index, use :no-index: for one of them
+/workspace/docs/autoapi/seaicecp/plot/hvplots/index.rst:38: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
+/workspace/docs/autoapi/seaicecp/plot/index.rst:67: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
+/workspace/docs/autoapi/seaicecp/plot/index.rst:101: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
+/workspace/docs/autoapi/seaicecp/plot/index.rst:116: WARNING: duplicate object description of seaicecp.plot.get_limited_extent, other instance in autoapi/seaicecp/plot/index, use :no-index: for one of them
+/workspace/docs/autoapi/seaicecp/plot/index.rst:127: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
+/workspace/docs/autoapi/seaicecp/plot/index.rst:141: WARNING: duplicate object description of seaicecp.plot.save_hvplot, other instance in autoapi/seaicecp/plot/index, use :no-index: for one of them
+/workspace/docs/autoapi/seaicecp/plot/index.rst:194: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
+/workspace/docs/autoapi/seaicecp/plot/index.rst:200: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
+/workspace/docs/autoapi/seaicecp/plot/limit_extent/index.rst:29: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
+/workspace/docs/autoapi/seaicecp/plot/seasonal_cycle/index.rst:37: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
+/workspace/docs/autoapi/seaicecp/plot/seasonal_cycle/index.rst:43: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
+/workspace/docs/autoapi/seaicecp/plot/time_series/index.rst:34: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
+/workspace/docs/autoapi/seaicecp/plot/time_series/index.rst:40: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
+/workspace/docs/autoapi/seaicecp/verify/index.rst:27: WARNING: duplicate object description of seaicecp.verify.verify_path, other instance in autoapi/seaicecp/verify/verify_path/index, use :no-index: for one of them
+/workspace/docs/autoapi/seaicecp/verify/verify_path/index.rst:4: WARNING: duplicate object description of seaicecp.verify.verify_path, other instance in autoapi/seaicecp/verify/index, use :no-index: for one of them
 looking for now-outdated files... none found
 pickling environment... done
 checking consistency... done
 preparing documents... done
 copying assets... 
 copying static files... 
-Writing evaluated template result to /Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp/docs/_build/html/_static/basic.css
-Writing evaluated template result to /Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp/docs/_build/html/_static/language_data.js
-Writing evaluated template result to /Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp/docs/_build/html/_static/documentation_options.js
-Writing evaluated template result to /Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp/docs/_build/html/_static/js/versions.js
+Writing evaluated template result to /workspace/docs/_build/html/_static/basic.css
+Writing evaluated template result to /workspace/docs/_build/html/_static/language_data.js
+Writing evaluated template result to /workspace/docs/_build/html/_static/documentation_options.js
+Writing evaluated template result to /workspace/docs/_build/html/_static/js/versions.js
 copying static files: done
 copying extra files... 
 copying extra files: done
 copying assets: done
 writing output... [100%] index
 generating indices... genindex py-modindex done
-highlighting module code... [100%] seaicecp.seaicecp
+highlighting module code... [100%] seaicecp.verify.verify_path
 writing additional pages... search done
 dumping search index in English (code: en)... done
 dumping object inventory... done
-build succeeded.
+...
+```
+
+</details>
+
+```console
+...
+build succeeded, 24 warnings.
 
 The HTML pages are in _build/html.
 ```
