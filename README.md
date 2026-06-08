@@ -2,10 +2,13 @@
 
 Investigate sea ice choke points in the Canadian Arctic Archipelago using high-resolution models.
 
+This project is set up to run inside a Podman container for reproducibility.
+It makes use of Python libraries managed by [`uv`](https://docs.astral.sh/uv/) using the `pyproject.toml` file.
+It also makes use of command line interfaces such as [`cdo`](https://code.mpimet.mpg.de/projects/cdo) and [`esgpull`](https://esgf.github.io/esgf-download/) for managing data from global climate models.
+
 ## Installation
 
-- This project makes use of Python libraries managed by `uv` using the `pyproject.toml` file.
-- It also makes use of command line interfaces such as `cdo` and `esgpull` for managing data from global climate models.
+- Follow the instructions on the [Installation](https://seaicecp.readthedocs.io/en/latest/docs_setup/installation.html) page.
 
 <!-- ```bash
 $ pip install seaicecp
