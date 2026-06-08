@@ -52,7 +52,8 @@ Several of the sections below are summarizations of parts of that guide, with de
     - [The `.pyproject.toml` file](#venv_pyproject_toml)
     - [Building the package](#venv_build_pkg)
     - [Using a Jupyter notebook in the container](#jupyter_notebook)
-    - [Adding `esgpull`](#esgpull)
+    - [Initializing `esgpull`](#esgpull_init)
+        - [Creating an `esgpull` install](#esgpull_init_install)
         - [Adding `esgpull` install on an external drive](#esgpull_ext_HD)
     - [Adding `cdo`](#cdo_install)
 - [Documentation](#docs)
@@ -1205,7 +1206,8 @@ This uses the separate script included with this project at `.devcontainer/esgpu
 :language: bash
 ```
 
-The `.devcontainer/esgpull_entrypoint.sh` script assumes that the directory in which the data on the external volume is stored has been defined as `/seaicecp_data`, something which is set when executing the `podman run` command.
+The `.devcontainer/esgpull_entrypoint.sh` script assumes that the directory in which the data on the external volume is stored has been defined as `/seaicecp_data`, something which is set when executing the `podman run` command (see [The `start_container` script](#podman_start_container)).
+For more information on `esgpull`, see [Initializing `esgpull`](#esgpull_init).
 
 <a id='podman_containerfile_jupyter_server'></a>
 [back to top](#top)
@@ -1817,6 +1819,8 @@ Type "help", "copyright", "credits" or "license" for more information.
 1.6.0
 ```
 Next, I added the `esgpull` package to be able to download HighResMIP data.
+On the [`esgpull` documentation Installation page](https://esgf.github.io/esgf-download/installation/) they show an example using `uv tool install` which creates an isolated installation.
+However, I use `uv add` so that `esgpull` becomes a persistent dependency of the project.
 I specify the source with `git+https://github.com/ESGF/esgf-download` in order to get the latest release of the package to resolve an issue I was encountering.
 ```console
 root@7f8e8a9c32da:/workspace# uv add git+https://github.com/ESGF/esgf-download
@@ -1849,6 +1853,8 @@ Installed 21 packages in 2.54s
  + validators==0.22.0
  + wrapt==2.1.2
 ```
+Using `esgpull` requires additional steps [as noted on the Installation page](https://esgf.github.io/esgf-download/installation/#setup).
+I detail how I managed that set up in the [Initializing `esgpull`](#esgpull_init) section later in this guide.
 
 <a id='venv_dependencies_test'></a>
 [back to top](#top)
@@ -2012,90 +2018,87 @@ print(seaicecp.__version__)
 0.1.0
 ```
 
-<a id='esgpull'></a>
+<a id='esgpull_init'></a>
 [back to top](#top)
 
-### Adding `esgpull`
+### Initializing `esgpull`
 
 Data from the CMIP6 HighResMIP models can be downloaded from the [ESGF Federated Nodes](https://esgf-node.ornl.gov/search) webportal, which has great search functionality but tedious manual downloading, or through Globus, which augments the webportal through an application you can install on your system.
 However, I decided to use [`esgpull`](https://esgf.github.io/esgf-download/quickstart/) for this project, which offers a command line interface for searching and downloading.
 For detailed reasoning on choosing `esgpull`, see the {doc}`Downloading model data with esgpull <esgpull_downloads>` guide. 
 
-I'll add `esgpull` as a dependency in my project following the [installation guide](https://esgf.github.io/esgf-download/installation/) which has an example using `uv` which is great.
+<a id='esgpull_init_install'></a>
+[back to top](#top)
 
-I came back to this later as I noticed that this didn't actually add `esgpull` to the `.toml` file.
-Perhaps I should try installing it with simply `uv add esgpull`?
-Would that perhaps mess up the installation I already have? Unclear. 
-I could try using the flag `--dry-run` and see what would happen.
+#### Creating an `esgpull` install
 
+In the section [Packages for external tools](#venv_dependencies_ext_tools), I added `esgpull` as a dependency for the Python environment. 
+As noted in the [Installation page](https://esgf.github.io/esgf-download/installation/#setup) under "Setup," an additonal step must be taken before `esgpull` can be used, namely running the `esgpull self install` command.
+> "The reason is that esgpull is prevented from writing anything on disk until installed.
+> 
+> Installing esgpull equates choosing a directory in which it is allowed to write anything it needs to run properly. It also creates all the required files/directories in that directory and fetches some metadata from ESGF that is required to run properly."
+
+In the `esgpull_entrypoint.sh` script, (see [Setting up `esgpull` install](#podman_containerfile_esgpull)), I run `uv run esgpull self install bergybits` from the directory where I want the data to be (in this case, `/seaice_data` which is connected to my external drive) to create an install called `bergybits`.
+
+The first time this is run, the output will indicate that a new install has been created.
 ```console
-(seaicecp) Grey@Audron:seaicecp$ uv tool install esgpull
-Resolved 43 packages in 184ms
-Prepared 1 package in 142ms
-Installed 43 packages in 172ms
- + aiofiles==25.1.0
- + aiostream==0.7.1
- + alembic==1.18.4
- + annotated-types==0.7.0
- + anyio==4.13.0
- + attrs==26.1.0
- + cattrs==26.1.0
- + certifi==2026.2.25
- + cffi==2.0.0
- + click==8.3.2
- + click-params==0.5.0
- + cryptography==46.0.7
- + deprecated==1.3.1
- + esgpull==0.9.6
- + greenlet==3.4.0
- + h11==0.16.0
- + httpcore==1.0.9
- + httpx==0.28.1
- + idna==3.11
- + mako==1.3.11
- + markdown-it-py==4.0.0
- + markupsafe==3.0.3
- + mdurl==0.1.2
- + nest-asyncio==1.6.0
- + packaging==26.1
- + platformdirs==4.9.6
- + pycparser==3.0
- + pydantic==2.13.0
- + pydantic-core==2.46.0
- + pydantic-settings==2.13.1
- + pygments==2.20.0
- + pyopenssl==26.0.0
- + pyparsing==3.3.2
- + python-dotenv==1.2.2
- + pyyaml==6.0.3
- + rich==15.0.0
- + setuptools==82.0.1
- + sqlalchemy==2.0.49
- + tomlkit==0.14.0
- + typing-extensions==4.15.0
- + typing-inspection==0.4.2
- + validators==0.22.0
- + wrapt==2.1.2
-Installed 1 executable: esgpull
+(seaicecp) root@c11f20a93021:/workspace# cd /seaicecp_data/
+(seaicecp) root@c11f20a93021:/seaicecp_data# uv run esgpull self install bergybits
+──────────────────────────────────── esgpull installation ────────────────────────────────────
+Creating install directory and files at /seaicecp_data/bergybits
+Install config added to /root/.config/esgpull/installs.json
+```
+On subsequent times running the `start_container.sh` script, `esgpull` will automatically recognize and use the existing install that has been set up with whatever data has already been downloaded.
+```console
+...
+───────────────────────────────── esgpull installation ─────────────────────────────────
+Using existing install at /seaicecp_data/bergybits
+Install config added to /root/.config/esgpull/installs.json
 ```
 
-Note: I needed to start a new terminal before the following would work:
+If no name for the install is given, (i.e., running just `uv run esgpull self install`), then you will be taken through an interactive setup process shown below where you can specify the name and location of the install.
 ```console
-(seaicecp) Grey@Audron:seaicecp$ esgpull --version
-esgpull, version 0.9.6
-```
-
-Then, I needed to do the second step of installation to allow it to write data:
-```console
-(seaicecp) Grey@Audron:seaicecp$ esgpull self install
+(seaicecp) root@c11f20a93021:/workspace# uv run esgpull self install
 ──────────────────────────────────────────────────── esgpull installation ────────────────────────────────────────────────────
-Install location (/Users/Grey/.esgpull): .esgpull
-Name (optional): seaicecp
-Creating install directory and files at /Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp/.esgpull
-Install config added to /Users/Grey/Library/Application Support/esgpull/installs.json
+Install location (/workspace/.esgpull): .esgpull
+Name (optional): new_install
+Creating install directory and files at /workspace/.esgpull
+Install config added to /root/.config/esgpull/installs.json
+```
+I can view all the installs I have setup where the one marked with `*` is the one that is currently selected.
+```console
+(seaicecp) root@c11f20a93021:/workspace# uv run esgpull self choose
+Install locations           
+    /seaicecp_data/bergybits 
+ *  /workspace/.esgpull     
+```
+I can choose a different install by specifying the name at the end of that command.
+```console
+(seaicecp) root@c11f20a93021:/workspace# uv run esgpull self choose /seaicecp_data/bergybits/
+(seaicecp) root@c11f20a93021:/workspace# uv run esgpull self choose
+Install locations           
+ *  /seaicecp_data/bergybits 
+    /workspace/.esgpull     
+```
+To delete an install, select it first, then use the `esgpull self delete` command.
+To remove the associated data, run the `rm` command suggested by the output.
+```console
+(seaicecp) root@c11f20a93021:/workspace# uv run esgpull self choose /workspace/.esgpull/
+(seaicecp) root@c11f20a93021:/workspace# uv run esgpull self choose
+Install locations                 
+    /seaicecp_data/bergybits      
+ *  /workspace/.esgpull
+(seaicecp) root@c11f20a93021:/workspace# uv run esgpull self delete
+You are going to delete: /workspace/.esgpull
+Please enter '.esgpull' to continue: .esgpull
+Deleting /workspace/.esgpull from config...
+To remove all files from this install, run:
+
+$ rm -rf /workspace/.esgpull
+(seaicecp) root@c11f20a93021:/workspace# rm -rf /workspace/.esgpull/
+(seaicecp) root@c11f20a93021:/workspace# 
 ```
 
-I checked the configuration because the "Server error '500 500' for url 'https://esgf-node.ipsl.upmc.fr/..." got me suspicious as to why it was selected a French web domain:
 ```console
 (seaicecp) Grey@Audron:seaicecp$ esgpull config
 ──────────────── /Users/Grey/Documents/Research/Postdoc_Projects/York_U_sea_ice/seaicecp/.esgpull/config.toml ────────────────
