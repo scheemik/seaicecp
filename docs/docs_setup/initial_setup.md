@@ -85,7 +85,7 @@ For this project, I decided to use [`uv`](https://docs.astral.sh/uv/) instead.
 From the instructions for [Installing `uv`](https://docs.astral.sh/uv/getting-started/installation/), I used Homebrew.
 I've truncated the output below for brevity. 
 ```console
-Grey@Audron:~$ brew install uv
+user@local:~$ brew install uv
 ==> Auto-updating Homebrew...
 Adjust how often this is run with `$HOMEBREW_AUTO_UPDATE_SECS` or disable with
 `$HOMEBREW_NO_AUTO_UPDATE=1`. Hide these hints with `$HOMEBREW_NO_ENV_HINTS=1` (see `man brew`).
@@ -101,7 +101,7 @@ Updated 2 taps (homebrew/core and homebrew/cask).
 
 I then ensured that I had the most up-to-date version of `uv` installed.
 ```console
-Grey@Audron:~$ brew upgrade uv
+user@local:~$ brew upgrade uv
 Warning: uv 0.11.6 already installed
 ```
 
@@ -121,14 +121,14 @@ To start a project, I simply need to use `uv` to initiate one, following the [Wo
 I chose the name `seaicecp` to stand for "Sea Ice Choke Points," trying to balance brevity and descriptiveness.
 First, I navigated to the directory in which I want my project to be, `<absolute/path/to/project>`, then used the `uv init` command with the name for the project and the `--package` flag.
 ```console
-Grey@Audron:~$ cd /<absolute/path/to/project>
-Grey@Audron:/<absolute/path/to/project>$ uv init seaicecp --package
+user@local:~$ cd /<absolute/path/to/project>
+user@local:/<absolute/path/to/project>$ uv init seaicecp --package
 Initialized project `seaicecp` at `/<absolute/path/to/project>/seaicecp`
 ```
 
 This creates a very simple directory structure for the project.
 ```console
-Grey@Audron:/<absolute/path/to/project>$ tree seaicecp
+user@local:/<absolute/path/to/project>$ tree seaicecp
 ├── .gitignore
 ├── .python-version
 ├── README.md
@@ -152,9 +152,9 @@ By using `uvx`, you don't need to commit to actually installing `cookiecutter` o
 First, I created and went into a temporary directory, `tmp_dir`, then generated the package structure.
 This is to ensure I didn't accidentally overwrite the structure I made with `uv init` earlier.
 ```console
-Grey@Audron:seaicecp$ mkdir tmp_dir
-Grey@Audron:seaicecp$ cd tmp_dir
-Grey@Audron:tmp_dir$ git branch -m master main
+user@local:seaicecp$ mkdir tmp_dir
+user@local:seaicecp$ cd tmp_dir
+user@local:tmp_dir$ git branch -m master main
 $ uvx cookiecutter https://github.com/py-pkgs/py-pkgs-cookiecutter.git
 Installed 21 packages in 137ms
   [1/7] author_name (Monty Python): Mikhail Schee
@@ -180,7 +180,7 @@ Installed 21 packages in 137ms
 
 This generates a directory with the chosen package name (in this case, `seaicecp`) and fill it with all the boiler-plate files you would expect in a Python Package.
 ```console
-Grey@Audron:tmp_dir$ tree seaicecp/
+user@local:tmp_dir$ tree seaicecp/
 seaicecp/
 ├── CHANGELOG.md
 ├── CONDUCT.md
@@ -258,8 +258,8 @@ build-backend = "uv_build"
 
 After completing those steps, I deleted the redundant instance of my project directory in `tmp_dir`. 
 ```console
-Grey@Audron:tmp_dir$ cd ..
-Grey@Audron:seaicecp$ rm -rf tmp_dir/
+user@local:tmp_dir$ cd ..
+user@local:seaicecp$ rm -rf tmp_dir/
 ```
 
 <a id='version_control'></a>
@@ -269,7 +269,7 @@ Grey@Audron:seaicecp$ rm -rf tmp_dir/
 
 Following [Py-Pkgs Section 3.3. Put your package under version control](https://py-pkgs.org/03-how-to-package-a-python#put-your-package-under-version-control), I initiated `git` for my new repository.
 ```console
-Grey@Audron:seaicecp$ git init
+user@local:seaicecp$ git init
 Initialized empty Git repository in /<absolute/path/to/project>/seaicecp/.git/
 ```
 
@@ -286,9 +286,9 @@ I'm following the guide from Geeks for Geeks on [How to Change Git Default Branc
 
 First, I renamed the local branch.
 ```console
-Grey@Audron:/<absolute/path/to/project>$ cd seaicecp
-Grey@Audron:seaicecp$ git branch -m master main
-Grey@Audron:seaicecp$ git push -u origin main
+user@local:/<absolute/path/to/project>$ cd seaicecp
+user@local:seaicecp$ git branch -m master main
+user@local:seaicecp$ git push -u origin main
 Total 0 (delta 0), reused 0 (delta 0)
 remote: 
 remote: Create a pull request for 'main' on GitHub by visiting:
@@ -303,7 +303,7 @@ Then, on GitHub, I went to the "Settings" tab for the repository, then confirmed
 Under the heading "Default branch," I clicked the button to "Switch to another branch," selected `main`, then hit "Update."
 Next, I deleted the `master` branch from the remote.
 ```console
-Grey@Audron:seaicecp$ git push origin --delete master
+user@local:seaicecp$ git push origin --delete master
 To https://github.com/scheemik/seaicecp.git
  - [deleted]         master
 ```
@@ -340,7 +340,7 @@ I then moved the `.pkg` file to the trash.
 The next step in the [Podman Installation Instructions](https://podman.io/docs/installation) for macOS is to setup the Podman virtual machine.
 This is necessary when running Podman on macOS or Windows as it needs to run on a Linux system, therefore I need to initialize a virtual machine to actually run Podman.
 ```console
-Grey@Audron:~$ podman machine init
+user@local:~$ podman machine init
 Looking up Podman Machine image at quay.io/podman/machine-os:5.8 to create VM
 Getting image source signatures
 Copying blob 5efcf56a5999 done   | 
@@ -356,7 +356,7 @@ To start your machine run:
 That took about 3 minutes.
 Next, I started the virtual machine.
 ```console
-Grey@Audron:~$ podman machine start
+user@local:~$ podman machine start
 Starting machine "podman-machine-default"
 
 This machine is currently configured in rootless mode. If your containers
@@ -374,7 +374,7 @@ That took about a minute.
 Then, I took a look at the `podman` information.
 There is quite a lot of information, so I'll collapse most of the output.
 ```console
-Grey@Audron:~$ podman info
+user@local:~$ podman info
 Client:
   APIVersion: 5.8.2
   BuildOrigin: pkginstaller
@@ -562,7 +562,7 @@ version:
 
 I can also simply check the version of `podman`.
 ```console
-Grey@Audron:~$ podman version
+user@local:~$ podman version
 Client:        Podman Engine
 Version:       5.8.2
 API Version:   5.8.2
@@ -582,13 +582,13 @@ OS/Arch:      linux/amd64
 ```
 I can also see that I now have `podman` files in my user's configuration folder.
 ```console
-Grey@Audron:~$ ls -la ~/.config/containers/
+user@local:~$ ls -la ~/.config/containers/
 total 8
-drwxr-xr-x  5 Grey  staff  160 Apr 28 10:57 .
-drwx------  8 Grey  staff  256 Apr 28 10:55 ..
-drwxr-xr-x  3 Grey  staff   96 Apr 28 10:55 podman
--rw-r--r--  1 Grey  staff  440 Apr 28 10:57 podman-connections.json
--rw-r--r--  1 Grey  staff    0 Apr 28 10:57 podman-connections.json.lock
+drwxr-xr-x  5 <user>  staff  160 Apr 28 10:57 .
+drwx------  8 <user>  staff  256 Apr 28 10:55 ..
+drwxr-xr-x  3 <user>  staff   96 Apr 28 10:55 podman
+-rw-r--r--  1 <user>  staff  440 Apr 28 10:57 podman-connections.json
+-rw-r--r--  1 <user>  staff    0 Apr 28 10:57 podman-connections.json.lock
 ```
 <a id='podman_test'></a>
 [back to top](#top)
@@ -600,7 +600,7 @@ drwxr-xr-x  3 Grey  staff   96 Apr 28 10:55 podman
 Next, I followed the [Basic Setup and Use of Podman](https://github.com/containers/podman/blob/main/docs/tutorials/podman_tutorial.md) guide.
 To start, I ran the sample `nginx` container, calling it `basic_httpd`.
 ```console
-Grey@Audron:~$ podman run --name basic_httpd -d -p 8080:80/tcp docker.io/nginx
+user@local:~$ podman run --name basic_httpd -d -p 8080:80/tcp docker.io/nginx
 Trying to pull docker.io/library/nginx:latest...
 Getting image source signatures
 Copying blob sha256:677c631968686eeb23ab8dd436d49bde041266df5d8952f03d7a8c418643d4b5
@@ -618,7 +618,7 @@ This pulls the image from the web, builds it, and starts a container running tha
 If the above command is run a second time, it will be able to skip the part where it downloads and builds the image.
 I can now list my running containers.
 ```console
-Grey@Audron:~$ podman ps -a
+user@local:~$ podman ps -a
 CONTAINER ID  IMAGE                           COMMAND               CREATED             STATUS             PORTS                 NAMES
 774a97cf2828  docker.io/library/nginx:latest  nginx -g daemon o...  About a minute ago  Up About a minute  0.0.0.0:8080->80/tcp  basic_httpd
 ```
@@ -626,7 +626,7 @@ Adding the `-a` flag shows "all" containers, but that doesn't result in any diff
 
 Then, I can inspect that running container.
 ```console
-Grey@Audron:~$ podman inspect basic_httpd | grep IPAddress
+user@local:~$ podman inspect basic_httpd | grep IPAddress
                "IPAddress": "10.88.0.3",
                          "IPAddress": "10.88.0.3",
 ```
@@ -637,7 +637,7 @@ This is different than what is shown in the guide which says:
 
 Next, I tested the `httpd` server to make sure it is running on the expected port, displaying the index page.
 ```console
-Grey@Audron:~$ curl http://localhost:8080
+user@local:~$ curl http://localhost:8080
 <!DOCTYPE html>
 <html>
 <head>
@@ -668,7 +668,7 @@ security features and capabilities please refer to
 ```
 Using the Container ID from the `podman ps` command above, I can see the logs of this container.
 ```console
-Grey@Audron:~$ podman logs 774a97cf2828
+user@local:~$ podman logs 774a97cf2828
 /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
 /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
 /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
@@ -692,7 +692,7 @@ Grey@Audron:~$ podman logs 774a97cf2828
 ```
 I can also see the `httpd pid` with `top` using the same container ID.
 ```console
-Grey@Audron:~$ podman top 774a97cf2828
+user@local:~$ podman top 774a97cf2828
 USER      PID     PPID    %CPU    ELAPSED           TTY     TIME    COMMAND
 root      1       0       0.000   10m43.083334622s  ?       0s      nginx: master process nginx -g daemon off;
 nginx     24      1       0.000   10m42.083710443s  ?       0s      nginx: worker process
@@ -707,13 +707,13 @@ One of the benefits of Podman is the ability to run containers as "rootless" whi
 The `podman exec <container_name>` command allows you to execute commands within a container.
 I will use this to execute the `whoami` command to ask who the container thinks they are.
 ```console
-Grey@Audron:~$ podman exec basic_httpd whoami
+user@local:~$ podman exec basic_httpd whoami
 root
 ```
 So, the container is running as `root`. 
 Next, I'll see who owns the process.
 ```console
-Grey@Audron:~$ podman top basic_httpd user huser
+user@local:~$ podman top basic_httpd user huser
 USER        HUSER
 root        502
 nginx       100100
@@ -725,14 +725,14 @@ I can see here that the user id between `root` and the `nginx` container don't m
 
 Next, I can stop the container.
 ```console
-Grey@Audron:~$ podman stop basic_httpd
+user@local:~$ podman stop basic_httpd
 basic_httpd
 ```
 Then, I'll remove this container and check to make sure it is gone.
 ```console
-Grey@Audron:~$ podman rm basic_httpd
+user@local:~$ podman rm basic_httpd
 basic_httpd
-Grey@Audron:~$ podman ps -a
+user@local:~$ podman ps -a
 CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES
 ```
 
@@ -760,7 +760,7 @@ This is the image that was built when [Testing Podman](#podman_test).
 Containers get added to the list in the Pod Manager sidebar when they start running. 
 I can start the `basic_httpd` container again.
 ```console
-Grey@Audron:seaicecp$ podman run --name basic_httpd -d -p 8080:80/tcp docker.io/nginx
+user@local:seaicecp$ podman run --name basic_httpd -d -p 8080:80/tcp docker.io/nginx
 9ab04fb2f7c04e2a1cf263ee46b33a00cde5fc7c89e71926f7a65aeae4e35dd7
 ```
 Since this image was already built, all that needed to be done was start a container with the image.
@@ -776,18 +776,18 @@ podman exec -it 9ab04fb2f7c0 /bin/sh
 The default interactive shell is now zsh.
 To update your account to use zsh, please run `chsh -s /bin/zsh`.
 For more details, please visit https://support.apple.com/kb/HT208050.
-Grey@Audron:seaicecp$ podman exec -it 9ab04fb2f7c0 /bin/sh
+user@local:seaicecp$ podman exec -it 9ab04fb2f7c0 /bin/sh
 # basic_httpd whoami
 root
 # 
 ```
 Then, to clean up, I will stop and remove this `basic_httpd` from outside the container.
 ```console
-Grey@Audron:~$ podman stop basic_httpd
+user@local:~$ podman stop basic_httpd
 basic_httpd
-Grey@Audron:~$ podman rm basic_httpd
+user@local:~$ podman rm basic_httpd
 basic_httpd
-Grey@Audron:~$ podman ps -a
+user@local:~$ podman ps -a
 CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES
 ```
 If any terminals had been left open inside the container, they will have automatically exited when the container is removed.
@@ -836,7 +836,7 @@ CMD ["/bin/bash"]
 Next, I'll build the image.
 A lot of information is output to the console in the build process, so I'll collapse most of the output for brevity.
 ```console
-Grey@Audron:seaicecp$ podman build -f Containerfile -t test_trixie .
+user@local:seaicecp$ podman build -f Containerfile -t test_trixie .
 [1/2] STEP 1/1: FROM ghcr.io/astral-sh/uv:latest AS uv
 Trying to pull ghcr.io/astral-sh/uv:latest...
 Getting image source signatures
@@ -1002,7 +1002,7 @@ Then, I'll run the container with the following flags (see the [Podman run docs]
 - `--name`: Container name
     - "Assign a name to the container." This can be completely different from the name of the image it is built from.
 ```console
-Grey@Audron:seaicecp$ podman run -it --rm --name container_name test_trixie
+user@local:seaicecp$ podman run -it --rm --name container_name test_trixie
 root@c6dc2f68fd76:/workspace# 
 ```
 While this container is running, I can hit the refresh button in the Pod Manager sidebar to see that there is a new container named `container_name`.
@@ -1020,7 +1020,7 @@ When I am done, I can exit the container.
 ```console
 root@c6dc2f68fd76:/workspace# exit
 exit
-Grey@Audron:seaicecp$ 
+user@local:seaicecp$ 
 ```
 Upon exiting the container, I can refresh the Pod Manager sidebar again to see that the container removed itself upon exit because of the `--rm` flag.
 This is important to keep from building up a large number of idle containers when starting a particular image many times.
@@ -1043,7 +1043,7 @@ Below is the current `Containerfile` used to build the image for this project.
 Note that this is meant to be executed via the [`start_container.sh` script](#podman_start_container).
 However, if testing a new build, it can be useful to pipe the output of `podman build` to a log file using `tee`.
 ```console
-Grey@Audron:seaicecp$ podman build -f .devcontainer/Containerfile -t <image_name> . | tee .devcontainer/<log_file_name>.log
+user@local:seaicecp$ podman build -f .devcontainer/Containerfile -t <image_name> . | tee .devcontainer/<log_file_name>.log
 ```
 
 I'll explain each section of the `Containerfile` in detail below.
@@ -1060,9 +1060,9 @@ After [Building a simple container](#podman_simple_container), I now see the fol
 
 I can get the exact hashes of the versions of `uv` and `trixie-slim` from their manifests.
 ```console
-Grey@Audron:seaicecp$ podman image inspect debian:trixie-slim --format '{{.Digest}}'
+user@local:seaicecp$ podman image inspect debian:trixie-slim --format '{{.Digest}}'
 sha256:e18da95f66066b7c5fa31491b524e83121271eca59a3d140f4906c8d0a090367
-Grey@Audron:seaicecp$ podman image inspect ghcr.io/astral-sh/uv --format '{{.Digest}}'
+user@local:seaicecp$ podman image inspect ghcr.io/astral-sh/uv --format '{{.Digest}}'
 sha256:5cbec7ab7753a6c763c6dda6a38f085c8c585ec9f53cfb4e7368b79ca30bc881
 ```
 
@@ -1250,7 +1250,7 @@ The script is shown below:
 
 This script can be run with a simple `bash` command.
 ```console
-Grey@Audron:seaicecp$ bash start_container.sh 
+user@local:seaicecp$ bash start_container.sh 
 Starting podman machine...
 Starting machine "podman-machine-default"
 
@@ -1406,13 +1406,13 @@ fi
 ```
 If you need to change the external volume setup, you will need to restart the Podman machine, not just the container, to see whether the change worked.
 ```console
-Grey@Audron:seaicecp$ podman machine stop
+user@local:seaicecp$ podman machine stop
 Machine "podman-machine-default" stopped successfully
-Grey@Audron:seaicecp$ podman machine rm
+user@local:seaicecp$ podman machine rm
 The following files will be deleted:
 
 
-/Users/Grey/.config/containers/podman/machine/applehv/podman-machine-default.json
+/Users/<user>/.config/containers/podman/machine/applehv/podman-machine-default.json
 /var/folders/30/czkm3xpn6fx2v22bz_r2g37r0000gp/T/podman/podman-machine-default.sock
 /var/folders/30/czkm3xpn6fx2v22bz_r2g37r0000gp/T/podman/podman-machine-default-gvproxy.sock
 /var/folders/30/czkm3xpn6fx2v22bz_r2g37r0000gp/T/podman/podman-machine-default-api.sock
@@ -1481,7 +1481,7 @@ The arguments of the command are, similar to [Building a simple container](#podm
 With the container running, I can test to make sure things were installed correctly. 
 First, I'll check the versions of various packages, starting with `uv`.
 ```console
-Grey@Audron:seaicecp$ podman exec -it c11f20a93021 /bin/sh
+user@local:seaicecp$ podman exec -it c11f20a93021 /bin/sh
 # bash
 root@c11f20a93021:/workspace# uv --version
 uv 0.11.8 (x86_64-unknown-linux-musl)
@@ -1536,7 +1536,7 @@ For the images, containers, and local volumes, it lists the total number, the nu
 When testing out new builds of the `Containerfile`, it is easy to generate many images.
 Podman can list the existing images. 
 ```console
-Grey@Audron:seaicecp$ podman images -a
+user@local:seaicecp$ podman images -a
 REPOSITORY                TAG          IMAGE ID      CREATED      SIZE
 <none>                    <none>       55b854bc8dcd  2 days ago   199 MB
 localhost/test_trixie     latest       7bab3cfc2aa3  2 days ago   199 MB
@@ -1554,7 +1554,7 @@ Podman provides an easy `prune` command to clean this up.
 When this command is run, it will remove all images that do not have an associated container that is currently running. 
 This makes it convenient as I can just start a container from the image that I want to keep then, from outside that container, run a `prune` command.
 ```console
-Grey@Audron:seaicecp$ podman image prune -a
+user@local:seaicecp$ podman image prune -a
 WARNING! This command removes all images without at least one container associated with them.
 Are you sure you want to continue? [y/N] y
 7aaca76c508f7d121ff29cbe9dd071012486d00c21e17655eb1a1dfb711e9330
@@ -1569,7 +1569,7 @@ b907eed1ae8b4ec83fe12df4292630c67ca77d99f5e966dfa0e99e8077d2bae7
 ```
 I can then confirm that only one image remains.
 ```console
-Grey@Audron:seaicecp$ podman images -a
+user@local:seaicecp$ podman images -a
 REPOSITORY            TAG         IMAGE ID      CREATED      SIZE
 localhost/seaicecp_7  latest      b05b6acdb72b  3 weeks ago  2.78 GB
 ```
@@ -1594,7 +1594,7 @@ podman exec -it f6df1af96ed1 /bin/sh
 The default interactive shell is now zsh.
 To update your account to use zsh, please run `chsh -s /bin/zsh`.
 For more details, please visit https://support.apple.com/kb/HT208050.
-Grey@Audron:seaicecp$ podman exec -it f6df1af96ed1 /bin/sh
+user@local:seaicecp$ podman exec -it f6df1af96ed1 /bin/sh
 # 
 ```
 Then, I activate `bash` and source the virtual environment directory.
@@ -2034,7 +2034,7 @@ As shown in the [Build systems](https://docs.astral.sh/uv/concepts/projects/conf
 In the [Building your package](https://docs.astral.sh/uv/guides/package/#building-your-package) section, I used the 
 
 ```console
-Grey@Audron:seaicecp$ podman exec -it 89a2a5684ba1 /bin/sh
+user@local:seaicecp$ podman exec -it 89a2a5684ba1 /bin/sh
 # bash 
 root@89a2a5684ba1:/workspace# source .cvenv/bin/activate
 (seaicecp) root@89a2a5684ba1:/workspace# uv sync
