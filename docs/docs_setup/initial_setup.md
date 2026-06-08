@@ -1003,22 +1003,23 @@ Then, I'll run the container with the following flags (see the [Podman run docs]
     - "Assign a name to the container." This can be completely different from the name of the image it is built from.
 ```console
 user@local:seaicecp$ podman run -it --rm --name container_name test_trixie
-root@c6dc2f68fd76:/workspace# 
+root@<container_id>:/workspace# 
 ```
+Where `<container_id>` is a 12-digit identifier of the container. 
 While this container is running, I can hit the refresh button in the Pod Manager sidebar to see that there is a new container named `container_name`.
 I can also verify that Python and `uv` are installed inside the container.
 ```console
-root@c6dc2f68fd76:/workspace# python
+root@<container_id>:/workspace# python
 Python 3.13.5 (main, May  5 2026, 21:05:52) [GCC 14.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> exit()
-root@c6dc2f68fd76:/workspace# uv --version
+root@<container_id>:/workspace# uv --version
 uv 0.11.17 (x86_64-unknown-linux-musl)
-root@c6dc2f68fd76:/workspace#
+root@<container_id>:/workspace#
 ```
 When I am done, I can exit the container.
 ```console
-root@c6dc2f68fd76:/workspace# exit
+root@<container_id>:/workspace# exit
 exit
 user@local:seaicecp$ 
 ```
@@ -1481,14 +1482,14 @@ The arguments of the command are, similar to [Building a simple container](#podm
 With the container running, I can test to make sure things were installed correctly. 
 First, I'll check the versions of various packages, starting with `uv`.
 ```console
-user@local:seaicecp$ podman exec -it c11f20a93021 /bin/sh
+user@local:seaicecp$ podman exec -it <container_id> /bin/sh
 # bash
-root@c11f20a93021:/workspace# uv --version
+root@<container_id>:/workspace# uv --version
 uv 0.11.8 (x86_64-unknown-linux-musl)
 ```
 Next, I'll check `cdo`.
 ```console
-root@c11f20a93021:/workspace# cdo --version
+root@<container_id>:/workspace# cdo --version
 Climate Data Operators version 2.5.1 (https://mpimet.mpg.de/cdo)
 System: x86_64-pc-linux-gnu
 CXX Compiler: g++ -std=gnu++20 -g -O2 -ffile-prefix-map=/build/reproducible-path/cdo-2.5.1=. -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -fopenmp -pthread
@@ -1509,15 +1510,14 @@ CDI file types: srv ext ieg grb1 grb2 nc1 nc2 nc4 nc4c nc5 nczarr
     FILE library version : 1.9.1
 ```
 To check `nco`, I'll check the version of `ncks` (NetCDF Kitchen Sink).
-root@c11f20a93021:/workspace# 
 ```console
-root@c11f20a93021:/workspace# ncks --version
+root@<container_id>:/workspace# ncks --version
 NCO netCDF Operators version 5.3.3 "Sea Shanty" built by sbuild on sbuild at Mar 29 2025 05:28:49
 ncks version 5.3.3
 ```
 Then, I can check Python.
 ```console
-root@c11f20a93021:/workspace# python
+root@<container_id>:/workspace# python
 Python 3.13.5 (main, Jun 25 2025, 18:55:22) [GCC 14.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> exit()
@@ -1589,19 +1589,19 @@ That environment can be used outside the container.
 In the section [Defining environment variables](#podman_containerfile_env_vars), I noted that I changed the default virtual environment location for `uv` to be `.cvenv` inside the container.
 I can easily activate it by first starting a terminal inside the container.
 ```console
-podman exec -it f6df1af96ed1 /bin/sh
+podman exec -it <container_id> /bin/sh
 
 The default interactive shell is now zsh.
 To update your account to use zsh, please run `chsh -s /bin/zsh`.
 For more details, please visit https://support.apple.com/kb/HT208050.
-user@local:seaicecp$ podman exec -it f6df1af96ed1 /bin/sh
+user@local:seaicecp$ podman exec -it <container_id> /bin/sh
 # 
 ```
 Then, I activate `bash` and source the virtual environment directory.
 ```console
 # bash
-root@f6df1af96ed1:/workspace# source .cvenv/bin/activate
-(seaicecp) root@f6df1af96ed1:/workspace# 
+root@<container_id>:/workspace# source .cvenv/bin/activate
+(seaicecp) root@<container_id>:/workspace# 
 ```
 Note that the virtual environment's name `(seaicecp)` is now at the beginning of the command prompt.
 
@@ -1621,7 +1621,7 @@ See `uv` docs for [The project environment](https://docs.astral.sh/uv/concepts/p
 
 I use `xarray` as the main workhorse to handle datasets.
 ```console
-(seaicecp) root@f6df1af96ed1:/workspace# uv add xarray
+(seaicecp) root@<container_id>:/workspace# uv add xarray
 Resolved 48 packages in 343ms
 Prepared 1 package in 318ms
 Installed 1 package in 11ms
@@ -1629,7 +1629,7 @@ Installed 1 package in 11ms
 ```
 In order to load data from NetCDF files into an `xarray` dataset, I also need to add the `netcdf4` package.
 ```console
-(seaicecp) root@f6df1af96ed1:/workspace# uv add netcdf4
+(seaicecp) root@<container_id>:/workspace# uv add netcdf4
 Resolved 78 packages in 716ms
 Prepared 2 packages in 3.74s
 Installed 2 packages in 13ms
@@ -1639,7 +1639,7 @@ Installed 2 packages in 13ms
 I also specifically added `dask` so that I can take advantage of lazy loading with `xarray.open_dataset()`. 
 This allows me to filter a large dataset before actually loading the entire file into memory.
 ```console
-(seaicecp) root@ea50d4a8fafe:/workspace# uv add dask
+(seaicecp) root@<container_id>:/workspace# uv add dask
 Resolved 198 packages in 708ms
       Built seaicecp @ file:///workspace
 Prepared 1 package in 18ms
@@ -1661,7 +1661,7 @@ Installed 7 packages in 2.48s
 
 For plots, I added the `hvplot` package to be able to make `html` maps of irregular gridded data without interpolating onto a regular grid first.
 ```console
-(seaicecp) root@ffb09d078027:/workspace# uv add hvplot
+(seaicecp) root@<container_id>:/workspace# uv add hvplot
 Resolved 170 packages in 2.70s
       Built seaicecp @ file:///workspace
 Prepared 16 packages in 6.01s
@@ -1686,7 +1686,7 @@ Installed 16 packages in 18.01s
 ```
 Then, I added `cartopy` to have access to map projections through the submodule `cartopy.crs`.
 ```console
-(seaicecp) root@ffb09d078027:/workspace# uv add cartopy
+(seaicecp) root@<container_id>:/workspace# uv add cartopy
 Resolved 178 packages in 1.40s
       Built seaicecp @ file:///workspace
 Prepared 9 packages in 6.54s
@@ -1704,7 +1704,7 @@ Installed 9 packages in 5.07s
 ```
 I also added the `geoviews` package for handling physical features on maps.
 ```console
-(seaicecp) root@ffb09d078027:/workspace# uv add geoviews
+(seaicecp) root@<container_id>:/workspace# uv add geoviews
 Resolved 179 packages in 643ms
       Built seaicecp @ file:///workspace
 Prepared 2 packages in 503ms
@@ -1723,7 +1723,7 @@ In the GitHub issue [How to convert cftime.Datetime360Day() object to python dat
 
 Adding `nc-time-axis` indeed fixed the issue. 
 ```console
-(seaicecp) root@fb318a3146d8:/workspace# uv add nc-time-axis
+(seaicecp) root@<container_id>:/workspace# uv add nc-time-axis
 Resolved 200 packages in 697ms
       Built seaicecp @ file:///workspace
 Prepared 2 packages in 174ms
@@ -1746,7 +1746,7 @@ The `html` plots that are made with `hvplot` cannot be directly saved to a `png`
 As a workaround, I added the packages `chromium` and `chromium-driver` to the [`Containerfile`](#podman_containerfile) in order to open an `html` plot in a browser within the container, take a "screenshot", and save that as a `png` image.
 In order for that process to work, I added the `selenium` and `bokeh` packages.
 ```console
-(seaicecp) root@ffb09d078027:/workspace# uv add selenium
+(seaicecp) root@<container_id>:/workspace# uv add selenium
 Resolved 187 packages in 910ms
       Built seaicecp @ file:///workspace
 Prepared 9 packages in 1.64s
@@ -1761,7 +1761,7 @@ Installed 9 packages in 2.54s
  + trio==0.33.0
  + trio-websocket==0.12.2
  + wsproto==1.3.2
-(seaicecp) root@ffb09d078027:/workspace# uv add bokeh
+(seaicecp) root@<container_id>:/workspace# uv add bokeh
 Resolved 187 packages in 323ms
       Built seaicecp @ file:///workspace
 Prepared 1 package in 18ms
@@ -1771,7 +1771,7 @@ Installed 1 package in 45ms
 ```
 I also added the `pillow` package for additional `png` manipulation tools.
 ```console
-(seaicecp) root@ffb09d078027:/workspace# uv add pillow
+(seaicecp) root@<container_id>:/workspace# uv add pillow
 Resolved 187 packages in 331ms
       Built seaicecp @ file:///workspace
 Prepared 1 package in 20ms
@@ -1787,7 +1787,7 @@ Installed 1 package in 60ms
 
 In order to use Jupyter notebooks with the `.cvenv` virtual environment, I added `ipykernel` and `jupyter`.
 ```console
-(seaicecp) root@5eee334aadfd:/workspace# uv add ipykernel jupyter
+(seaicecp) root@<container_id>:/workspace# uv add ipykernel jupyter
 Resolved 134 packages in 1.15s
       Built seaicecp @ file:///workspace
 Prepared 51 packages in 3.38s
@@ -1854,7 +1854,7 @@ Installed 51 packages in 14.63s
 I added the Python package for `cdo` to be able to call it's functions from Python scripts. 
 Note that this requires that the `cdo` CLI is installed, which is done in the `Containerfile`.
 ```console
-(seaicecp) root@94822df4851d:/workspace# uv add cdo
+(seaicecp) root@<container_id>:/workspace# uv add cdo
 Resolved 199 packages in 2.61s
       Built seaicecp @ file:///workspace
 Prepared 2 packages in 177ms
@@ -1862,7 +1862,7 @@ Uninstalled 1 package in 17ms
 Installed 2 packages in 68ms
  + cdo==1.6.1
  ~ seaicecp==0.1.0 (from file:///workspace)
-(seaicecp) root@94822df4851d:/workspace# python
+(seaicecp) root@<container_id>:/workspace# python
 Python 3.13.5 (main, Jun 25 2025, 18:55:22) [GCC 14.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import cdo
@@ -1874,7 +1874,7 @@ On the [`esgpull` documentation Installation page](https://esgf.github.io/esgf-d
 However, I use `uv add` so that `esgpull` becomes a persistent dependency of the project.
 I specify the source with `git+https://github.com/ESGF/esgf-download` in order to get the latest release of the package to resolve an issue I was encountering.
 ```console
-root@7f8e8a9c32da:/workspace# uv add git+https://github.com/ESGF/esgf-download
+root@<container_id>:/workspace# uv add git+https://github.com/ESGF/esgf-download
 Resolved 198 packages in 1.07s
       Built seaicecp @ file:///workspace
     Updated https://github.com/ESGF/esgf-download (726ef1166114eadd085c24c6e1542ec0be052e03)
@@ -1933,7 +1933,7 @@ I detail how I managed that set up in the [Initializing `esgpull`](#esgpull_init
 In order to run tests, following [Py-Pkgs Section 3.7.2. Running tests](https://py-pkgs.org/03-how-to-package-a-python#running-tests) and [Py-Pkgs Section 3.7.3. Code coverage](https://py-pkgs.org/03-how-to-package-a-python#code-coverage), I installed `pytest` and `pytest-cov` as development dependencies by specifying the `--dev` group.
 This means that, if someone where to install `seaicecp` as a package for their own purposes, the packages in the `--dev` group would not be installed by default.
 ```console
-root@183f42d448cd:/workspace# uv add --dev pytest
+root@<container_id>:/workspace# uv add --dev pytest
 Resolved 190 packages in 2.15s
       Built seaicecp @ file:///workspace
 Prepared 4 packages in 210ms
@@ -1943,7 +1943,7 @@ Installed 4 packages in 499ms
  + pluggy==1.6.0
  + pytest==9.0.3
  ~ seaicecp==0.1.0 (from file:///workspace)
-root@183f42d448cd:/workspace# uv add --dev pytest-cov
+root@<container_id>:/workspace# uv add --dev pytest-cov
 Resolved 192 packages in 512ms
       Built seaicecp @ file:///workspace
 Prepared 3 packages in 181ms
@@ -1954,14 +1954,14 @@ Installed 3 packages in 337ms
  ~ seaicecp==0.1.0 (from file:///workspace)
 ```
 <!-- ```console
-root@183f42d448cd:/workspace# uv add --dev debugpy   
+root@<container_id>:/workspace# uv add --dev debugpy   
 Resolved 192 packages in 165ms
       Built seaicecp @ file:///workspace
 Prepared 1 package in 20ms
 Uninstalled 1 package in 14ms
 Installed 1 package in 69ms
  ~ seaicecp==0.1.0 (from file:///workspace)
-root@183f42d448cd:/workspace# 
+root@<container_id>:/workspace# 
 ``` -->
 
 <a id='venv_dependencies_docs'></a>
@@ -1971,7 +1971,7 @@ root@183f42d448cd:/workspace#
 
 Following [Py-Pkgs 3.8.4. Building documentation](https://py-pkgs.org/03-how-to-package-a-python#building-documentation), I added the packages necessary to build the documentation you are reading to the `--dev` group.
 ```console
-(seaicecp) root@f6df1af96ed1:/workspace# uv add --dev myst-nb sphinx-autoapi sphinx-rtd-theme
+(seaicecp) root@<container_id>:/workspace# uv add --dev myst-nb sphinx-autoapi sphinx-rtd-theme
 Resolved 112 packages in 1.08s
       Built seaicecp @ file:///workspace
 Prepared 31 packages in 3.20s
@@ -2034,21 +2034,21 @@ As shown in the [Build systems](https://docs.astral.sh/uv/concepts/projects/conf
 In the [Building your package](https://docs.astral.sh/uv/guides/package/#building-your-package) section, I used the 
 
 ```console
-user@local:seaicecp$ podman exec -it 89a2a5684ba1 /bin/sh
+user@local:seaicecp$ podman exec -it <container_id> /bin/sh
 # bash 
-root@89a2a5684ba1:/workspace# source .cvenv/bin/activate
-(seaicecp) root@89a2a5684ba1:/workspace# uv sync
+root@<container_id>:/workspace# source .cvenv/bin/activate
+(seaicecp) root@<container_id>:/workspace# uv sync
 Resolved 200 packages in 550ms
       Built seaicecp @ file:///workspace
 Prepared 1 package in 53ms
 Installed 1 package in 12ms
  + seaicecp==0.1.0 (from file:///workspace)
-(seaicecp) root@89a2a5684ba1:/workspace# uv lock
+(seaicecp) root@<container_id>:/workspace# uv lock
 Resolved 200 packages in 21ms
 ```
 
 ```console
-(seaicecp) root@89a2a5684ba1:/workspace# uv build
+(seaicecp) root@<container_id>:/workspace# uv build
 Building source distribution (uv build backend)...
 Building wheel from source distribution (uv build backend)...
 Successfully built dist/seaicecp-0.1.0.tar.gz
@@ -2058,13 +2058,13 @@ Successfully built dist/seaicecp-0.1.0-py3-none-any.whl
 
 
 ```console
-(seaicecp) root@89a2a5684ba1:/workspace# uv version
+(seaicecp) root@<container_id>:/workspace# uv version
 seaicecp 0.1.0
 ```
 
 I can now import the package in the Python interpreter.
 ```console
-(seaicecp) root@89a2a5684ba1:/workspace# python
+(seaicecp) root@<container_id>:/workspace# python
 Python 3.13.5 (main, Jun 25 2025, 18:55:22) [GCC 14.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import seaicecp
@@ -2111,8 +2111,8 @@ In the `esgpull_entrypoint.sh` script, (see [Setting up `esgpull` install](#podm
 
 The first time this is run, the output will indicate that a new install has been created.
 ```console
-(seaicecp) root@c11f20a93021:/workspace# cd /seaicecp_data/
-(seaicecp) root@c11f20a93021:/seaicecp_data# uv run esgpull self install bergybits
+(seaicecp) root@<container_id>:/workspace# cd /seaicecp_data/
+(seaicecp) root@<container_id>:/seaicecp_data# uv run esgpull self install bergybits
 ──────────────────────────────────── esgpull installation ────────────────────────────────────
 Creating install directory and files at /seaicecp_data/bergybits
 Install config added to /root/.config/esgpull/installs.json
@@ -2127,7 +2127,7 @@ Install config added to /root/.config/esgpull/installs.json
 
 If no name for the install is given, (i.e., running just `uv run esgpull self install`), then you will be taken through an interactive setup process shown below where you can specify the name and location of the install.
 ```console
-(seaicecp) root@c11f20a93021:/workspace# uv run esgpull self install
+(seaicecp) root@<container_id>:/workspace# uv run esgpull self install
 ──────────────────────────────────────────────────── esgpull installation ────────────────────────────────────────────────────
 Install location (/workspace/.esgpull): .esgpull
 Name (optional): new_install
@@ -2136,15 +2136,15 @@ Install config added to /root/.config/esgpull/installs.json
 ```
 I can view all the installs I have setup where the one marked with `*` is the one that is currently selected.
 ```console
-(seaicecp) root@c11f20a93021:/workspace# uv run esgpull self choose
+(seaicecp) root@<container_id>:/workspace# uv run esgpull self choose
 Install locations           
     /seaicecp_data/bergybits 
  *  /workspace/.esgpull     
 ```
 I can choose a different install by specifying the name at the end of that command.
 ```console
-(seaicecp) root@c11f20a93021:/workspace# uv run esgpull self choose /seaicecp_data/bergybits/
-(seaicecp) root@c11f20a93021:/workspace# uv run esgpull self choose
+(seaicecp) root@<container_id>:/workspace# uv run esgpull self choose /seaicecp_data/bergybits/
+(seaicecp) root@<container_id>:/workspace# uv run esgpull self choose
 Install locations           
  *  /seaicecp_data/bergybits 
     /workspace/.esgpull     
@@ -2152,20 +2152,20 @@ Install locations
 To delete an install, select it first, then use the `esgpull self delete` command.
 To remove the associated data, run the `rm` command suggested by the output.
 ```console
-(seaicecp) root@c11f20a93021:/workspace# uv run esgpull self choose /workspace/.esgpull/
-(seaicecp) root@c11f20a93021:/workspace# uv run esgpull self choose
+(seaicecp) root@<container_id>:/workspace# uv run esgpull self choose /workspace/.esgpull/
+(seaicecp) root@<container_id>:/workspace# uv run esgpull self choose
 Install locations                 
     /seaicecp_data/bergybits      
  *  /workspace/.esgpull
-(seaicecp) root@c11f20a93021:/workspace# uv run esgpull self delete
+(seaicecp) root@<container_id>:/workspace# uv run esgpull self delete
 You are going to delete: /workspace/.esgpull
 Please enter '.esgpull' to continue: .esgpull
 Deleting /workspace/.esgpull from config...
 To remove all files from this install, run:
 
 $ rm -rf /workspace/.esgpull
-(seaicecp) root@c11f20a93021:/workspace# rm -rf /workspace/.esgpull/
-(seaicecp) root@c11f20a93021:/workspace# 
+(seaicecp) root@<container_id>:/workspace# rm -rf /workspace/.esgpull/
+(seaicecp) root@<container_id>:/workspace# 
 ```
 
 <a id='esgpull_init_config'></a>
@@ -2175,7 +2175,7 @@ $ rm -rf /workspace/.esgpull
 
 The first time I tried to search with `esgpull`, I got the following error.
 ```console
-(seaicecp) root@c11f20a93021:/workspace# uv run esgpull search
+(seaicecp) root@<container_id>:/workspace# uv run esgpull search
 (
     'fetch',
     [
@@ -2195,7 +2195,7 @@ However, in an older version of `esgpull`, the error was more cryptic.
 <summary>Expand for an older version of the error message</summary>
 
 ```console
-(seaicecp) root@c11f20a93021:/workspace# uv run esgpull search
+(seaicecp) root@<container_id>:/workspace# uv run esgpull search
 [2026-04-14 18:33:45]  ERROR     root
 
   + Exception Group Traceback (most recent call last):
@@ -2214,7 +2214,7 @@ The line with `Server error '500 500' for url 'https://esgf-node.ipsl.upmc.fr/..
 
 I checked the configuration for this `esgpull` install.
 ```console
-(seaicecp) root@c11f20a93021:/workspace# uv run esgpull config
+(seaicecp) root@<container_id>:/workspace# uv run esgpull config
 ──────────────────────────── /seaicecp_data/bergybits/config.toml ────────────────────────────
 [paths]
 data = "/seaicecp_data/bergybits/data"
@@ -2261,7 +2261,7 @@ This confirms install I created has `index_node = "esgf-node.ipsl.upmc.fr"`.
 I can check the status of the available nodes.
 This information should also be available at the [ESGF Nodes Status Summary page](https://metagrid.esgf-west.org/nodes/), however that site is currently not working.
 ```console
-(seaicecp) root@c11f20a93021:/workspace# uv run esgpull index-nodes
+(seaicecp) root@<container_id>:/workspace# uv run esgpull index-nodes
                 node                │   status    
 ════════════════════════════════════╪═════════════
  esgf-node.ornl.gov/esgf-1-5-bridge │          OK 
@@ -2275,7 +2275,7 @@ And here's the problem.
 The French node is indeed not responding.
 I changed the index node to be the one recommended for the USA region.
 ```console
-(workspace) root@454194a5d693:/seaicecp_data# uv run esgpull config api.index_node esgf-node.ornl.gov/esgf-1-5-bridge
+(workspace) root@<container_id>:/seaicecp_data# uv run esgpull config api.index_node esgf-node.ornl.gov/esgf-1-5-bridge
 [api]
 index_node = "esgf-node.ornl.gov/esgf-1-5-bridge"
 
@@ -2284,7 +2284,7 @@ index_node = "esgf-node.ornl.gov/esgf-1-5-bridge"
 
 Then, I was able to perform a search:
 ```console
-(workspace) root@185e23f0ab22:/workspace# uv run esgpull search project:CMIP6 activity_id:HighResMIP
+(workspace) root@<container_id>:/workspace# uv run esgpull search project:CMIP6 activity_id:HighResMIP
 Found 66629 datasets.
  id │                                 dataset                                 │ #  │    size     │     data_node      
 ════╪═════════════════════════════════════════════════════════════════════════╪════╪═════════════╪════════════════════
@@ -2312,7 +2312,7 @@ Found 66629 datasets.
 
 I also set the `replica` option to `true`.
 ```console
-(workspace) root@185e23f0ab22:/workspace# uv run esgpull config api.default_options.replica true
+(workspace) root@<container_id>:/workspace# uv run esgpull config api.default_options.replica true
 [api.default_options]
 replica = "true"
 
@@ -2321,7 +2321,7 @@ Previous value: none
 I'm not certain this step is strictly necessary, but it works.
 Here is what the configuration for my `esgpull` install looks like.
 ```console
-(seaicecp) root@c11f20a93021:/workspace# uv run esgpull config
+(seaicecp) root@<container_id>:/workspace# uv run esgpull config
 ──────────────────────────── /seaicecp_data/bergybits/config.toml ────────────────────────────
 [paths]
 data = "/seaicecp_data/bergybits/data"
@@ -2379,8 +2379,8 @@ In the section, [Packages for documentation](#venv_dependencies_docs), I added t
 To build the documentation, activate the virtual environment, go into the `docs/` directory, and run the `make` command.
 This will produce a lot of output, so I have hidden most of it.
 ```console
-(seaicecp) root@c11f20a93021:/workspace# cd docs
-(seaicecp) root@c11f20a93021:/workspace/docs# make html
+(seaicecp) root@<container_id>:/workspace# cd docs
+(seaicecp) root@<container_id>:/workspace/docs# make html
 Running Sphinx v9.1.0
 loading translations [en]... done
 loading pickled environment... The configuration has changed (3 options: 'html_permalinks_icon', 'jquery_use_sri', 'mathjax3_config')
