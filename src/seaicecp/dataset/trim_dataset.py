@@ -10,6 +10,8 @@ cdo.cleanTempDir()
 import seaicecp.params as sps
 from seaicecp.verify import verify_path
 from seaicecp.params.var_params import meta_vars
+from seaicecp.dataset.grid_type import get_grid_type
+from seaicecp.dataset.latlon_type import get_latlon_names, get_lon_type
 
 def trim_latlon(
     xr_data: xr.Dataset,
@@ -67,11 +69,14 @@ def trim_latlon(
     box_lon_max = map_bbox[2]
     box_lon_min = map_bbox[3]
 
-    # Check whether the longitude values are negative
-    if box_lon_max < 0:
-        box_lon_max += 360
-    if box_lon_min < 0:
-        box_lon_min += 360
+    # Determine the longitude type of the dataset
+    lon_type = get_lon_type(xr_data)
+    if lon_type == 'PM_centered':
+        # Check whether the longitude values are negative
+        if box_lon_max < 0:
+            box_lon_max += 360
+        if box_lon_min < 0:
+            box_lon_min += 360
     
     # cdo expects bounding box coordinates as a string in the order: 
     ## lon_min, lon_max, lat_min, lat_max
@@ -97,6 +102,23 @@ def trim_latlon(
                 (xr_data_trimmed['longitude'] < box_lon_max),
             lambda val: np.nan
         )
+
+    # Get the latitude and longitude coordinate names
+    lat_var, lon_var = get_latlon_names(xr_data_trimmed)
+    # Get the grid type of the dataset
+    this_grid_type = get_grid_type(xr_data_trimmed)
+
+    if this_grid_type == 'irregular':
+        # Set the values of the data variables outside the bounding box to `nan`
+        for var in data_vars:
+            xr_data_trimmed[var] = xr_data_trimmed[var].where(
+                lambda val:
+                    (xr_data_trimmed[lat_var] < box_lat_max) &
+                    (xr_data_trimmed[lat_var] > box_lat_min) &
+                    (xr_data_trimmed[lon_var] > box_lon_min) &
+                    (xr_data_trimmed[lon_var] < box_lon_max),
+                lambda val: np.nan
+            )
 
     # Save the trimmed dataset, if applicable
     if not isinstance(save_as, type(None)):
