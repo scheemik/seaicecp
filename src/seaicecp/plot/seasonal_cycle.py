@@ -1,4 +1,5 @@
 import xarray as xr
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.cm as mplcm 
 import matplotlib.colors as mplclrs
@@ -9,13 +10,17 @@ import seaicecp.params as sps
 from seaicecp.verify import verify_path
 
 def plot_seasonal_cycle(
-    dataset: (str, xr.DataArray, xr.Dataset),
+    datasets: [(str, xr.DataArray, xr.Dataset)],
     variable_id: str = None,
     take_mean: bool = False,
+    fig: matplotlib.figure.Figure = None,
+    ax: matplotlib.axes.Axes = None,
     plt_title: str = None,
+    line_labels: [str] = None,
     xlims: [str, str] = None,
     ylims: [float, float] = None,
     c_map: [mplclrs.ListedColormap] = mplcm.viridis_r,
+    c_map_label: str = 'Year',
     save_as: str = None,
     test: bool = False,
     **kwargs,
@@ -26,16 +31,23 @@ def plot_seasonal_cycle(
 
         Parameters
         ----------
-        dataset : `str`, `xarray.DataArray`, `xarray.Dataset`
-            The dataset for which to make a plot.
+        datasets : list of `str`, `xarray.DataArray`, `xarray.Dataset`
+            A list of datasets for which to make a plot.
         variable_id : `str`
             The name of the variable ID to plot.
         take_mean : `bool`, optional
             Whether to take the mean for each month across all the years.
             Default is `False`.
+        ax : `matplotlib.axes.Axes`, optional
+            The axes on which to plot the data.
+            If `None`, a new figure is created.
+            Default is `None`.
         plt_title : `str`, `None`, optional
             The title to use for the plot.
             Default is `None`, which uses a default title for the plot.
+        line_labels : list of `str`, `None`, optional
+            The labels to use for the lines that are plotted if `take_mean = True`.
+            Default is `None`.
         xlims : List of `float`, optional
             The limits to use for the x-axis on the plot in the following format:
                 - [x_min, x_max]
@@ -50,6 +62,10 @@ def plot_seasonal_cycle(
         c_map : `matplotlib.colors.ListedColormap`, optional
             The color map to use for the different lines so their order is clearer.
             Default is `matplotlib.cm.viridis_r`, the reverse of `viridis`.
+        c_map_label : `str`, `None`, optional
+            The label to use on the colorbar.
+            If `None`, then the colorbar will have no label.
+            Default is `Year`.
         save_as : `str`, `None`, optional
             The name of the file to which to save the plot.
             Default is `None`, which doesn't save the plot to a file.
@@ -62,7 +78,8 @@ def plot_seasonal_cycle(
         Returns
         -------
         If `test` == `False`: 
-            `None`
+            fig
+            ax
         If `test` == `True` : 
             dataset : `xarray.DataArray`
         
@@ -74,24 +91,43 @@ def plot_seasonal_cycle(
         >>> plot_seasonal_cycle(dataset = fldmean_xr, variable_id = 'siconc')
     """
     # Verify input arguments
-    if not isinstance(dataset, (str, xr.Dataset, xr.DataArray)):
-        raise TypeError(f"(plot_seasonal_cycle) `dataset` must be a string, `xr.Dataset`, or `xr.DataArray`. Got type: {type(dataset)}")
-    if isinstance(dataset, str):
-        # Verify this is a valid path
-        dataset = verify_path(dataset)
-        if not dataset.endswith('.nc'):
-            raise TypeError(f"(plot_seasonal_cycle) `dataset` must be a `.nc` filepath. Got: {dataset}")
+    if not isinstance(datasets, type([])):
+        if isinstance(datasets, (str, xr.Dataset, xr.DataArray)):
+            datasets = [datasets]
+    for dataset in datasets:
+        if not isinstance(dataset, (str, xr.Dataset, xr.DataArray)):
+            raise TypeError(f"(plot_seasonal_cycle) `dataset` must be a string, `xr.Dataset`, or `xr.DataArray`. Got type: {type(dataset)}")
+        if isinstance(dataset, str):
+            # Verify this is a valid path
+            dataset = verify_path(dataset)
+            if not dataset.endswith('.nc'):
+                raise TypeError(f"(plot_seasonal_cycle) `dataset` must be a `.nc` filepath. Got: {dataset}")
     if not isinstance(variable_id, (str, type(None))):
         raise TypeError(f"(plot_seasonal_cycle) `variable_id` must be a string or `None`. Got type: {type(variable_id)}")
     if isinstance(variable_id, type(None)):
-        if isinstance(dataset, xr.Dataset):
-            raise ValueError(f"(plot_seasonal_cycle) `variable_id` must be a string if `dataset` is `xr.Dataset`. Got type: {type(variable_id)}")
-        else:
-            variable_id = dataset.name
+        for dataset in datasets:
+            if isinstance(dataset, xr.Dataset):
+                raise ValueError(f"(plot_seasonal_cycle) `variable_id` must be a string if `dataset` is `xr.Dataset`. Got type: {type(variable_id)}")
+            else:
+                variable_id = dataset.name
+    if not isinstance(take_mean, bool):
+        raise TypeError(f"(plot_seasonal_cycle) `take_mean` must be a `bool`. Got type: {type(take_mean)}")
+    if not isinstance(ax, (matplotlib.axes.Axes, type(None))):
+        raise TypeError(f"(plot_seasonal_cycle) `ax` must be a matplotlib Axes object or `None`. Got type: {type(ax)}")
     if isinstance(plt_title, type(None)):
         plt_title = f"Seasonal cycle of '{variable_id}'"
     elif not isinstance(plt_title, str):
         raise TypeError(f"(plot_seasonal_cycle) `plt_title` must be a string or `None`. Got type: {type(plt_title)}")
+    if isinstance(line_labels, type([])):
+        if not len(line_labels) == len(datasets):
+            raise ValueError(f"(plot_seasonal_cycle) `line_labels` is a different length ({len(line_labels)}) than `datasets` ({len(datasets)}).")
+        for line_label in line_labels:
+            if not isinstance(line_label, str):
+                raise TypeError(f"(plot_seasonal_cycle) `line_labels` must be a list of strings or `None`. Got type: {type(line_label)}")
+    elif isinstance(line_labels, str):
+        line_labels = [line_labels]*len(datasets)
+    elif not isinstance(line_labels, type(None)):
+        raise TypeError(f"(plot_seasonal_cycle) `line_labels` must be a list of strings or `None`. Got type: {type(line_labels)}")
     if isinstance(xlims, type([])):
         if not len(xlims) == 2:
             raise ValueError(f"(plot_seasonal_cycle) `xlims` must have a length of 2. Got length: {len(xlims)}")
@@ -127,6 +163,12 @@ def plot_seasonal_cycle(
     # Information to output
     print(f"(plot_seasonal_cycle) `save_as`: {save_as}")
 
+    # Check whether to make a new figure or not
+    if isinstance(ax, type(None)):
+        # Create the figure
+        fig = plt.figure()
+        ax = fig.subplots(nrows=1, ncols=1)
+
     # Get limits for the y-axis
     if isinstance(ylims, type(None)):
         # Check whether the given variable is in the sea ice variable dictionary
@@ -135,65 +177,78 @@ def plot_seasonal_cycle(
             if 'plot_range' in sps.sea_ice_vars[variable_id].keys():
                 ylims = sps.sea_ice_vars[variable_id]['plot_range']
 
-    # Get the data array to plot
-    if isinstance(dataset, xr.Dataset):
-        dataset = dataset[variable_id]
+    # Loop across the datasets
+    for dataset in datasets:
+        # Get the data array to plot
+        if isinstance(dataset, str):
+            dataset = xr.open_dataset(dataset)
+        if isinstance(dataset, xr.Dataset):
+            dataset = dataset[variable_id]
     
-    # Assemble the axis label
-    var_long_name = dataset.attrs['long_name']
-    var_units = dataset.attrs['units']
-    var_axis_label = f"{var_long_name} ({var_units})"
-    
-    # Convert the data array into a data frame
-    ## Using `.isel` to select the first index of the `lat` and `lon` coordinates
-    ## so that these are dropped. It is assumed that the dataset coming in to this function
-    ## is a field mean, so there should only be one `lat` and one `lon` value
-    data_frame = dataset.isel(lat=0, lon=0).reset_coords(drop=True).to_dataframe()
-    # Separate 'Year' and 'Month' from the time index
-    data_frame['Month'] = data_frame.index.month
-    data_frame['Year'] = data_frame.index.year 
-    # Group the data by month of year and re-order the data frame into a shape that is easily plotted
-    ## Using `.mean()` turns the DataFrameGroupBy object into a pandas.DataFrame 
-    ## Using `.unstack()` re-orders the DataFrame into a table with rows for each year and columns for each month
-    ## Using `.T` transposes the table to have rows for each month and columns for each year
-    ## Using `.droplevel(0)` drops the unnecessary variable level and allows for the x-axis to be solely the month number
-    data_frame = data_frame.groupby(['Year', 'Month']).mean().unstack().T.droplevel(0)
-    # Take the mean for each month across the years, if applicable
-    if take_mean == True:
-        data_frame = data_frame.mean(axis=1)
-        plt_title = f"Mean {plt_title}"
+        # Assemble the axis label
+        var_long_name = dataset.attrs['long_name']
+        var_units = dataset.attrs['units']
+        var_axis_label = f"{var_long_name} ({var_units})"
+        
+        # Convert the data array into a data frame
+        ## Using `.isel` to select the first index of the `lat` and `lon` coordinates
+        ## so that these are dropped. It is assumed that the dataset coming in to this function
+        ## is a field mean, so there should only be one `lat` and one `lon` value
+        data_frame = dataset.isel(lat=0, lon=0).reset_coords(drop=True).to_dataframe()
+        # Separate 'Year' and 'Month' from the time index
+        data_frame['Month'] = data_frame.index.month
+        data_frame['Year'] = data_frame.index.year 
+        # Group the data by month of year and re-order the data frame into a shape that is easily plotted
+        ## Using `.mean()` turns the DataFrameGroupBy object into a pandas.DataFrame 
+        ## Using `.unstack()` re-orders the DataFrame into a table with rows for each year and columns for each month
+        ## Using `.T` transposes the table to have rows for each month and columns for each year
+        ## Using `.droplevel(0)` drops the unnecessary variable level and allows for the x-axis to be solely the month number
+        data_frame = data_frame.groupby(['Year', 'Month']).mean().unstack().T.droplevel(0)
+        # Take the mean for each month across the years, if applicable
+        if take_mean == True:
+            # Taking the mean results in a data series
+            data_frame = data_frame.mean(axis=1)
+            # Add the specified label as the name of the resulting data series
+            data_frame.name = line_label
+            # Modify the plot title
+            plt_title = f"Mean {plt_title}"
 
-    # Get the values of the years in the data frame to set the line colors
-    try:
-        year_values = np.array(data_frame.columns)
-    except:
-        year_values = [np.nan]
-    if len(year_values) > 2:
-        # Create the normalizer based on the maximum and minimum year values
-        norm = mplclrs.Normalize(vmin=year_values.min(), vmax=year_values.max())
-        # Create the colormapper for the lines
-        cmapper = mplcm.ScalarMappable(norm=norm, cmap=c_map)
-        cmapper_to_plot = cmapper.to_rgba(year_values)
-    else: 
-        cmapper_to_plot = None
+        # Get the values of the years in the data frame to set the line colors
+        try:
+            year_values = np.array(data_frame.columns)
+        except:
+            year_values = [np.nan]
+        if len(year_values) > 2:
+            # Create the normalizer based on the maximum and minimum year values
+            norm = mplclrs.Normalize(vmin=year_values.min(), vmax=year_values.max())
+            # Create the colormapper for the lines
+            cmapper = mplcm.ScalarMappable(norm=norm, cmap=c_map)
+            cmapper_to_plot = cmapper.to_rgba(year_values)
+        else: 
+            cmapper_to_plot = None
 
-    # If testing, exit before making the plot
-    if test == True:
-        return data_frame
+        # If testing, exit before making the plot
+        if test == True:
+            return data_frame
 
-    # Plot the seasonal cycle
-    this_ax = data_frame.plot(
-        color=cmapper_to_plot,
-        xlim = xlims,
-        ylim = ylims,
-        ylabel = var_axis_label,
-        **kwargs,
-    )
-    # Modify the plot
-    plt.title(plt_title)
+        # Plot the seasonal cycle
+        this_ax = data_frame.plot(
+            color=cmapper_to_plot,
+            ax = ax,
+            xlim = xlims,
+            ylim = ylims,
+            ylabel = var_axis_label,
+            title = plt_title,
+            legend = True,
+            **kwargs,
+        )
     # If there are more than 10 lines, remove the legend and replace with a colorbar
     if len(year_values) > 10:
         this_ax.get_legend().remove()
-        plt.colorbar(cmapper, ax=this_ax)
+        plt.colorbar(
+            cmapper, 
+            ax = this_ax,
+            label = c_map_label,
+        )
 
-    return None
+    return fig, ax
