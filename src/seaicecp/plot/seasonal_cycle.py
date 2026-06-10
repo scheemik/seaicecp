@@ -139,11 +139,16 @@ def plot_seasonal_cycle(
     if isinstance(dataset, xr.Dataset):
         dataset = dataset[variable_id]
     
+    # Assemble the axis label
+    var_long_name = dataset.attrs['long_name']
+    var_units = dataset.attrs['units']
+    var_axis_label = f"{var_long_name} ({var_units})"
+    
     # Convert the data array into a data frame
     ## Using `.isel` to select the first index of the `lat` and `lon` coordinates
     ## so that these are dropped. It is assumed that the dataset coming in to this function
     ## is a field mean, so there should only be one `lat` and one `lon` value
-    data_frame = data_frame = dataset.isel(lat=0, lon=0).reset_coords(drop=True).to_dataframe()
+    data_frame = dataset.isel(lat=0, lon=0).reset_coords(drop=True).to_dataframe()
     # Separate 'Year' and 'Month' from the time index
     data_frame['Month'] = data_frame.index.month
     data_frame['Year'] = data_frame.index.year 
@@ -181,6 +186,7 @@ def plot_seasonal_cycle(
         color=cmapper_to_plot,
         xlim = xlims,
         ylim = ylims,
+        ylabel = var_axis_label,
         **kwargs,
     )
     # Modify the plot
