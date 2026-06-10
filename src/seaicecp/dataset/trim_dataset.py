@@ -107,17 +107,20 @@ def trim_latlon(
         print(f"(trim_latlon) `lat_var`: {lat_var}")
         print(f"(trim_latlon) `lon_var`: {lon_var}")
 
+    # Get the grid type of the dataset
+    this_grid_type = get_grid_type(xr_data_trimmed)
+
     # Get the minimum and maximum values
     if verbose:
-        print(f"(trim_latlon) After `cdo` trim, before precise trim.")
+        if this_grid_type == 'irregular':
+            print(f"(trim_latlon) After `cdo` trim, before precise trim.")
+        elif this_grid_type == 'regular':
+            print(f"(trim_latlon) After `cdo` trim.")
         for data_var in data_vars:
             this_data_array = xr_data_trimmed[data_var].values.flatten()
             this_min = np.nanmin(this_data_array)
             this_max = np.nanmax(this_data_array)
             print(f"(trim_latlon)     For variable {data_var}, `nanmin`:{this_min}, `nanmax`:{this_max}")
-
-    # Get the grid type of the dataset
-    this_grid_type = get_grid_type(xr_data_trimmed)
 
     if this_grid_type == 'irregular':
         if verbose:
