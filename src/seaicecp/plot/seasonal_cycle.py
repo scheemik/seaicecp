@@ -16,6 +16,7 @@ def plot_seasonal_cycle(
     ax: matplotlib.axes.Axes = None,
     plt_title: str = None,
     line_labels: [str] = None,
+    line_styles: [str] = '-',
     xlims: [str, str] = None,
     ylims: [float, float] = None,
     c_map: [mplclrs.ListedColormap] = mplcm.viridis_r,
@@ -47,6 +48,9 @@ def plot_seasonal_cycle(
         line_labels : list of `str`, `None`, optional
             The labels to use for the lines that are plotted if `take_mean = True`.
             Default is `None`.
+        line_styles : list of `str`, `None`, optional
+            The line styles to use for the lines that are plotted if `take_mean = True`.
+            Default is `'-'`.
         xlims : List of `float`, optional
             The limits to use for the x-axis on the plot in the following format:
                 - [x_min, x_max]
@@ -177,7 +181,16 @@ def plot_seasonal_cycle(
                 ylims = sps.sea_ice_vars[variable_id]['plot_range']
 
     # Loop across the datasets
-    for dataset in datasets:
+    for i in range(len(datasets)):
+        dataset = datasets[i]
+        if isinstance(line_labels, type([])):
+            line_label = line_labels[i]
+        else:
+            line_label = line_labels
+        if isinstance(line_styles, type([])):
+            line_style = line_styles[i]
+        else:
+            line_style = line_styles
         # Get the data array to plot
         if isinstance(dataset, str):
             dataset = xr.open_dataset(dataset)
@@ -239,6 +252,7 @@ def plot_seasonal_cycle(
             ylim = ylims,
             ylabel = var_axis_label,
             title = plt_title,
+            linestyle = line_style,
             legend = True,
             **kwargs,
         )
