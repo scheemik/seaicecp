@@ -1,11 +1,14 @@
-import xarray as xr
+from datetime import datetime
 import matplotlib
-import matplotlib.pyplot as plt
 import matplotlib.cm as mplcm 
 import matplotlib.colors as mplclrs
+from matplotlib.figure import figaspect
+import matplotlib.pyplot as plt
 import numpy as np
-from datetime import datetime
+import xarray as xr
 
+from seaicecp.dataset.field_mean import get_field_mean 
+from seaicecp.path.file_lists import list_variable_files, select_files_by_time
 import seaicecp.params as sps
 from seaicecp.verify import verify_path
 
@@ -266,3 +269,180 @@ def plot_seasonal_cycle(
         )
 
     return ax
+
+def multi_seasonal_cycle(
+    source_id: str = 'EC-Earth3P-HR',
+    variable_ids: [str] = ['siconc', 'sithick'],
+    experiment_ids: [str] = ['hist-1950'],
+    time_bounds_lists: dict = {
+        'hist-1950': [
+            [1950, 1959], 
+            [2005, 2014],
+        ],
+        'highres-future': [
+            [2015, 2024], 
+            [2041, 2050]
+        ],
+    },
+    variant_labels = [
+        'r1i1p2f1', 
+        'r2i1p2f1', 
+        'r3i1p2f1',
+    ],
+    super_title: str = None,
+    fig_scale: (int, float) = 2,
+    save_as: str = None,
+    test: bool = False,
+    **kwargs,
+):
+    """ Plot multiple seasonal cycles of different datasets.
+
+        Plots a seasonal cycle for each combination of parameters.
+        Different experiments get their own axes, as well as different variables.
+        Multiple time bounds and variant labels are plotted on the same axes.
+
+        Parameters
+        ----------
+        source_id : `str`
+            The name of the `source_id` to specify the model to plot.
+        variable_ids : list of `str`
+            The variable ID(s) to plot.
+        experiment_ids : list of `str`, optional
+            The experiment(s) to plot. 
+            Default is `['hist-1950']`.
+        time_bounds_lists : `dict`, optional
+            A dictionary of the time bounds within which to plot.
+            Each key in the dictionary is the name of an experiment and each value is a list of pairs of years.
+            These time bounds will be passed to `select_files_by_time()`.
+            Default is shown above.
+        variant_labels : list of `str`, optional
+            The variant label(s) to plot for each subplot.
+            Default is shown above.
+        super_title : `str`, `None`, optional
+            The title for the overall figure.
+            Default is `None`.
+        fig_scale : `int`, `float`, optional
+            The scale factor by which to resize the figure.
+            Default is `2`. 
+        save_as : `str`, `None`, optional
+            The name of the file to which to save the plot.
+            Default is `None`, which doesn't save the plot to a file.
+        test : `bool`, optional
+            If `True`, the function exists before making a plot for use in testing.
+            Default is `False`.
+        **kwargs
+            Keyword arguments to pass to `xr.DataArray.plot()`.
+
+        Returns
+        -------
+        `None`
+        
+        Examples
+        --------
+        >>> from seaicecp.plot.seasonal_cycle import multi_seasonal_cycle 
+        >>> multi_seasonal_cycle(
+                source_id = 'EC-Earth3P-HR',
+                variable_ids = ['siconc'],
+                super_title = 'Seasonal Cycles',
+            )
+    """
+    # Verify input arguments
+    if not isinstance(source_id, str):
+        raise TypeError(f"(multi_seasonal_cycle) `source_id` must be a string. Got type: {type(source_id)}")
+    if not isinstance(variable_ids, type([])):
+        if isinstance(variable_ids, str):
+            variable_ids = [variable_ids]
+    for variable_id in variable_ids:
+        if not isinstance(variable_id, str):
+            raise TypeError(f"(multi_seasonal_cycle) `variable_id` must be a string. Got type: {type(variable_id)}")
+    if not isinstance(time_bounds_lists, type({})):
+        raise TypeError(f"(multi_seasonal_cycle) `time_bounds_lists` must be a dictionary. Got type: {type(time_bounds_lists)}")
+    if not isinstance(experiment_ids, type([])):
+        if isinstance(experiment_ids, str):
+            experiment_ids = [experiment_ids]
+    for experiment_id in experiment_ids:
+        if not isinstance(experiment_id, str):
+            raise TypeError(f"(multi_seasonal_cycle) `experiment_id` must be a string. Got type: {type(experiment_id)}")
+        if not experiment_id in time_bounds_lists.keys():
+            raise ValueError(f"(multi_seasonal_cycle) `experiment_id` must be in the `time_bound_lists.keys()`. Got: {experiment_id}\n\tAvailable keys: {time_bounds_lists.keys()}")
+    for time_bounds in time_bounds_lists.values():
+        for these_time_bounds in time_bounds:
+            if not len(these_time_bounds) == 2:
+                raise ValueError(f"(multi_seasonal_cycle) `time_bounds_lists` must contain lists of length 2. Got: {these_time_bounds}")
+    if not isinstance(variant_labels, type([])):
+        if isinstance(variant_labels, str):
+            variant_labels = [variant_labels]
+    for variant_label in variant_labels:
+        if not isinstance(variant_label, str):
+            raise TypeError(f"(multi_seasonal_cycle) `variant_label` must be a string. Got type: {type(variant_label)}")
+    if not isinstance(super_title, str):
+        raise TypeError(f"(multi_seasonal_cycle) `super_title` must be a string. Got type: {type(super_title)}")
+    if not isinstance(save_as, (str, type(None))):
+        raise TypeError(f"(plot_seasonal_cycle) `save_as` must be a string or `None`. Got type: {type(save_as)}")
+    elif isinstance(save_as, str) and not '.png' in save_as:
+        raise TypeError(f"(plot_seasonal_cycle) `save_as` must be a `.png` filepath. Got: {save_as}")
+    if not isinstance(test, (type(True))):
+        raise TypeError(f"(plot_seasonal_cycle) `test` must be a `bool`. Got type: {type(test)}")
+    
+    # Set up the figure
+    n_rows = len(variable_ids)
+    n_cols = len(experiment_ids)
+    w, h = figaspect(n_rows/n_cols)
+    fig_scale = 2
+    this_fig = plt.figure(figsize=(w*fig_scale,h*fig_scale))
+    # Use `squeeze=False` to ensure `this_ax` always has 2 dimensions
+    this_ax = this_fig.subplots(nrows=n_rows, ncols=n_cols, squeeze=False)
+
+    # Set up the line labels and styles
+    time_bounds_len = len(time_bounds_lists[experiment_ids[0]][0])
+    these_line_labels = variant_labels*time_bounds_len
+    if time_bounds_len == 1:
+        these_line_styles = ['-']*len(variant_labels)
+    elif time_bounds_len == 2:
+        these_line_styles = ['--']*len(variant_labels) + ['-']*len(variant_labels)
+    else:
+        raise TypeError(f"(plot_seasonal_cycle) Support for `time_bounds_lists` entries with lists longer than 2 has not yet been implemented. Got: {time_bounds_lists}")
+
+    # Loop across rows for the different variables
+    for j in range(len(variable_ids)):
+        # Select the variable from the list
+        this_variable = variable_ids[j]
+        # Loop across columns for the experiments
+        for i in range(len(experiment_ids)):
+            this_experiment = experiment_ids[i]
+            list_of_time_bounds = time_bounds_lists[this_experiment]
+            these_datasets = []
+            for these_time_bounds in list_of_time_bounds:
+                for this_variant_label in variant_labels:
+                    these_files = list_variable_files(
+                        source_id = source_id,
+                        variable_id = this_variable,
+                        experiment_id = this_experiment,
+                        variant_label = this_variant_label,
+                        with_modification = 'trim_NWP_',
+                    )
+
+                    just_these_files = select_files_by_time(
+                        data_filepaths = these_files,
+                        start = min(these_time_bounds),
+                        end = max(these_time_bounds),
+                    )
+                    print(just_these_files)
+
+                    fldmean_xr = get_field_mean(
+                        dataset = just_these_files,
+                        save_as = None
+                    )
+
+                    these_datasets.append(fldmean_xr)
+
+            this_ax[j,i] = plot_seasonal_cycle(
+                datasets = these_datasets, 
+                variable_id = this_variable,
+                take_mean = True,
+                ax = this_ax[j,i],
+                plt_title = f"{source_id} ({this_experiment}) NWP Region",
+                line_labels = these_line_labels,
+                line_styles = these_line_styles,
+            )
+    plt.suptitle(super_title)
