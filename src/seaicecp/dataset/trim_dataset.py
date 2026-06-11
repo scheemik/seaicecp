@@ -16,6 +16,7 @@ from seaicecp.dataset.latlon_type import get_latlon_names, get_lon_type
 def trim_latlon(
     xr_data: xr.Dataset,
     map_bbox: [float, float, float, float] = sps.NWP_BBOX,
+    precise_trim: bool = True,
     save_as: str = None,
     verbose: bool = False,
 ):
@@ -32,6 +33,9 @@ def trim_latlon(
                 - [LAT_MAX, LAT_MIN, LON_MAX, LON_MIN]
                 
             Default is `seaicecp.params.latlon_params.NWP_BBOX`.
+        precise_trim : `bool`, optional
+            Whether to precisely trim an irregular grid to the bounding box, making all values outside the bounding box null.
+            Default is `True`.
         save_as : `str`, `None`, optional
             The file name to pass to `seaicecp.plot.save_hvplots.save_hvplot()`.
             Default is `None`, which doesn't save the plot to a file.
@@ -59,10 +63,14 @@ def trim_latlon(
         for i in range(len(map_bbox)):
             if not isinstance(map_bbox[i], (int, float)):
                 raise TypeError(f"(trim_latlon) `map_bbox[{i}]` must be a number. Got type: {type(map_bbox[i])}")
+    if not isinstance(precise_trim, bool):
+        raise TypeError(f"(trim_latlon) `precise_trim` must be a `bool`. Got type: {type(precise_trim)}")
     if not isinstance(save_as, (str, type(None))):
         raise TypeError(f"(trim_latlon) `save_as` must be a string or `None`. Got type: {type(save_as)}")
     elif isinstance(save_as, str) and not '.nc' in save_as:
         raise TypeError(f"(trim_latlon) `save_as` must be a `.nc` filepath. Got: {save_as}")
+    if not isinstance(verbose, bool):
+        raise TypeError(f"(trim_latlon) `verbose` must be a `bool`. Got type: {type(verbose)}")
     
     # Information to output
     if verbose:
@@ -112,7 +120,7 @@ def trim_latlon(
 
     # Get the minimum and maximum values
     if verbose:
-        if this_grid_type == 'irregular':
+        if this_grid_type == 'irregular' and precise_trim == True:
             print(f"(trim_latlon) After `cdo` trim, before precise trim.")
         elif this_grid_type == 'regular':
             print(f"(trim_latlon) After `cdo` trim.")
@@ -122,7 +130,7 @@ def trim_latlon(
             this_max = np.nanmax(this_data_array)
             print(f"(trim_latlon)     For variable {data_var}, `nanmin`:{this_min}, `nanmax`:{this_max}")
 
-    if this_grid_type == 'irregular':
+    if this_grid_type == 'irregular' and precise_trim == True:
         if verbose:
             print(f"(trim_latlon) Trimming grid type: {this_grid_type}")
         # Set the values of the data variables outside the bounding box to `nan`
@@ -232,6 +240,7 @@ def trim_files(
         trim_latlon(
             xr_data = this_xr,
             save_as = new_filepath,
+            **kwargs,
         )
 
     return None
