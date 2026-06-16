@@ -4,6 +4,7 @@ import cartopy.crs as crs
 
 from seaicecp.plot.save_hvplots import save_hvplot
 from seaicecp.plot.limit_extent import get_limited_extent
+from seaicecp.dataset.latlon_type import get_latlon_names
 import seaicecp.params as sps
 
 def quadmesh_map(
@@ -12,6 +13,7 @@ def quadmesh_map(
     save_as: str = None,
     map_projection: str = 'NorthPolarStereo',
     map_bbox: [float, float, float, float] = sps.NWP_BBOX,
+    verbose: bool = False,
     **kwargs,
 ):
     """ Create an `hvplot` quadmesh map.
@@ -36,6 +38,9 @@ def quadmesh_map(
                 - [LAT_MAX, LAT_MIN, LON_MAX, LON_MIN]
                 
             Default is `seaicecp.params.latlon_params.NWP_BBOX`.
+        verbose : `bool`, optional
+            Whether to verbosely output information as the function executes.
+            Default is `False`.
         **kwargs
             Keyword arguments to pass to `hvplot.quadmesh()` and `seaicecp.plot.limit_extent.get_limited_extent()`
 
@@ -74,7 +79,8 @@ def quadmesh_map(
                 raise TypeError(f"(quadmesh_map) `map_bbox[{i}]` must be a number. Got type: {type(map_bbox[i])}")
     
     # Information to output
-    print(f"(quadmesh_map) `save_as`: {save_as}")
+    if verbose:
+        print(f"(quadmesh_map) `save_as`: {save_as}")
 
     map_extent = None
     if map_projection == 'Orthographic':
@@ -93,11 +99,17 @@ def quadmesh_map(
         map_projection = crs.NorthPolarStereo(central_longitude = box_lon_cent)
         # Get the extent to which to limit the map plot
         map_extent = get_limited_extent(map_projection)
+    
+    # Get the latitude and longitude coordinate names
+    lat_var, lon_var = get_latlon_names(xr_data)
+    if verbose:
+        print(f"(quadmesh_map) `lat_var`: {lat_var}")
+        print(f"(quadmesh_map) `lon_var`: {lon_var}")
 
     # Make the plot
     qm_map_plot = xr_data[var].hvplot.quadmesh(
-        'longitude', 
-        'latitude', 
+        lon_var, 
+        lat_var, 
         projection=map_projection, 
         project=True,
         global_extent=False, 

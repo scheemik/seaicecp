@@ -10,11 +10,15 @@ cdo.cleanTempDir()
 import seaicecp.params as sps
 from seaicecp.verify import verify_path
 from seaicecp.params.var_params import meta_vars
+from seaicecp.dataset.grid_type import get_grid_type
+from seaicecp.dataset.latlon_type import get_latlon_names, get_lon_type
 
 def trim_latlon(
     xr_data: xr.Dataset,
     map_bbox: [float, float, float, float] = sps.NWP_BBOX,
+    precise_trim: bool = True,
     save_as: str = None,
+    verbose: bool = False,
 ):
     """ Trim the given dataset.
 
@@ -29,9 +33,15 @@ def trim_latlon(
                 - [LAT_MAX, LAT_MIN, LON_MAX, LON_MIN]
                 
             Default is `seaicecp.params.latlon_params.NWP_BBOX`.
+        precise_trim : `bool`, optional
+            Whether to precisely trim an irregular grid to the bounding box, making all values outside the bounding box null.
+            Default is `True`.
         save_as : `str`, `None`, optional
             The file name to pass to `seaicecp.plot.save_hvplots.save_hvplot()`.
             Default is `None`, which doesn't save the plot to a file.
+        verbose : `bool`, optional
+            Whether to verbosely output information as the function executes.
+            Default is `False`.
 
         Returns
         -------
@@ -53,13 +63,18 @@ def trim_latlon(
         for i in range(len(map_bbox)):
             if not isinstance(map_bbox[i], (int, float)):
                 raise TypeError(f"(trim_latlon) `map_bbox[{i}]` must be a number. Got type: {type(map_bbox[i])}")
+    if not isinstance(precise_trim, bool):
+        raise TypeError(f"(trim_latlon) `precise_trim` must be a `bool`. Got type: {type(precise_trim)}")
     if not isinstance(save_as, (str, type(None))):
         raise TypeError(f"(trim_latlon) `save_as` must be a string or `None`. Got type: {type(save_as)}")
     elif isinstance(save_as, str) and not '.nc' in save_as:
         raise TypeError(f"(trim_latlon) `save_as` must be a `.nc` filepath. Got: {save_as}")
+    if not isinstance(verbose, bool):
+        raise TypeError(f"(trim_latlon) `verbose` must be a `bool`. Got type: {type(verbose)}")
     
     # Information to output
-    print(f"(trim_latlon) `save_as`: {save_as}")
+    if verbose:
+        print(f"(trim_latlon) `save_as`: {save_as}")
 
     # Unpack the bounding box values
     box_lat_max = map_bbox[0]
@@ -67,11 +82,14 @@ def trim_latlon(
     box_lon_max = map_bbox[2]
     box_lon_min = map_bbox[3]
 
-    # Check whether the longitude values are negative
-    if box_lon_max < 0:
-        box_lon_max += 360
-    if box_lon_min < 0:
-        box_lon_min += 360
+    # Determine the longitude type of the dataset
+    lon_type = get_lon_type(xr_data)
+    if lon_type == 'PM_centered':
+        # Check whether the longitude values are negative
+        if box_lon_max < 0:
+            box_lon_max += 360
+        if box_lon_min < 0:
+            box_lon_min += 360
     
     # cdo expects bounding box coordinates as a string in the order: 
     ## lon_min, lon_max, lat_min, lat_max
@@ -82,21 +100,57 @@ def trim_latlon(
     
     # Get the list of data variables
     data_vars = list(xr_data_trimmed.data_vars.keys())
-    # print('data_vars:', data_vars)
+    if verbose:
+        print(f"(trim_latlon) `data_vars` all: {data_vars}")
+    # Remove the unnecessary meta variables to avoid errors when trimming
     for meta_var in meta_vars:
         if meta_var in data_vars:
             data_vars.remove(meta_var)
+    if verbose:
+        print(f"(trim_latlon) `data_vars` cleaned: {data_vars}")
 
-    # Set the values of the data variables outside the bounding box to `nan`
-    for var in data_vars:
-        xr_data_trimmed[var] = xr_data_trimmed[var].where(
-            lambda val:
-                (xr_data_trimmed['latitude'] < box_lat_max) &
-                (xr_data_trimmed['latitude'] > box_lat_min) &
-                (xr_data_trimmed['longitude'] > box_lon_min) &
-                (xr_data_trimmed['longitude'] < box_lon_max),
-            lambda val: np.nan
-        )
+    # Get the latitude and longitude coordinate names
+    lat_var, lon_var = get_latlon_names(xr_data_trimmed)
+    if verbose:
+        print(f"(trim_latlon) `lat_var`: {lat_var}")
+        print(f"(trim_latlon) `lon_var`: {lon_var}")
+
+    # Get the grid type of the dataset
+    this_grid_type = get_grid_type(xr_data_trimmed)
+
+    # Get the minimum and maximum values
+    if verbose:
+        if this_grid_type == 'irregular' and precise_trim == True:
+            print(f"(trim_latlon) After `cdo` trim, before precise trim.")
+        elif this_grid_type == 'regular':
+            print(f"(trim_latlon) After `cdo` trim.")
+        for data_var in data_vars:
+            this_data_array = xr_data_trimmed[data_var].values.flatten()
+            this_min = np.nanmin(this_data_array)
+            this_max = np.nanmax(this_data_array)
+            print(f"(trim_latlon)     For variable {data_var}, `nanmin`:{this_min}, `nanmax`:{this_max}")
+
+    if this_grid_type == 'irregular' and precise_trim == True:
+        if verbose:
+            print(f"(trim_latlon) Trimming grid type: {this_grid_type}")
+        # Set the values of the data variables outside the bounding box to `nan`
+        for var in data_vars:
+            xr_data_trimmed[var] = xr_data_trimmed[var].where(
+                lambda val:
+                    (xr_data_trimmed[lat_var] < box_lat_max) &
+                    (xr_data_trimmed[lat_var] > box_lat_min) &
+                    (xr_data_trimmed[lon_var] > box_lon_min) &
+                    (xr_data_trimmed[lon_var] < box_lon_max),
+                lambda val: np.nan
+            )
+        # Get the minimum and maximum values
+        if verbose:
+            print(f"(trim_latlon) After precise trim.")
+            for data_var in data_vars:
+                this_data_array = xr_data_trimmed[data_var].values.flatten()
+                this_min = np.nanmin(this_data_array)
+                this_max = np.nanmax(this_data_array)
+                print(f"(trim_latlon)     For variable {data_var}, `nanmin`:{this_min}, `nanmax`:{this_max}")
 
     # Save the trimmed dataset, if applicable
     if not isinstance(save_as, type(None)):
@@ -177,15 +231,16 @@ def trim_files(
                 warnings.warn(f"(trim_files) file `{new_filepath}` exists already. To overwrite this file, set `overwrite` to `True`.", UserWarning)
                 continue
             else:
-                print(f"\tOverwriting file `{new_filepath}`.")
+                print(f"\t(trim_files) Overwriting file `{new_filepath}`.")
         except (FileNotFoundError):
-            foo = 2
+            print(f"\t(trim_files) Writing file `{new_filepath}`.")
         # Load this file with `xarray`
         this_xr = xr.open_dataset(filepath)
         # Trim the dataset and save to file
         trim_latlon(
             xr_data = this_xr,
             save_as = new_filepath,
+            **kwargs,
         )
 
     return None
