@@ -28,7 +28,7 @@ def find_packed_ice(
             The threshold above which to mark packed ice.
             Default is `85` percent, following Laliberté et al. 2018.
         save_as : `str`, `None`, optional
-            The file name to pass to `cdo.setrtoc2(output=save_as)`.
+            The file name to which to save the modified dataset.
             Default is `None`, which doesn't save the dataset to a file.
         verbose : `bool`, optional
             Whether to verbosely output information as the function executes.
@@ -138,11 +138,17 @@ def find_packed_ice(
         packedice_xr = cdo_command(
             input = input_command,
             returnXDataset = 'sipacked',
-            output = save_as,
         )
 
     # Rename `siconc` in the new dataset to `sipacked`
-    return packedice_xr.rename_vars({'siconc':'sipacked'})
+    packedice_xr = packedice_xr.rename_vars({'siconc':'sipacked'})
+
+    # Save the trimmed dataset, if applicable
+    if not isinstance(save_as, type(None)):
+        # Save the plot to file
+        packedice_xr.to_netcdf(save_as)
+    
+    return packedice_xr
 
 def find_slow_ice(
     dataset: (str, [str], xr.DataArray, xr.Dataset),
@@ -163,7 +169,7 @@ def find_slow_ice(
             The threshold above which to mark slow ice.
             Default is `0.01` m/s, following Laliberté et al. 2018.
         save_as : `str`, `None`, optional
-            The file name to pass to `cdo.setrtoc2(output=save_as)`.
+            The file name to which to save the modified dataset.
             Default is `None`, which doesn't save the dataset to a file.
         verbose : `bool`, optional
             Whether to verbosely output information as the function executes.
@@ -273,11 +279,17 @@ def find_slow_ice(
         slowice_xr = cdo_command(
             input = input_command,
             returnXDataset = 'sislow',
-            output = save_as,
         )
 
     # Rename `sispeed` in the new dataset to `sislow`
-    return slowice_xr.rename_vars({'sispeed':'sislow'})
+    slowice_xr = slowice_xr.rename_vars({'sispeed':'sislow'})
+
+    # Save the trimmed dataset, if applicable
+    if not isinstance(save_as, type(None)):
+        # Save the plot to file
+        slowice_xr.to_netcdf(save_as)
+    
+    return slowice_xr
 
 def find_landfast_ice(
     siconc_dataset: (str, [str], xr.DataArray, xr.Dataset),
@@ -297,7 +309,7 @@ def find_landfast_ice(
         sispeed_dataset : `str`, list of `str`, `xarray.DataArray`, `xarray.Dataset`
             The dataset of which to find the locations of landfast ice that contains `sispeed`.
         save_as : `str`, `None`, optional
-            The file name to pass to `cdo.setrtoc2(output=save_as)`.
+            The file name to which to save the modified dataset.
             Default is `None`, which doesn't save the dataset to a file.
         verbose : `bool`, optional
             Whether to verbosely output information as the function executes.
@@ -378,4 +390,11 @@ def find_landfast_ice(
     )
 
     # Rename `sipacked` in the new dataset to `silandfast`
-    return landfastice_xr.rename_vars({'sipacked':'silandfast'})
+    landfastice_xr = landfastice_xr.rename_vars({'sipacked':'silandfast'})
+
+    # Save the trimmed dataset, if applicable
+    if not isinstance(save_as, type(None)):
+        # Save the plot to file
+        landfastice_xr.to_netcdf(save_as)
+    
+    return landfastice_xr

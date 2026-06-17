@@ -1,8 +1,9 @@
 import numpy as np 
 
 from seaicecp import analysis
-from seaicecp.path.manipulate_paths import remove_non_empty_directory, make_file_path
 from seaicecp.dataset.example_dataset import make_example_dataset
+from seaicecp.path.manipulate_paths import remove_non_empty_directory, make_file_path
+from seaicecp.verify import verify_path
 
 def test_find_packed_ice():
     """Test the `find_packed_ice` function."""
@@ -29,11 +30,28 @@ def test_find_packed_ice():
                 test_var_name='siconc',
             ),
             'packed_threshold': 3,
+            'save_as': None,
+            'expected_sum': 6,
+        },
+        {
+            'dataset': make_example_dataset(
+                n=3, 
+                test_var_name='siconc',
+            ),
+            'packed_threshold': 3,
+            'save_as': f"{test_file_dir}/example_landfast_0.nc",
             'expected_sum': 6,
         },
         {
             'dataset': test_file_names,
             'packed_threshold': 3,
+            'save_as': None,
+            'expected_sum': 36,
+        },
+        {
+            'dataset': test_file_names,
+            'packed_threshold': 3,
+            'save_as': f"{test_file_dir}/example_landfast_1.nc",
             'expected_sum': 36,
         },
     ]
@@ -41,9 +59,15 @@ def test_find_packed_ice():
         actual_dataset = analysis.find_packed_ice(
             dataset = test_case['dataset'],
             packed_threshold = test_case['packed_threshold'],
+            save_as = test_case['save_as'],
         )
         actual_sum = actual_dataset['sipacked'].sum(skipna=True).values
         assert actual_sum == test_case['expected_sum'], f"`find_packed_ice` failed on test case: {test_case}.\nExpected: {test_case['expected_sum']}\nActual: {actual_sum}"
+        if not isinstance(test_case['save_as'], type(None)):
+            try:
+                actual_save_as = verify_path(test_case['save_as'])
+            except (FileNotFoundError) as e:
+                assert True, f"`find_packed_ice` raised an exception: {e}\nExpected save file at {test_case['save_as']}"
     # Clean up test files that were created
     remove_non_empty_directory(test_file_dir)
 
@@ -142,11 +166,28 @@ def test_find_slow_ice():
                 test_var_name='sispeed',
             ),
             'slow_threshold': 3,
+            'save_as': None,
+            'expected_sum': 4,
+        },
+        {
+            'dataset': make_example_dataset(
+                n=3, 
+                test_var_name='sispeed',
+            ),
+            'slow_threshold': 3,
+            'save_as': f"{test_file_dir}/example_landfast_0.nc",
             'expected_sum': 4,
         },
         {
             'dataset': test_file_names,
             'slow_threshold': 3,
+            'save_as': None,
+            'expected_sum': 24,
+        },
+        {
+            'dataset': test_file_names,
+            'slow_threshold': 3,
+            'save_as': f"{test_file_dir}/example_landfast_1.nc",
             'expected_sum': 24,
         },
     ]
@@ -154,9 +195,15 @@ def test_find_slow_ice():
         actual_dataset = analysis.find_slow_ice(
             dataset = test_case['dataset'],
             slow_threshold = test_case['slow_threshold'],
+            save_as = test_case['save_as'],
         )
         actual_sum = actual_dataset['sislow'].sum(skipna=True).values
         assert actual_sum == test_case['expected_sum'], f"`find_slow_ice` failed on test case: {test_case}.\nExpected: {test_case['expected_sum']}\nActual: {actual_sum}"
+        if not isinstance(test_case['save_as'], type(None)):
+            try:
+                actual_save_as = verify_path(test_case['save_as'])
+            except (FileNotFoundError) as e:
+                assert True, f"`find_packed_ice` raised an exception: {e}\nExpected save file at {test_case['save_as']}"
     # Clean up test files that were created
     remove_non_empty_directory(test_file_dir)
 
@@ -265,6 +312,21 @@ def test_find_landfast_ice():
             ),
             'packed_threshold': 4,
             'slow_threshold': 4,
+            'save_as': None,
+            'expected_sum': 1,
+        },
+        {
+            'siconc_dataset': make_example_dataset(
+                n=3, 
+                test_var_name='siconc',
+            ),
+            'sispeed_dataset': make_example_dataset(
+                n=3, 
+                test_var_name='sispeed',
+            ),
+            'packed_threshold': 4,
+            'slow_threshold': 4,
+            'save_as': f"{test_file_dir}/example_landfast_0.nc",
             'expected_sum': 1,
         },
         {
@@ -272,6 +334,15 @@ def test_find_landfast_ice():
             'sispeed_dataset': test_file_names['sispeed'],
             'packed_threshold': 4,
             'slow_threshold': 4,
+            'save_as': None,
+            'expected_sum': 6,
+        },
+        {
+            'siconc_dataset': test_file_names['siconc'],
+            'sispeed_dataset': test_file_names['sispeed'],
+            'packed_threshold': 4,
+            'slow_threshold': 4,
+            'save_as': f"{test_file_dir}/example_landfast_1.nc",
             'expected_sum': 6,
         },
     ]
@@ -281,9 +352,15 @@ def test_find_landfast_ice():
             sispeed_dataset = test_case['sispeed_dataset'],
             packed_threshold = test_case['packed_threshold'],
             slow_threshold = test_case['slow_threshold'],
+            save_as = test_case['save_as'],
         )
         actual_sum = actual_dataset['silandfast'].sum(skipna=True).values
         assert actual_sum == test_case['expected_sum'], f"`find_landfast_ice` failed on test case: {test_case}.\nExpected: {test_case['expected_sum']}\nActual: {actual_sum}"
+        if not isinstance(test_case['save_as'], type(None)):
+            try:
+                actual_save_as = verify_path(test_case['save_as'])
+            except (FileNotFoundError) as e:
+                assert True, f"`find_packed_ice` raised an exception: {e}\nExpected save file at {test_case['save_as']}"
 
     # Define invalid test cases
     invalid_test_cases = [
