@@ -91,6 +91,8 @@ def find_packed_ice(
         raise TypeError(f"(find_packed_ice) `save_as` must be a string or `None`. Got type: {type(save_as)}")
     elif isinstance(save_as, str) and not '.nc' in save_as:
         raise TypeError(f"(find_packed_ice) `save_as` must be a `.nc` filepath. Got: {save_as}")
+    if not isinstance(verbose, bool):
+        raise TypeError(f"(find_packed_ice) `verbose` must be a `bool`. Got type: {type(verbose)}")
 
     # Verify the dataset(s) contain(s) the `siconc` variable
     for this_dataset in var_check_list:
@@ -224,6 +226,8 @@ def find_slow_ice(
         raise TypeError(f"(find_slow_ice) `save_as` must be a string or `None`. Got type: {type(save_as)}")
     elif isinstance(save_as, str) and not '.nc' in save_as:
         raise TypeError(f"(find_slow_ice) `save_as` must be a `.nc` filepath. Got: {save_as}")
+    if not isinstance(verbose, bool):
+        raise TypeError(f"(trim_latlon) `verbose` must be a `bool`. Got type: {type(verbose)}")
 
     # Verify the dataset(s) contain(s) the `sispeed` variable
     for this_dataset in var_check_list:
@@ -332,6 +336,8 @@ def find_landfast_ice(
         raise TypeError(f"(find_landfast_ice) `save_as` must be a string or `None`. Got type: {type(save_as)}")
     elif isinstance(save_as, str) and not '.nc' in save_as:
         raise TypeError(f"(find_landfast_ice) `save_as` must be a `.nc` filepath. Got: {save_as}")
+    if not isinstance(verbose, bool):
+        raise TypeError(f"(trim_latlon) `verbose` must be a `bool`. Got type: {type(verbose)}")
     
     # Information to output
     if verbose:
