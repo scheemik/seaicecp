@@ -81,6 +81,19 @@ def sum_by_year(
     # Information to output
     if verbose:
         print(f"(sum_by_year) `save_as`: {save_as}")
+    
+    # Get the `data_var` list
+    data_var_list = list(dataset.data_vars)
+    if verbose:
+        print(f"(sum_by_year) `data_var_list`: {data_var_list}")
+
+    # Remove meta variables having to do with time
+    for meta_var in sps.meta_vars:
+        if 'time' in meta_var:
+            if meta_var in data_var_list:
+                if verbose:
+                    print(f"(sum_by_year) Removing `meta_var`: {meta_var}")
+                dataset = dataset.drop_vars([meta_var])
 
     # Sum the dataset by year
     year_summed_xr = dataset.groupby('time.year').sum(dim='time')
