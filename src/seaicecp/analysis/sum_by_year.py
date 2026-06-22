@@ -2,8 +2,6 @@ import numpy as np
 import xarray as xr
 
 from seaicecp.dataset.get_variable import get_variable_name
-from seaicecp.dataset.trim_dataset import trim_latlon
-from seaicecp.path.manipulate_paths import make_file_path
 import seaicecp.params as sps
 from seaicecp.verify import verify_path
 
@@ -39,17 +37,21 @@ def sum_by_year(
         Examples
         --------
         >>> from seaicecp.dataset.example_dataset import make_example_dataset
-        >>> dataset = make_example_dataset(n=3, test_var_name='siconc')
-        >>> dataset['siconc'].values
-        array([[0., 1., 2.],
-               [3., 4., 5.],
-               [6., 7., 8.]])
-        >>> from seaicecp.analysis.landfast import sum_by_year
-        >>> dataset_sipacked = sum_by_year(dataset, packed_threshold=4)
-        >>> dataset_sipacked['sipacked'].values
-        array([[0., 0., 0.],
-               [0., 1., 1.],
-               [1., 1., 1.]])
+        >>> dataset = make_example_dataset(n=3, time_axis=True)
+        >>> dataset['test_var'].values
+        array([[[0., 1., 2.],
+                [3., 4., 5.],
+                [6., 7., 8.]],
+
+               [[0., 1., 2.],
+                [3., 4., 5.],
+                [6., 7., 8.]]])
+        >>> from seaicecp.analysis.sum_by_year import sum_by_year
+        >>> dataset_year_sum = sum_by_year(dataset)
+        >>> dataset_year_sum['test_var_year_sum'].values
+        array([[[ 0.,  2.,  4.],
+                [ 6.,  8., 10.],
+                [12., 14., 16.]]])
     """
     # Verify input arguments
     if not isinstance(verbose, bool):
@@ -98,7 +100,7 @@ def sum_by_year(
     # Sum the dataset by year
     ## Passing `min_count=1` prevents grid cells with all `nan` values across time from being set to zero instead of the expected `nan`
     ## Removing the `min_count` argument results in a spiky artifact on maps
-    year_summed_xr = dataset.groupby('time.year').sum(dim='time', min_count=1)
+    year_summed_xr = dataset.groupby('time.year').sum(dim='time', min_count=1, **kwargs)
 
     if isinstance(dataset, xr.Dataset):
         # Get the name of the variable in the dataset
