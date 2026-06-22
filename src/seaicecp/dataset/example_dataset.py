@@ -6,6 +6,7 @@ from seaicecp.verify import verify_path
 def make_example_dataset(
     save_as: str = None,
     n: int = 10,
+    offset: (int, float) = 0, 
     test_var_name: str = 'test_var',
     time_axis: (bool, int) = False,
     overwrite: bool = True,
@@ -22,6 +23,9 @@ def make_example_dataset(
         n : `int`, optional
             The number of values in each dimension.
             Default is `10`.
+        offset : `int`, `float`, optional
+            A constant offset value to add to every value in the dataset.
+            Default is `0`. 
         test_var_name : `str`, optional
             The name to give the test variable.
             Default is `test_var`.
@@ -86,7 +90,7 @@ def make_example_dataset(
     )
 
     # Add a test variable
-    test_var = np.reshape(np.arange(n*n, dtype=np.float64), (n,n))
+    test_var = np.reshape(np.arange(offset, n*n+offset, dtype=np.float64), (n,n))
     xr_dataset[test_var_name] = (['j','i'],test_var)
 
     # Add time dimension, if applicable
