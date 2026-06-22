@@ -49,7 +49,6 @@ def test_sum_by_year():
                 time_axis=True,
             ),
             'save_as': f"{test_file_dir}/example_new_0.nc",
-            'save_as': None,
             'unique_years': [2026],
             'expected_sum': 72,
         },
