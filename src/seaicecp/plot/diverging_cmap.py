@@ -78,6 +78,16 @@ def make_diverging_cmap(
             midpoint=c_diverge_point_normalized,
             **kwargs,
         )
+    if range_below_mid == range_above_mid:
+        if verbose:
+            print(f"(make_diverging_cmap) Reds and Blues are even")
+        diverging_cmap = bokeh.palettes.diverging_palette(
+            bokeh.palettes.Blues[ncolors],
+            bokeh.palettes.Reds[ncolors],
+            n=ncolors,
+            midpoint=c_diverge_point_normalized,
+            **kwargs,
+        )
     else:
         if verbose:
             print(f"(make_diverging_cmap) Shortening the Blues")
