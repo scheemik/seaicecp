@@ -28,7 +28,12 @@ def get_min_max(
         
         Examples
         --------
-        >>> from seaicecp.dataset.grid_type import get_min_max
+        >>> from seaicecp.dataset.example_dataset import make_example_dataset
+        >>> from seaicecp.dataset.get_min_max import get_min_max
+        >>> dataset = make_example_dataset(n=3)
+        >>> min, max = get_min_max(dataset, var='test_var')
+        >>> print('min:',min,'max:',max)
+        min: 0.0 max: 8.0
     """
     # Verify input arguments
     if not isinstance(dataset, (str, xr.Dataset, xr.DataArray)):
@@ -50,8 +55,8 @@ def get_min_max(
         dataset = dataset[var]
     
     # Get the minimum value
-    this_min = dataset.min(skipna=True).values
+    var_min = dataset.min(skipna=True).values
     # Get the maximum value
-    this_max = dataset.max(skipna=True).values
+    var_max = dataset.max(skipna=True).values
 
-    return this_min, this_max
+    return var_min, var_max
