@@ -143,6 +143,7 @@ def quadmesh_map(
         title = make_title(xr_data),
         clabel = make_label(xr_data, var),
         cmap = this_cmap, 
+        bgcolor = 'lightgray',
         symmetric = False,
         coastline = True,
         geo = True,
