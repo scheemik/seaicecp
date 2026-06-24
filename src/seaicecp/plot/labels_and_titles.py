@@ -1,3 +1,4 @@
+import warnings
 import xarray as xr
 
 from seaicecp.dataset.get_variable import get_variable_name
@@ -123,7 +124,7 @@ def make_title(
 
 def make_label(
     dataset: (str, [str], xr.DataArray, xr.Dataset),
-    var: str,
+    var: str = None,
     add_name: bool = True,
     add_units: bool = True,
     **kwargs,
@@ -136,8 +137,10 @@ def make_label(
         ----------
         dataset : `str`, list of `str`, `xarray.DataArray`, `xarray.Dataset`
             The dataset for which to make a label.
-        var : `str`
+        var : `str`, `None`, optional
             The variable in `dataset` for which to make a label.
+            This is required if `dataset` is an `xarray.Dataset`. 
+            Default is `None`. 
         add_name : `bool`, optional
             Whether to add the variable name to the label.
             Default is `True`.
@@ -175,6 +178,9 @@ def make_label(
         dataset = xr.open_mfdataset(dataset)
     elif not isinstance(dataset, (xr.Dataset, xr.DataArray)):
         raise TypeError(f"(make_label) `dataset` must be a string, `xr.Dataset`, or `xarray.DataArray`. Got type: {type(dataset)}")
+    if isinstance(var, type(None)):
+        if isinstance(dataset, xr.Dataset):
+            raise TypeError(f"(make_label) `var` must be a string if `dataset` is `xarray.Dataset`. Got type: {type(var)}")
     if not isinstance(var, (str, type(None))):
         raise TypeError(f"(make_label) `var` must be a string or `None`. Got type: {type(var)}")
     if not isinstance(add_name, bool):
@@ -203,18 +209,24 @@ def make_label(
     # Add the source ID
     if add_name:
         if 'long_name' in attr_keys:
-            var_name_attr = 'long_name'
+            dataset_label = f"{dataset_label}{var_attrs['long_name']} "
         elif 'original_name' in attr_keys:
-            var_name_attr = 'original_name'
+            dataset_label = f"{dataset_label}{var_attrs['original_name']} "
         elif 'standard_name' in attr_keys:
-            var_name_attr = 'standard_name'
+            dataset_label = f"{dataset_label}{var_attrs['standard_name']} "
         else:
-            raise KeyError(f"(make_label) `dataset` has no `long_name`, `original_name`, or `standard_name` attribute. Available attributes: {attr_keys}")
-        dataset_label = f"{dataset_label}{var_attrs[var_name_attr]} "
+            if isinstance(dataset, xr.Dataset):
+                warnings.warn(f"(make_label) `dataset` has no `long_name`, `original_name`, or `standard_name` attribute. Using variable name: {var}", UserWarning)
+                var_name = var
+            else:
+                warnings.warn(f"(make_label) `dataset` has no `long_name`, `original_name`, or `standard_name` attribute. Using xr.DataArray name: {dataset.name}", UserWarning)
+                var_name = dataset.name
+            dataset_label = f"{dataset_label}{var_name} "
     # Add the experiment ID
     if add_units:
-        if 'units' not in attr_keys:
-            raise KeyError(f"(make_label) `dataset` has no `units` attribute. Available attributes: {attr_keys}")
-        dataset_label = f"{dataset_label}({var_attrs['units']}) "
+        if 'units' in attr_keys:
+            dataset_label = f"{dataset_label}({var_attrs['units']}) "
+        else:
+            warnings.warn(f"(make_label) `dataset` has no `units` attribute. Skipping units in label.", UserWarning)
     
     return dataset_label
