@@ -69,7 +69,8 @@ def set_cbar_lims(
         print("Warning: Given `hv_overlay` does not contain a colorbar.")
         return fig
 
-    # Extract mapper and color palette from original colorbar
+    # Extract title, mapper, and color palette from original colorbar
+    cbar_title = old_cb.title
     orig_mapper = old_cb.color_mapper
     palette = orig_mapper.palette
     # Get max and min of original mapper
@@ -102,6 +103,7 @@ def set_cbar_lims(
         label_standoff = 12,
         bar_line_color = 'black',
         major_tick_line_color = 'black',
+        title = cbar_title,
     )
     # Add the custom colorbar in the old colorbar's place
     fig.add_layout(custom_cb, "right")
