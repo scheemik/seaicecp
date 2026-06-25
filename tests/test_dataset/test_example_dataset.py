@@ -54,6 +54,7 @@ def test_make_example_dataset():
             'test_latlon_size': 100,
             'n_size': 10,
             'unique_years': [2026],
+            'expected_sums': [4950, 4950],
         },
         {
             'actual': dataset.make_example_dataset(time_axis=2025),
@@ -64,6 +65,18 @@ def test_make_example_dataset():
             'test_latlon_size': 100,
             'n_size': 10,
             'unique_years': [2025],
+            'expected_sums': [4950, 4950],
+        },
+        {
+            'actual': dataset.make_example_dataset(n=3, offset=2, time_axis=True),
+            'keys': ['test_var'],
+            'coords': ['time', 'j', 'i', 'longitude', 'latitude'],
+            'sizes': ['time', 'j', 'i'],
+            'test_var_size': 18,
+            'test_latlon_size': 9,
+            'n_size': 3,
+            'unique_years': [2026],
+            'expected_sums': [36+2*9, 54],
         },
     ]
     for test_case in test_cases:
@@ -83,6 +96,12 @@ def test_make_example_dataset():
             # Check the years present on the time axis
             actual_years = np.unique(test_case['actual']['time'].dt.year.values)
             assert actual_years == test_case['unique_years'], f"`make_example_dataset` created a dataset with the unique years: {actual_years}.\nExpected unique years: {test_case['unique_years']}"
+            # Check each year
+            for datetime in test_case['actual']['time'].values:
+                for i in range(len(test_case['keys'])):
+                    this_var = test_case['keys'][i]
+                    actual_sum = test_case['actual'][this_var].sel(time=datetime).sum(skipna=True).values
+                    assert actual_sum == test_case['expected_sums'][i], f"`make_example_dataset` failed on test case: {test_case}.\nExpected: {test_case['expected_sums'][i]}\nActual: {actual_sum}"
     
     # Test setting overwrite to `False`
     try:

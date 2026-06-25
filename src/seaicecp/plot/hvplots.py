@@ -2,10 +2,13 @@ import hvplot.xarray
 import xarray as xr
 import cartopy.crs as crs
 
-from seaicecp.plot.save_hvplots import save_hvplot
-from seaicecp.plot.limit_extent import get_limited_extent
+from seaicecp.dataset.get_min_max import get_min_max
 from seaicecp.dataset.latlon_type import get_latlon_names
 import seaicecp.params as sps
+from seaicecp.plot.cbar_limits import set_cbar_lims
+from seaicecp.plot.labels_and_titles import make_title, make_label
+from seaicecp.plot.limit_extent import get_limited_extent
+from seaicecp.plot.save_hvplots import save_hvplot
 
 def quadmesh_map(
     xr_data: xr.Dataset,
@@ -13,6 +16,8 @@ def quadmesh_map(
     save_as: str = None,
     map_projection: str = 'NorthPolarStereo',
     map_bbox: [float, float, float, float] = sps.NWP_BBOX,
+    diverging_cbar: bool = False, 
+    symmetric_cbar: bool = False, 
     verbose: bool = False,
     **kwargs,
 ):
@@ -38,6 +43,9 @@ def quadmesh_map(
                 - [LAT_MAX, LAT_MIN, LON_MAX, LON_MIN]
                 
             Default is `seaicecp.params.latlon_params.NWP_BBOX`.
+        diverging_cbar : `bool`, optional
+            Whether to use a diverging colormap on the colorbar.
+            Default is `False`.
         verbose : `bool`, optional
             Whether to verbosely output information as the function executes.
             Default is `False`.
@@ -99,7 +107,15 @@ def quadmesh_map(
         map_projection = crs.NorthPolarStereo(central_longitude = box_lon_cent)
         # Get the extent to which to limit the map plot
         map_extent = get_limited_extent(map_projection)
-    
+
+    # Set colormap
+    if diverging_cbar == True:
+        this_cmap = 'bwr'
+        symmetric_cbar = True
+    else:
+        this_cmap = 'viridis'
+        symmetric_cbar = False
+
     # Get the latitude and longitude coordinate names
     lat_var, lon_var = get_latlon_names(xr_data)
     if verbose:
@@ -113,7 +129,11 @@ def quadmesh_map(
         projection=map_projection, 
         project=True,
         global_extent=False, 
-        cmap='viridis', 
+        title=make_title(xr_data),
+        clabel=make_label(xr_data, var),
+        cmap=this_cmap, 
+        bgcolor='lightgray',
+        symmetric=symmetric_cbar,
         coastline=True,
         geo=True,
     )
@@ -123,6 +143,20 @@ def quadmesh_map(
         qm_map_plot = qm_map_plot.opts(
             xlim=(map_extent[0], map_extent[1]),
             ylim=(map_extent[2], map_extent[3]),
+        )
+
+    # Set colorbar parameters
+    cmin, cmax = get_min_max(xr_data, var)
+    if verbose:
+        print(f"(quadmesh_map) `diverging_cbar`: {diverging_cbar}")
+        print(f"(quadmesh_map) `cmin`: {cmin}, `cmax`: {cmax}")
+    if diverging_cbar == True and cmin != -cmax:
+        qm_map_plot = set_cbar_lims(
+            qm_map_plot,
+            cmin,
+            cmax,
+            verbose = verbose,
+            # **kwargs,
         )
 
     # Save the plot, if applicable
