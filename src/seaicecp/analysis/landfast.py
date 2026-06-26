@@ -1,12 +1,14 @@
 import numpy as np
 import xarray as xr
 import warnings
+
 from cdo import Cdo
 cdo = Cdo()
 # Set path for temporary files in case of a crash
 cdo = Cdo(tempdir='./cdo_tmp/')
 cdo.cleanTempDir()
 
+from seaicecp import get_current_datetime_str
 from seaicecp.dataset.get_variable import get_variable_name
 from seaicecp.dataset.trim_dataset import trim_latlon
 from seaicecp.path.manipulate_paths import make_file_path
@@ -146,6 +148,23 @@ def find_packed_ice(
 
     # Rename `siconc` in the new dataset to `sipacked`
     packedice_xr = packedice_xr.rename_vars({'siconc':'sipacked'})
+
+    # Modify the attributes of the dataset to reflect the changes
+    packedice_xr['sipacked'].attrs['standard_name'] = 'sea_ice_packed_marker'
+    packedice_xr['sipacked'].attrs['long_name'] = f'Sea Ice Concentration > {packed_threshold}%'
+    packedice_xr['sipacked'].attrs['units'] = '1: Yes, 0: No'
+    packedice_xr['sipacked'].attrs['comment'] = f'Marker of packed ice, where sea ice concentration (`siconc`) >{packed_threshold}%'
+    packedice_xr['sipacked'].attrs['original_name'] = 'sipacked'
+    if 'history' in packedice_xr['sipacked'].attrs.keys():
+        original_history = packedice_xr['sipacked'].attrs['history']
+    else:
+        original_history = ''
+    packedice_xr['sipacked'].attrs['history'] = f"{get_current_datetime_str()} altered by `seaicecp`: Calculated packed ice, marking `siconc` > {packed_threshold} as 1 and 0 otherwise. {original_history}"
+    if 'history' in packedice_xr.attrs.keys():
+        original_history = packedice_xr.attrs['history']
+    else:
+        original_history = ''
+    packedice_xr.attrs['history'] = f"{get_current_datetime_str()} altered by `seaicecp`: Calculated packed ice, marking `siconc` > {packed_threshold} as 1 and 0 otherwise. {original_history}"
 
     # Save the trimmed dataset, if applicable
     if not isinstance(save_as, type(None)):
@@ -288,6 +307,23 @@ def find_slow_ice(
     # Rename `sispeed` in the new dataset to `sislow`
     slowice_xr = slowice_xr.rename_vars({'sispeed':'sislow'})
 
+    # Modify the attributes of the dataset to reflect the changes
+    slowice_xr['sislow'].attrs['standard_name'] = 'sea_ice_slow_marker'
+    slowice_xr['sislow'].attrs['long_name'] = f'Speed of Ice < {slow_threshold} m s-1'
+    slowice_xr['sislow'].attrs['units'] = '1: Yes, 0: No'
+    slowice_xr['sislow'].attrs['comment'] = f'Marker of slow ice, where sea ice speed (`sispeed`) <{slow_threshold} m s-1'
+    slowice_xr['sislow'].attrs['original_name'] = 'sislow'
+    if 'history' in slowice_xr['sislow'].attrs.keys():
+        original_history = slowice_xr['sislow'].attrs['history']
+    else:
+        original_history = ''
+    slowice_xr['sislow'].attrs['history'] = f"{get_current_datetime_str()} altered by `seaicecp`: Calculated slow ice, marking `sispeed` > {slow_threshold} as 1 and 0 otherwise. {original_history}"
+    if 'history' in slowice_xr.attrs.keys():
+        original_history = slowice_xr.attrs['history']
+    else:
+        original_history = ''
+    slowice_xr.attrs['history'] = f"{get_current_datetime_str()} altered by `seaicecp`: Calculated slow ice, marking `sispeed` > {slow_threshold} as 1 and 0 otherwise. {original_history}"
+
     # Save the trimmed dataset, if applicable
     if not isinstance(save_as, type(None)):
         # Save the plot to file
@@ -406,9 +442,32 @@ def find_landfast_ice(
         input=dataset_sipacked, 
         returnXDataset='silandfast'
     )
+    # # Set 0 as the missing value
+    # landfastice_xr = cdo.setmissval(
+    #     '0',
+    #     input=landfastice_xr, 
+    #     returnXDataset='silandfast'
+    # )
 
     # Rename `sipacked` in the new dataset to `silandfast`
     landfastice_xr = landfastice_xr.rename_vars({'sipacked':'silandfast'})
+
+    # Modify the attributes of the dataset to reflect the changes
+    landfastice_xr['silandfast'].attrs['standard_name'] = 'sea_ice_landfast_marker'
+    landfastice_xr['silandfast'].attrs['long_name'] = f'Landfast Ice (>{packed_threshold}%, <{slow_threshold}m s-1)'
+    landfastice_xr['silandfast'].attrs['units'] = '1: Yes, 0: No'
+    landfastice_xr['silandfast'].attrs['comment'] = f'Marker of landfast ice, where sea ice concentration (`siconc`) > {packed_threshold}% and sea ice speed (`sispeed`) < {slow_threshold} m s-1'
+    landfastice_xr['silandfast'].attrs['original_name'] = 'silandfast'
+    if 'history' in landfastice_xr['silandfast'].attrs.keys():
+        original_history = landfastice_xr['silandfast'].attrs['history']
+    else:
+        original_history = ''
+    landfastice_xr['silandfast'].attrs['history'] = f"{get_current_datetime_str()} altered by `seaicecp`: Calculated landfast ice, marking where both `siconc` > {packed_threshold} and `sispeed` > {slow_threshold} as 1 and 0 otherwise. {original_history}"
+    if 'history' in landfastice_xr.attrs.keys():
+        original_history = landfastice_xr.attrs['history']
+    else:
+        original_history = ''
+    landfastice_xr.attrs['history'] = f"{get_current_datetime_str()} altered by `seaicecp`: Calculated landfast ice, marking where both `siconc` > {packed_threshold} and `sispeed` > {slow_threshold} as 1 and 0 otherwise. {original_history}"
 
     # Save the trimmed dataset, if applicable
     if not isinstance(save_as, type(None)):
