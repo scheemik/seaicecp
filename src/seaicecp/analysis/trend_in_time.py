@@ -2,6 +2,7 @@ import numpy as np
 import xarray as xr
 
 from seaicecp.dataset.get_variable import get_variable_name
+from seaicecp.dataset.get_min_max import get_min_max
 import seaicecp.params as sps
 from seaicecp.verify import verify_path
 
@@ -208,6 +209,7 @@ def mask_where_all_zero(
 
         For each grid cell in the dataset, if that grid cell is equal to zero across the entire time dimension, set those values to `nan`.
         This will allow masking out grid cells which have no trend in time not because the values don't change, but because they are missing data. 
+        Note, this is done by summing across time to find which cells have a sum of zero, so this should not be used for any variable which could have negative values. 
 
         Parameters
         ----------
@@ -301,6 +303,13 @@ def mask_where_all_zero(
 
     # Sum the dataset across the time dimension
     dataset_time_sum = dataset.sum(dim=time_dim)
+    # Check to see whether any values are negative
+    vmin, vmax = get_min_max(
+        dataset_time_sum.compute(),
+        var,
+    )
+    if vmin < 0:
+        raise ValueError(f"(mask_where_all_zero) The chosen `var` ({var}) in `dataset` must not have negative values. Found a minimum value of the sum across time of: {vmin}")
 
     if isinstance(dataset, xr.Dataset):
         # Point to the specific variable

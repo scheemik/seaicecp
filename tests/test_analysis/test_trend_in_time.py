@@ -272,6 +272,42 @@ def test_mask_where_all_zero():
             actual_array = actual_dataset[test_case['var']].values
         assert np.array_equal(actual_array, test_case['expected_array'], equal_nan=True), f"`mask_where_all_zero` created a dataset with the array: {actual_array}.\nExpected array: {test_case['expected_array']}"
     
+    # Create a dataset with negative values
+    invalid_ex_xr = xr.Dataset({
+        'test_var': (
+            ['t', 'i', 'j'], 
+          [[[ -1,  -1,  -1],
+            [ 1,  1,  1],
+            [ 0,  0,  0]],
+           [[ 0,  1,  1],
+            [ 1,  0,  0],
+            [ 0,  0,  0]]]
+        )
+    })
+    # Define invalid test cases
+    invalid_test_cases = [
+        {   # Passing a file that does not exist
+            'dataset': 'invalid_dataset.nc',
+        },
+        {   # Passing a string that isn't a file path
+            'dataset': 'invalid_dataset',
+        },
+        {   # Passing a list of files that don't have the same dimensions
+            'dataset': invalid_ex_xr,
+        },
+    ]
+    for invalid_test_case in invalid_test_cases:
+        try:
+            actual = analysis.mask_where_all_zero(
+                dataset = invalid_test_case['dataset'],
+                var = 'test_var',
+                time_dim = 't',
+            )
+        except (FileNotFoundError, ValueError) as e:
+            assert True, f"`mask_where_all_zero` raised an exception on invalid test case: {e}"
+        else:
+            assert False, f"`mask_where_all_zero` did not raise an exception on invalid test case {invalid_test_case}"
+    
     # Define a list of invalid inputs
     invalid_strings = [
         1234,
