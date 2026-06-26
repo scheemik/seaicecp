@@ -50,27 +50,27 @@ def trend_in_time(
         Examples
         --------
         >>> from seaicecp.dataset.example_dataset import make_example_dataset
-        from seaicecp.path.manipulate_paths import make_file_path
-        # Create multiple example test files
-        test_file_dir = 'tests/test_analysis/example_datasets'
-        make_file_path(test_file_dir)
-        test_file_names = [
-            f"{test_file_dir}/example_dataset_0.nc",
-            f"{test_file_dir}/example_dataset_1.nc",
-            f"{test_file_dir}/example_dataset_2.nc",
-        ]
-        offsets = [0, 1, 3]
-        for i in range(len(test_file_names)):
-            make_example_dataset(
-                n=3,
-                offset=offsets[i],
-                test_var_name='test_var',
-                time_axis=(2000+i),
-                save_as=test_file_names[i],
-            )
-        import xarray as xr
-        test_dataset = xr.open_mfdataset(test_file_names)
-        test_dataset['test_var'].values
+        >>> from seaicecp.path.manipulate_paths import make_file_path
+        >>> # Create multiple example test files
+        >>> test_file_dir = 'tests/test_analysis/example_datasets'
+        >>> make_file_path(test_file_dir)
+        >>> test_file_names = [
+        >>>     f"{test_file_dir}/example_dataset_0.nc",
+        >>>     f"{test_file_dir}/example_dataset_1.nc",
+        >>>     f"{test_file_dir}/example_dataset_2.nc",
+        >>> ]
+        >>> offsets = [0, 1, 3]
+        >>> for i in range(len(test_file_names)):
+        >>>     make_example_dataset(
+        >>>         n=3,
+        >>>         offset=offsets[i],
+        >>>         test_var_name='test_var',
+        >>>         time_axis=(2000+i),
+        >>>         save_as=test_file_names[i],
+        >>>     )
+        >>> import xarray as xr
+        >>> test_dataset = xr.open_mfdataset(test_file_names)
+        >>> test_dataset['test_var'].values
         array([[[ 0.,  1.,  2.],
                 [ 3.,  4.,  5.],
                 [ 6.,  7.,  8.]],
@@ -94,13 +94,13 @@ def trend_in_time(
                [[ 3.,  4.,  5.],
                 [ 6.,  7.,  8.],
                 [ 9., 10., 11.]]])
-        from seaicecp.analysis.trend_in_time import trend_in_time
-        test_trends = trend_in_time(
-            test_dataset,
-            var='test_var',
-            time_dim='time',
-        )
-        test_trends['test_var_trends'].values
+        >>> from seaicecp.analysis.trend_in_time import trend_in_time
+        >>> test_trends = trend_in_time(
+        >>>     test_dataset,
+        >>>     var='test_var',
+        >>>     time_dim='time',
+        >>> )
+        >>> test_trends['test_var_trends'].values
         array([[1.49369, 1.49369, 1.49369],
                [1.49369, 1.49369, 1.49369],
                [1.49369, 1.49369, 1.49369]])
