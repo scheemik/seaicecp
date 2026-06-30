@@ -30,10 +30,10 @@ def calc_siconc(
         ----------
         sithick_dataset : `str`, list of `str`, `xarray.DataArray`, `xarray.Dataset`
             The sea ice thickness dataset.
-            Must have the same source ID, experiment ID, variant label, and time frame as `sivol_dataset`.
+            Must have the same source ID, experiment ID, variant label, and dimensions sizes as `sivol_dataset`.
         sivol_dataset : `str`, list of `str`, `xarray.DataArray`, `xarray.Dataset`
             The sea ice volume dataset.
-            Must have the same source ID, experiment ID, variant label, and time frame as `sithick_dataset`.
+            Must have the same source ID, experiment ID, variant label, and dimensions sizes as `sithick_dataset`.
         save_as : `str`, `None`, optional
             The file name to which to save the modified dataset.
             Default is `None`, which doesn't save the dataset to a file.
@@ -41,7 +41,7 @@ def calc_siconc(
             Whether to verbosely output information as the function executes.
             Default is `False`.
         **kwargs
-            Keyword arguments .
+            Keyword arguments.
 
         Returns
         -------
@@ -53,20 +53,20 @@ def calc_siconc(
         >>> from seaicecp.dataset.example_dataset import make_example_dataset
         >>> dataset_0 = make_example_dataset(n=3, test_var_name='sithick')
         >>> dataset_0['sithick'].values
-        array([[0., 1., 2.],
-               [3., 4., 5.],
-               [6., 7., 8.]])
+        array([[1., 2., 3.],
+               [4., 5., 6.],
+               [7., 8., 9.]])
         >>> dataset_1 = make_example_dataset(n=3, test_var_name='sivol')
         >>> dataset_1['sivol'].values
         array([[0., 1., 2.],
                [3., 4., 5.],
                [6., 7., 8.]])
-        >>> from seaicecp.analysis.landfast import calc_siconc
-        >>> dataset_landfast = calc_siconc(sithick_dataset=dataset_0, sivol_dataset=dataset_1, packed_threshold=4, slow_threshold=4)
-        >>> dataset_landfast['siconc2'].values
-        array([[0., 0., 0.],
-               [0., 1., 0.],
-               [0., 0., 0.]])
+        >>> from seaicecp.analysis import calc_siconc
+        >>> dataset_siconc2 = calc_siconc(sithick_dataset=dataset_0, sivol_dataset=dataset_1)
+        >>> dataset_siconc2['siconc2'].values
+        array([[ 0.        , 50.        , 66.66666667],
+               [75.        , 80.        , 83.33333333],
+               [85.71428571, 87.5       , 88.88888889]])
     """
     # Verify input arguments
     if isinstance(sithick_dataset, str):
